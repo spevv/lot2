@@ -18,8 +18,7 @@ $this->params['breadcrumbs'][] = $this->title;
     }
 ?>
 
-Для авторизации выберите другую соцсеть
-<!--
+
 <p class="lead">Do you already have an account on one of these sites? Click the logo to log in with it here:</p>
 <?php echo \nodge\eauth\Widget::widget(array('action' => 'site/login')); ?>
 
@@ -39,5 +38,6 @@ $this->params['breadcrumbs'][] = $this->title;
             <?php ActiveForm::end(); ?>
         </div>
     </div>
--->
+
+
 </div>
