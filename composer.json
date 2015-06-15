@@ -1,0 +1,68 @@
+{
+    "name": "yiisoft/yii2-app-advanced",
+    "description": "Yii 2 Advanced Application Template",
+    "keywords": ["yii2", "framework", "advanced", "application template"],
+    "homepage": "http://www.yiiframework.com/",
+    "type": "project",
+    "license": "BSD-3-Clause",
+    "support": {
+        "issues": "https://github.com/yiisoft/yii2/issues?state=open",
+        "forum": "http://www.yiiframework.com/forum/",
+        "wiki": "http://www.yiiframework.com/wiki/",
+        "irc": "irc://irc.freenode.net/yii",
+        "source": "https://github.com/yiisoft/yii2"
+    },
+    "minimum-stability": "dev",
+    "require": {
+        "php": ">=5.4.0",
+        "yiisoft/yii2": "*",
+        "yiisoft/yii2-bootstrap": "*",
+        "yiisoft/yii2-swiftmailer": "*",
+        "yiisoft/yii2-authclient": "~2.0",
+        "yiisoft/yii2-imagine": "~2.0",
+        "pendalf89/yii2-settings": "*",
+        "himiklab/yii2-ipgeobase-component": "*",
+        "2amigos/yii2-date-time-picker-widget": "~1.0",
+        "2amigos/yii2-ckeditor-widget": "~1.0",
+        "2amigos/yii2-switch-widget": "~1.0",
+        "iutbay/yii2-kcfinder": "*",
+        "kartik-v/yii2-widget-select2": "*",
+        "metalguardian/yii2-fotorama-widget": "*",
+        "russ666/yii2-countdown": "*",
+        "mirocow/yii2-yandex-maps": "*",
+        "yii2mod/yii2-sweet-alert": "*",
+        "katzz0/yii2-yandex-maps": "dev-master",
+        "alex-bond/yii2-thumbler": "dev-master",
+        "kartik-v/yii2-money": "dev-master",
+        "kartik-v/yii2-widget-spinner": "*",
+        "kartik-v/yii2-widget-activeform": "*",
+        "kartik-v/yii2-widget-datetimepicker": "*",
+        "2amigos/yii2-editable-widget": "~1.0",
+        "2amigos/yii2-grid-view-library": "*",
+        "zelenin/yii2-slug-behavior": "~0.2@stable",
+        "kartik-v/yii2-helpers": "dev-master",
+        "kartik-v/yii2-dropdown-x": "*",
+        "2amigos/yii2-multi-select-widget": "*",
+        "nirvana-msu/yii2-infinite-scroll": "1.0.*@dev",
+        "kop/yii2-scroll-pager": "dev-master",
+        "darkcs/yii2-infinite-scroll": "*",
+        "nodge/yii2-eauth": "dev-master",
+        "uran1980/yii2-jquery-essential": "dev-master",
+        "dragonjet/yii2-opengraph": "*"
+    },
+    "require-dev": {
+        "yiisoft/yii2-codeception": "*",
+        "yiisoft/yii2-debug": "*",
+        "yiisoft/yii2-gii": "*",
+        "yiisoft/yii2-faker": "*"
+    },
+    "config": {
+        "process-timeout": 1800
+    },
+    "extra": {
+        "asset-installer-paths": {
+            "npm-asset-library": "vendor/npm",
+            "bower-asset-library": "vendor/bower"
+        }
+    }
+}

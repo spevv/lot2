@@ -1,0 +1,169 @@
+<?php
+
+namespace backend\controllers;
+
+use Yii;
+use common\models\Branch;
+use backend\models\BranchSearch;
+use yii\web\Controller;
+use yii\web\NotFoundHttpException;
+use yii\filters\VerbFilter;
+
+use yii\web\Response;
+use dosamigos\editable\EditableAction;
+/**
+ * BranchController implements the CRUD actions for Branch model.
+ */
+class BranchController extends Controller
+{
+
+	public function actions()
+	{
+	    return [
+	        'editable' => [
+	            'class' => EditableAction::className(),
+	            'modelClass' => Branch::className(),
+	            'forceCreate' => false
+	        ]
+	    ];
+	}
+	
+    public function behaviors()
+    {
+        return [
+            'verbs' => [
+                'class' => VerbFilter::className(),
+                'actions' => [
+                    'delete' => ['post'],
+                ],
+            ],
+        ];
+    }
+
+    /**
+     * Lists all Branch models.
+     * @return mixed
+     */
+    public function actionIndex()
+    {
+       /* $searchModel = new BranchSearch();
+        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+
+        return $this->render('index', [
+            'searchModel' => $searchModel,
+            'dataProvider' => $dataProvider,
+        ]);*/
+        
+        $model = new Branch();
+	    if ($model->load(Yii::$app->request->post()) && $model->save())
+	    {
+	        $model = new Branch();
+	        
+	        //$searchModel = new BranchSearch();
+	    	//$dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+	        
+	    }
+	    $searchModel = new BranchSearch();
+	    $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+	 
+	    return $this->render('index', [
+	        'searchModel' => $searchModel,
+	        'dataProvider' => $dataProvider,
+	        'model' => $model,
+	    ]);
+    }
+
+    /**
+     * Displays a single Branch model.
+     * @param string $id
+     * @return mixed
+     */
+    public function actionView($id)
+    {
+        return $this->render('view', [
+            'model' => $this->findModel($id),
+        ]);
+    }
+
+    /**
+     * Creates a new Branch model.
+     * If creation is successful, the browser will be redirected to the 'view' page.
+     * @return mixed
+     */
+    public function actionCreate()
+    {
+        $model = new Branch();
+
+        if ($model->load(Yii::$app->request->post()) && $model->save()) {
+           // return $this->redirect(['view', 'id' => $model->id]);
+            return $this->redirect(['index']);
+        } else {
+            return $this->render('create', [
+                'model' => $model,
+            ]);
+        }
+    }
+
+    /**
+     * Updates an existing Branch model.
+     * If update is successful, the browser will be redirected to the 'view' page.
+     * @param string $id
+     * @return mixed
+     */
+    public function actionUpdate($id)
+    {
+        $model = $this->findModel($id);
+
+        if ($model->load(Yii::$app->request->post()) && $model->save()) {
+           // return $this->redirect(['view', 'id' => $model->id]);
+           return $this->redirect(['index']);
+        } else {
+            return $this->render('update', [
+                'model' => $model,
+            ]);
+        }
+    }
+
+    /**
+     * Deletes an existing Branch model.
+     * If deletion is successful, the browser will be redirected to the 'index' page.
+     * @param string $id
+     * @return mixed
+     */
+    public function actionDelete($id)
+    {
+        $this->findModel($id)->delete();
+        return $this->redirect(['index']);
+    }
+     
+    
+    public function actionAjaxDelete($id) {
+	    if (Yii::$app->request->isAjax) {
+	        $this->findModel($id)->delete();
+	    	Yii::$app->response->format = 'json';
+	        $res = array(
+	            'body'    => $id,
+	            'success' => true,
+	        );
+	        return $res;
+	    }
+	   
+	}
+
+
+    /**
+     * Finds the Branch model based on its primary key value.
+     * If the model is not found, a 404 HTTP exception will be thrown.
+     * @param string $id
+     * @return Branch the loaded model
+     * @throws NotFoundHttpException if the model cannot be found
+     */
+    protected function findModel($id)
+    {
+        if (($model = Branch::findOne($id)) !== null) {
+            return $model;
+        } else {
+            throw new NotFoundHttpException('The requested page does not exist.');
+        }
+    }
+}
