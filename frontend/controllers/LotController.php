@@ -25,7 +25,9 @@ use common\models\CategoryLot;
 
 
 
-use console\controllers\MainController;
+use common\models\CheckLot;
+
+
 /**
  * LotController implements the CRUD actions for Lot model.
  */
@@ -110,7 +112,6 @@ class LotController extends Controller
         } 
     }
     
-    
     public function actionFinishLot()
     {
 
@@ -118,45 +119,10 @@ class LotController extends Controller
 	    	$post = Yii::$app->request->post();
 	    	Yii::$app->response->format = Response::FORMAT_JSON;
 	    	
-	    	$rate = Rate::find()->where(['lot_id'=>$post['lot_id']])->orderBy('price desc')->one();
-	    	
-	    	$lotRateStatistic = new LotRateStatistic();
-	    	$lotRateStatistic->lot_id = $post['lot_id'];
-	    	$lotRateStatistic->last_rate = $rate['id'];
-	    	$lotRateStatistic->status = 0;
-	    	$lotRateStatistic->save();
-	    	
-	    	$identity = Yii::$app->getUser()->getIdentity();
-		    if (isset($identity->profile)) 
-		    {
-		    	$user_id =  $identity->profile['service'].'-'.$identity->profile['id'];
-		    	
-		    	if($user_id == $rate['user2_id'])
-		    	{
-					$res = array(
-			            'success' => true,
-			            'url' => Url::to(['pay/index', 'id'=>$rate['id']]),
-			            
-			        );
-			        return $res;
-				}
-		    }
-		    return array(
-		        'success' => false,
-		    );
-			
-	    }
-	}
-    
-    
-    /*public function actionFinishLot()
-    {
-
-		if (Yii::$app->request->isPost) {
-	    	$post = Yii::$app->request->post();
-	    	Yii::$app->response->format = Response::FORMAT_JSON;
+	    	//выполнить проверки
 	    	
 	    	
+	
 	    	$identity = Yii::$app->getUser()->getIdentity();
 		    if (isset($identity->profile)) 
 		    {
@@ -177,11 +143,10 @@ class LotController extends Controller
 		    );
 			
 	    }
-	}*/
+	} 
     
-    
-    
-     public function actionGetRateInfo() {
+    public function actionGetRateInfo() 
+    {
     	//var_dump('simple');
 	    if (Yii::$app->request->isPost) {
 	    	$post = Yii::$app->request->post();
@@ -206,9 +171,7 @@ class LotController extends Controller
 		        return $res;
 			}
 	    }
-	}
-    
-    
+	} 
     
     public function actionRate()
     {
@@ -426,29 +389,12 @@ class LotController extends Controller
     
     public function actionView($slug)
     {
-    	
-    	/*$lots = Lot::find()
-    		->where(['<',  'remaining_time', Yii::$app->formatter->asDate('now', 'yyyy-MM-dd hh:mm:ss')])
-    		->andWhere(['>',  'remaining_time', '2015-06-05 10:30:00'])
-    		->all(); //
-    	
-    	
-    	
-    	
-    	
-    	var_dump(count($lots));
-    	var_dump($lots);*/
+	
+		//поместить в finishLot
+    	$checkLot = new CheckLot();
+    	$checkLot->checkAndUpdate();
     	
 
-    	
-    	
-    	
-    	/*$post = Yii::$app->request->post();
-    	
-    	if($post){
-			var_dump($post);
-			die;
-		}*/
     	Url::remember();
     	
     	$modelId = $this->findModel($slug);
@@ -490,7 +436,7 @@ class LotController extends Controller
 			$rate->price = $rate->price+100;
 		}	
 		
-		 $contact = new ContactForm();
+		$contact = new ContactForm();
 		
 		//данные по соцсетям
 		$string = Url::to('');
@@ -592,9 +538,8 @@ class LotController extends Controller
             'share' => $share,
         ]);
     }
-    /* return $this->renderPartial('contact', [
-                'model' => $modelNew,
-                ]);*/
+
+
 
 	public function plural($n, $forms){
 		

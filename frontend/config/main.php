@@ -14,6 +14,7 @@ return [
     'controllerNamespace' => 'frontend\controllers',
     
     'homeUrl' => '/',
+    
     'components' => [
     	'request' => [
             'baseUrl' => '',

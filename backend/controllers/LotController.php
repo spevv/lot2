@@ -349,7 +349,7 @@ class LotController extends Controller
         	
         	$formRateModel = LotRateStatistic::find()->where(['lot_id' =>$model->id])->orderBy('id desc')->one();
         	
-        	use common\models\RateWinner;
+        	//use common\models\RateWinner;
         	
         	
         	if($formRateModel){

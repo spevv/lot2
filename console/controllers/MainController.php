@@ -2,21 +2,22 @@
 
 namespace console\controllers;
 
+use yii\console\Controller;
 use Yii;
 use yii\helpers\Html;
 use yii\helpers\Url;
 use common\models\Rate;
 use common\models\RateWinner;
 use common\models\Lot;
-use common\models\CronInfo;
+use console\models\CronInfo;
 
 
-class MainController extends \yii\web\Controller
+class MainController extends Controller
 {
 	
-    public function actionIndex($id)
+    public function actionIndex()
     {
-    	$rate = Rate::findOne($id);
+    	/*$rate = Rate::findOne($id);
 		if($rate)
 		{
 			$rateWinner = new RateWinner();
@@ -33,15 +34,17 @@ class MainController extends \yii\web\Controller
 		else
 		{
 			return false;	
-		}
+		}*/
+		echo('start');
         
         //return $this->render('index');
     }
+    
     public function actionCheck()
     {
 		
-		//$cronInfo = CronInfo::findone(['type' => 'update_rate']);
-		$cronInfo = '2015-06-05 10:30:00';
+		$cronInfo = CronInfo::findone(['type' => 'update_rate']);
+		
 		
 		//var_dump($cronInfo['time']);
 		// проверить запрос
@@ -51,9 +54,13 @@ class MainController extends \yii\web\Controller
     		->all(); 
     		
     	//var_dump($lots);
+    	//return $lots;
+    	//echo($lots);
+    	
+    	$cronInfo->time = '2015-06-03 11:11:00';
+		$cronInfo->save();
 		
-		
-		
+		return false;
 		
 	}
 
