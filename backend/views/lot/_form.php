@@ -24,6 +24,9 @@ use iutbay\yii2kcfinder\KCFinder;
 
 
 ?>
+
+
+
 <div class="row">
 	<div class="lot-form">
 
@@ -211,4 +214,12 @@ use iutbay\yii2kcfinder\KCFinder;
 
 
 	</div>
+	
 </div>
+
+
+<?= $formRate; ?>
+
+
+
+

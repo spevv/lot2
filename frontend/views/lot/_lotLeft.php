@@ -15,12 +15,17 @@ use yii\widgets\Pjax;
 					<div class="lot-remaining_time-header">До  окончания торгов</div> 
 					<div class="lot-remaining_time-text">
 					<?php
+					$model['remaining_time'] = '2015-06-16 12:27:00';
 						if(isset($model['remaining_time']) and ($model['remaining_time'] > Yii::$app->formatter->asDate('now', 'yyyy-MM-dd hh:mm:ss'))){
 							echo \russ666\widgets\Countdown::widget([
 							    'datetime' => $model['remaining_time'],
 							    'format' => '%Dд %Hч:%Mм:%Sс',
 							    'events' => [
-							        //'finish' => 'function(){location.reload()}',
+							        'finish' => 'function(){
+							        	console.log("finish");
+							        	finishLot();
+							        	//location.reload()
+							        	}',
 							        'update' => 'function(event){
 							        	var format = "%-Sс";
 						                if(event.offset.minutes > 0) format = "%-Mм " + format;
@@ -150,7 +155,7 @@ $js = <<< JS
 				type: "success",
 				timer: 3000,
 				confirmButtonColor: "#2A8FBD",
-			    confirmButtonText: "Сделать принята",
+			    confirmButtonText: "Ставка принята",
 			});
 		},
 		
@@ -162,6 +167,19 @@ $js = <<< JS
 				timer: 3000,
 				confirmButtonColor: "#2A8FBD",
 			    confirmButtonText: "Закрыть",
+			});
+		},
+		
+		lotFinish: function(url){
+			swal({
+				title: "Поздравляем!",
+				text: "Вы победили в лоте. Перейдите по <a href='"+url+"'>этой ссылке</a>, что бы оплатить лот.",
+				type: "success",
+				timer: 30000,
+				html: true,
+				showConfirmButton: false
+				//confirmButtonColor: "#2A8FBD",
+			    //confirmButtonText: "Сделать принята",
 			});
 		}
 	}
@@ -253,6 +271,46 @@ $js = <<< JS
 	$('#collapseRate').on('shown.bs.collapse', function () {
 	  $('.lot-rate-more span').html('Свернуть');
 	})	
+	
+	
+	
+	
+	
+	function finishLot()
+	{
+		var lotId = $modelId;
+		console.log('in finish lot');
+		console.log(lotId);
+	    var ajaxRequest = $.ajax({
+	        type: "post",
+	        dataType: 'json',
+	        url: '/lot/finish-lot',
+	        data: 'lot_id='+lotId
+	    })
+		  .done(function(msg) {
+		  	console.log(msg);
+		  	
+		    if(msg.success == true)
+		    {
+				ReturnAlert.lotFinish(msg.url);
+				//$.pjax({container: '#lot-left', timeout: 0, scrollTo: false});
+			}
+			else
+			{
+				$.pjax({container: '#lot-left', timeout: 0, scrollTo: false});
+				//location.reload();
+			}
+		    
+		  })
+		  .fail(function() {
+		  	location.reload();
+		  	//$.pjax({container: '#lot-left', timeout: 0, scrollTo: false});
+		    console.log( "error" );
+		  });
+	}
+	
+	
+	
 JS;
 $this->registerJs($js,  $this::POS_READY);
 ?>		
@@ -264,6 +322,7 @@ $js = <<< JS
 
 	ShareSocial.vkInit(obj.social.vk);
 	ShareSocial.fbInit(obj.social.fb);
+	
 
 JS;
 $this->registerJs($js,  $this::POS_READY);

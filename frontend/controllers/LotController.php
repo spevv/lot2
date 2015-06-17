@@ -10,6 +10,8 @@ use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 
 use common\models\Rate;
+use common\models\RateWinner;
+use common\models\LotRateStatistic;
 use frontend\models\UserSocial;
 use yii\helpers\VarDumper;
 
@@ -20,6 +22,10 @@ use backend\models\UserInterests;
 
 use frontend\models\ContactForm;
 use common\models\CategoryLot;
+
+
+
+use console\controllers\MainController;
 /**
  * LotController implements the CRUD actions for Lot model.
  */
@@ -105,6 +111,75 @@ class LotController extends Controller
     }
     
     
+    public function actionFinishLot()
+    {
+
+		if (Yii::$app->request->isPost) {
+	    	$post = Yii::$app->request->post();
+	    	Yii::$app->response->format = Response::FORMAT_JSON;
+	    	
+	    	$rate = Rate::find()->where(['lot_id'=>$post['lot_id']])->orderBy('price desc')->one();
+	    	
+	    	$lotRateStatistic = new LotRateStatistic();
+	    	$lotRateStatistic->lot_id = $post['lot_id'];
+	    	$lotRateStatistic->last_rate = $rate['id'];
+	    	$lotRateStatistic->status = 0;
+	    	$lotRateStatistic->save();
+	    	
+	    	$identity = Yii::$app->getUser()->getIdentity();
+		    if (isset($identity->profile)) 
+		    {
+		    	$user_id =  $identity->profile['service'].'-'.$identity->profile['id'];
+		    	
+		    	if($user_id == $rate['user2_id'])
+		    	{
+					$res = array(
+			            'success' => true,
+			            'url' => Url::to(['pay/index', 'id'=>$rate['id']]),
+			            
+			        );
+			        return $res;
+				}
+		    }
+		    return array(
+		        'success' => false,
+		    );
+			
+	    }
+	}
+    
+    
+    /*public function actionFinishLot()
+    {
+
+		if (Yii::$app->request->isPost) {
+	    	$post = Yii::$app->request->post();
+	    	Yii::$app->response->format = Response::FORMAT_JSON;
+	    	
+	    	
+	    	$identity = Yii::$app->getUser()->getIdentity();
+		    if (isset($identity->profile)) 
+		    {
+		    	$user_id =  $identity->profile['service'].'-'.$identity->profile['id'];
+		    	$rate = Rate::find()->where(['lot_id'=>$post['lot_id']])->orderBy('price desc')->one();
+		    	if($user_id == $rate['user2_id'])
+		    	{
+					$res = array(
+			            'success' => true,
+			            'url' => Url::to(['pay/index', 'id'=>$rate['id']]),
+			            
+			        );
+			        return $res;
+				}
+		    }
+		    return array(
+		        'success' => false,
+		    );
+			
+	    }
+	}*/
+    
+    
     
      public function actionGetRateInfo() {
     	//var_dump('simple');
@@ -130,9 +205,6 @@ class LotController extends Controller
 		        );
 		        return $res;
 			}
-	        
-	 
-	       
 	    }
 	}
     
@@ -149,6 +221,7 @@ class LotController extends Controller
     		{
     			$rate = new Rate();
     			$rate->price=0;
+    			
     		}
     		else{
 				$rate = clone $rates[0];
@@ -354,6 +427,22 @@ class LotController extends Controller
     public function actionView($slug)
     {
     	
+    	/*$lots = Lot::find()
+    		->where(['<',  'remaining_time', Yii::$app->formatter->asDate('now', 'yyyy-MM-dd hh:mm:ss')])
+    		->andWhere(['>',  'remaining_time', '2015-06-05 10:30:00'])
+    		->all(); //
+    	
+    	
+    	
+    	
+    	
+    	var_dump(count($lots));
+    	var_dump($lots);*/
+    	
+
+    	
+    	
+    	
     	/*$post = Yii::$app->request->post();
     	
     	if($post){
@@ -402,10 +491,6 @@ class LotController extends Controller
 		}	
 		
 		 $contact = new ContactForm();
-		
-		
-		
-		
 		
 		//данные по соцсетям
 		$string = Url::to('');

@@ -4,7 +4,7 @@
         "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "a2effc4c8022e113e2b8555bba40c377",
+    "hash": "ed53e7ba5f4795823cd767a67e6906d2",
     "packages": [
         {
             "name": "2amigos/yii2-ckeditor-widget",
@@ -2824,6 +2824,51 @@
             "time": "2015-03-14 21:40:00"
         },
         {
+            "name": "vova07/yii2-console-runner-extension",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/vova07/yii2-console-runner-extension.git",
+                "reference": "0258932e55995cb9384d52671ac08da9c14efbd6"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/vova07/yii2-console-runner-extension/zipball/0258932e55995cb9384d52671ac08da9c14efbd6",
+                "reference": "0258932e55995cb9384d52671ac08da9c14efbd6",
+                "shasum": ""
+            },
+            "require": {
+                "yiisoft/yii2": "*"
+            },
+            "type": "yii2-extension",
+            "autoload": {
+                "psr-4": {
+                    "vova07\\console\\": ""
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "BSD-3-Clause"
+            ],
+            "authors": [
+                {
+                    "name": "Crudu Vasile",
+                    "email": "bazillio07@yandex.ru"
+                }
+            ],
+            "description": "An extension for running console commands on background in Yii framework.",
+            "homepage": "https://github.com/vova07/yii2-console-runner-extension",
+            "keywords": [
+                "background",
+                "commands",
+                "console",
+                "runner",
+                "yii 2",
+                "yii2"
+            ],
+            "time": "2015-05-03 18:39:19"
+        },
+        {
             "name": "webcreate/jquery-ias",
             "version": "v2.2.1",
             "source": {
@@ -3358,6 +3403,51 @@
             "extra": {
                 "bower-asset-main": "dist/typeahead.bundle.js"
             }
+        },
+        {
+            "name": "dizews/yii2-db-console",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/dizews/yii2-db-console.git",
+                "reference": "d5de70c9f05421a764687321499a0cc4ce7f21bb"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/dizews/yii2-db-console/zipball/d5de70c9f05421a764687321499a0cc4ce7f21bb",
+                "reference": "d5de70c9f05421a764687321499a0cc4ce7f21bb",
+                "shasum": ""
+            },
+            "require": {
+                "yiisoft/yii2": "*"
+            },
+            "type": "yii2-extension",
+            "autoload": {
+                "psr-4": {
+                    "dizews\\dbConsole\\": ""
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "BSD-3-Clause"
+            ],
+            "authors": [
+                {
+                    "name": "Vladimir Zbrailov",
+                    "email": "dizews@gmail.com"
+                }
+            ],
+            "description": "The yii2 extension help to work in console with databases",
+            "keywords": [
+                "console",
+                "database",
+                "db",
+                "mongodb",
+                "mysql",
+                "sqlite",
+                "yii2"
+            ],
+            "time": "2015-05-30 16:36:37"
         },
         {
             "name": "fg/yii2-url-alias",

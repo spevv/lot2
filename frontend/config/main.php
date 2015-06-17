@@ -52,6 +52,21 @@ return [
                     'suffix' => ''
             	],
             	[
+            		'pattern' => 'pay/<id>',
+                    'route' => 'pay/index',
+                    'suffix' => ''
+            	],
+            	[
+            		'pattern' => 'thanks',
+                    'route' => 'pay/thanks',
+                    'suffix' => ''
+            	],
+            	[
+            		'pattern' => 'lot/finish-lot',
+                    'route' => 'lot/finish-lot',
+                    'suffix' => ''
+            	],
+            	[
             		'pattern' => 'lot/contact',
                     'route' => 'lot/contact',
                     'suffix' => ''

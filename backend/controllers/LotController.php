@@ -12,6 +12,7 @@ use common\models\SubjectLot;
 use common\models\BranchLot;
 use common\models\CategoryLot;
 use common\models\LotImage;
+use common\models\LotRateStatistic;
 /**
  * LotController implements the CRUD actions for Lot model.
  */
@@ -51,6 +52,7 @@ class LotController extends Controller
      */
     public function actionView($id)
     {
+
         return $this->render('view', [
             'model' => $this->findModel($id),
         ]);
@@ -125,6 +127,24 @@ class LotController extends Controller
             ]);
         }
     }
+    
+    public function actionCleanRate()
+    { 
+		if (Yii::$app->request->post()) {
+        	$post = Yii::$app->request->post();
+        	
+        	$formRateModel = LotRateStatistic::find()->where(['lot_id' => $post["LotRateStatistic"]['lot_id']])->orderBy('id desc')->one();
+        	
+        	if($formRateModel)
+        	{
+				$formRateModel->status = 1;
+				$formRateModel->save();
+				
+			}
+        }
+        echo '';
+		
+	}
 
     /**
      * Updates an existing Lot model.
@@ -134,6 +154,7 @@ class LotController extends Controller
      */
     public function actionUpdate($id)
     {
+
         $model = $this->findModel($id);
 
         if ($model->load(Yii::$app->request->post())) {
@@ -325,8 +346,34 @@ class LotController extends Controller
            // return $this->redirect(['view', 'id' => $model->id]);
             return $this->redirect(['index']);
         } else {
+        	
+        	$formRateModel = LotRateStatistic::find()->where(['lot_id' =>$model->id])->orderBy('id desc')->one();
+        	
+        	use common\models\RateWinner;
+        	
+        	
+        	if($formRateModel){
+        		//var_dump($formRateModel);
+        		if($formRateModel['status'] != 1){
+        			
+        			$formRateModel->status = 1;
+					$formRate = $this->renderPartial('_form-rate', [
+		            	'model' => $formRateModel,
+		            ]);
+				}
+        		else{
+					$formRate = "";
+				}	
+			}
+			else{
+				$formRate = "";
+			}
+        	
+        	
+        	
             return $this->render('update', [
                 'model' => $model,
+                'formRate' => $formRate,
             ]);
         }
     }

@@ -6,8 +6,8 @@ return [
 	    'clientSecret' => 'db7acdbd30eadfb4647e46a64be0ee5f', //'078f0ef6a3682b6b659f8bbf32ae096c', // 'a50a97ca31c69603d73440e605ca906a',
     ],
     'vkontakte' => [
-    	'clientId' => '4922757', // '4923090',
-	    'clientSecret' => 'g4VTjJiw97wko2AS8zjw', //'bijIsupnRxwKSf3VdkAH',
+    	'clientId' => '4923090', // '4923090', 4922757
+	    'clientSecret' => 'bijIsupnRxwKSf3VdkAH',
     ],
     'odnoklassniki' => [
     	'clientId' => '1137718016',

@@ -30,8 +30,10 @@ class RateWinner extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['pay', 'rate_id', 'comment'], 'integer'],
-            [['rate_id'], 'required']
+            [['pay', 'rate_id', 'status'], 'integer'],
+            [['rate_id'], 'required'],
+            [['winner_time', 'pay_time'], 'safe'],
+            [['rate_info', 'comment'], 'string']
         ];
     }
 
@@ -45,14 +47,17 @@ class RateWinner extends \yii\db\ActiveRecord
             'pay' => 'Pay',
             'rate_id' => 'Rate ID',
             'comment' => 'Comment',
+            'rate_info' => 'Info',
+            'winner_time' => 'winner_time',
+            'pay_time' => 'pay_time',
         ];
     }
 
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getRate()
+   /* public function getRate()
     {
         return $this->hasOne(Rate::className(), ['id' => 'rate_id']);
-    }
+    }*/
 }
