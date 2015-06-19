@@ -113,10 +113,10 @@ class LotSearch extends Lot
             ->andFilterWhere(['like',  'image', $this->image]);
         
         if($oldTime){
-			$query->andFilterWhere(['>',  'remaining_time', Yii::$app->formatter->asDate('now', 'yyyy-MM-dd hh:mm:ss')]);
+			$query->andFilterWhere(['>',  'remaining_time', Yii::$app->formatter->asDate('now', 'yyyy-MM-dd HH:mm:ss')]);
 		}
 		else{
-			$query->andFilterWhere(['<',  'remaining_time', Yii::$app->formatter->asDate('now', 'yyyy-MM-dd hh:mm:ss')]);
+			$query->andFilterWhere(['<',  'remaining_time', Yii::$app->formatter->asDate('now', 'yyyy-MM-dd HH:mm:ss')]);
 		}
         
            

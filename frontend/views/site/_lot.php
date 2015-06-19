@@ -4,6 +4,7 @@ use common\models\GeobaseCity;
 use yii\helpers\Url;
 use yii\i18n\Formatter;
 use common\models\Rate;
+use common\models\LotRateStatistic;
 
 ?>
 
@@ -28,7 +29,20 @@ use common\models\Rate;
 		<div class="current-price">
 			<div class="current-price-text">Текущая цена лота: </div>
 			<div class="current-price-price">
-				<?php $rate = Rate::find()->where(['lot_id'=>$model->id])->orderBy('price desc')->one(); ?>
+				<?php 
+				$lotRateStatistic = LotRateStatistic::find()->where(['lot_id'=>$model->id])->orderBy('id desc')->one();
+		    	$temp = 0;
+		    	if($lotRateStatistic){
+					if($lotRateStatistic->status)
+					{
+						$rate = Rate::find()->where(['lot_id'=>$model->id])->andWhere(['refusal'=>0])->andWhere(['>',  'id', $lotRateStatistic->last_rate])->orderBy('price desc')->one();
+		    			$temp = 1;
+					}
+				}
+				if(!$temp){
+					$rate = Rate::find()->where(['lot_id'=>$model->id])->andWhere(['refusal'=>0])->orderBy('price desc')->one();
+				}
+				//$rate = Rate::find()->where(['lot_id'=>$model->id])->orderBy('price desc')->one(); ?>
 				<?php if($rate): ?>
 					<?= Yii::$app->formatter->asDecimal($rate->price,0);?>
 				<?php else: ?>
@@ -52,7 +66,7 @@ use common\models\Rate;
 				<div class="lot-time-header">До окончания торгов:</div>
 				<div class="lot-time-time">
 				<?php
-				if(isset($model->remaining_time) and ($model->remaining_time > Yii::$app->formatter->asDate('now', 'yyyy-MM-dd hh:mm:ss'))){
+				if(isset($model->remaining_time) and ($model->remaining_time > Yii::$app->formatter->asDate('now', 'yyyy-MM-dd HH:mm:ss'))){
 					echo \russ666\widgets\Countdown::widget([
 					    'datetime' => $model->remaining_time,
 					    'format' => '%Dд %Hч:%Mм:%Sс',

@@ -94,12 +94,18 @@ ShareSocial = {
 					function(data) { 
 						var c={};
 				  		if (data.response) { 
-				  			if(data.response[1].attachment.link.url == a.url ){
-								$(window).trigger("share.success");
+				  			if(data.response[1].attachment.link){
+								if(data.response[1].attachment.link.url == a.url ){
+									$(window).trigger("share.success");
+								}
+								else{
+									$(window).trigger("share.error");
+								}
 							}
 							else{
 								$(window).trigger("share.error");
 							}
+				  			
 				  		}
 				  	} 
 				);

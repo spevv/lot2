@@ -110,7 +110,7 @@ class SiteController extends Controller
 	    if ($model->load(Yii::$app->request->post())) {
 	        if ($model->validate()) {
 	            // form inputs are valid, do something here
-	            $model->date = Yii::$app->formatter->asDate('now', 'yyyy-MM-dd hh:mm:ss');
+	            $model->date = Yii::$app->formatter->asDate('now', 'yyyy-MM-dd HH:mm:ss');
 	            $model->save();
 	            //var_dump($model->mail);
 	            // сделать сохранение

@@ -5,6 +5,7 @@ use yii\helpers\Url;
 
 use common\models\Rate;
 use frontend\models\UserSocial;
+use common\models\LotRateStatistic;
 ?>
 
 	<a href="<?= Url::toRoute(['lot/view', 'slug' => $model->slug]); ?>">
@@ -23,7 +24,22 @@ use frontend\models\UserSocial;
 	<div class="lot-footer">
 
 		<div class="winner">
-			<?php $rate = Rate::find()->where(['lot_id'=>$model->id])->orderBy('price desc')->one(); ?>
+			<?php 
+			$lotRateStatistic = LotRateStatistic::find()->where(['lot_id'=>$model->id])->orderBy('id desc')->one();
+		    	$temp = 0;
+		    	if($lotRateStatistic){
+					if($lotRateStatistic->status)
+					{
+						$rate = Rate::find()->where(['lot_id'=>$model->id])->andWhere(['refusal'=>0])->andWhere(['>',  'id', $lotRateStatistic->last_rate])->orderBy('price desc')->one();
+		    			$temp = 1;
+					}
+				}
+				if(!$temp){
+					$rate = Rate::find()->where(['lot_id'=>$model->id])->andWhere(['refusal'=>0])->orderBy('price desc')->one();
+				}
+			
+			
+			//$rate = Rate::find()->where(['lot_id'=>$model->id])->orderBy('price desc')->one(); ?>
 			<?php if($rate): ?>
 				<?php  
 				$user = UserSocial::findOne(['user_id'=>$rate->user2_id]);

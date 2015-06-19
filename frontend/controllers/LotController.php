@@ -179,7 +179,25 @@ class LotController extends Controller
     	{
     		//var_dump('in');
 			$post = Yii::$app->request->post();
-			$rates = Rate::find()->where(['lot_id'=>$post["Rate"]['lot_id']])->orderBy('price desc')->all();
+			//$rates = Rate::find()->where(['lot_id'=>$post["Rate"]['lot_id']])->orderBy('price desc')->all();
+			
+			$lotRateStatistic = LotRateStatistic::find()->where(['lot_id'=>$post["Rate"]['lot_id']])->orderBy('id desc')->one();
+	    	$temp = 0;
+	    	if($lotRateStatistic){
+				if($lotRateStatistic->status)
+				{
+					$rates = Rate::find()->where(['lot_id'=>$post["Rate"]['lot_id']])->andWhere(['refusal'=>0])->andWhere(['>',  'id', $lotRateStatistic->last_rate])->orderBy('price desc')->all();
+	    			//$count = Rate::find()->where(['lot_id'=>$modelId->id])->andWhere(['>',  'id', $lotRateStatistic->last_rate])->count();
+	    			$temp = 1;
+				}
+			}
+			
+			if(!$temp){
+				$rates = Rate::find()->where(['lot_id'=>$modelId->id])->andWhere(['refusal'=>0])->orderBy('price desc')->all();
+	    		//$count = Rate::find()->where(['lot_id'=>$modelId->id])->count();
+			}
+		
+		
 			if(!$rates)
     		{
     			$rate = new Rate();
@@ -205,15 +223,39 @@ class LotController extends Controller
 			if($post["Rate"]['price'] > $rate->price)
 			{
 				$model = new Rate();
-				$model->time = Yii::$app->formatter->asDate('now', 'yyyy-MM-dd hh:mm:ss');
+				$model->time = Yii::$app->formatter->asDate('now', 'yyyy-MM-dd HH:mm:ss');
 				$model->price = $post["Rate"]['price'];
 				$model->lot_id = $post["Rate"]['lot_id'];
 				$model->user2_id = $user2_id;
 				$model->save();
 				
 				
-				$rates2 = Rate::find()->where(['lot_id'=>$post["Rate"]['lot_id']])->orderBy('price desc')->all();
-		    	$count = Rate::find()->where(['lot_id'=>$post["Rate"]['lot_id']])->count();
+				/*$checkLot = new CheckLot();
+						
+				Yii::$app->params['emailText']['slewRate']['email'] = '';
+    			$checkLot->sendEmail(Yii::$app->params['emailText']['slewRate']);*/
+				
+				
+				
+				
+				$lotRateStatistic = LotRateStatistic::find()->where(['lot_id'=>$post["Rate"]['lot_id']])->orderBy('id desc')->one();
+		    	$temp = 0;
+		    	if($lotRateStatistic){
+					if($lotRateStatistic->status)
+					{
+						$rates2 = Rate::find()->where(['lot_id'=>$post["Rate"]['lot_id']])->andWhere(['>',  'id', $lotRateStatistic->last_rate])->orderBy('price desc')->all();
+		    			$count = Rate::find()->where(['lot_id'=>$modelId->id])->andWhere(['>',  'id', $lotRateStatistic->last_rate])->count();
+		    			$temp = 1;
+					}
+				}
+				
+				if(!$temp){
+					$rates2 = Rate::find()->where(['lot_id'=>$modelId->id])->orderBy('price desc')->all();
+		    		$count = Rate::find()->where(['lot_id'=>$modelId->id])->count();
+				}
+				
+				//$rates2 = Rate::find()->where(['lot_id'=>$post["Rate"]['lot_id']])->orderBy('price desc')->all();
+		    	//$count = Rate::find()->where(['lot_id'=>$post["Rate"]['lot_id']])->count();
 		    	$count = $count.' '.$this->plural($count,['ставка', 'ставки', 'ставок']);
 		    	
 		    	if(!$rates2)
@@ -390,16 +432,39 @@ class LotController extends Controller
     public function actionView($slug)
     {
 	
+		/*$time = '2015-06-17 15:48:10';
+		$new_date = date('Y-m-d H:m:s', strtotime("+3 hours", strtotime($time)));
+		var_dump($new_date);*/
+	
+	
 		//поместить в finishLot
     	$checkLot = new CheckLot();
     	$checkLot->checkAndUpdate();
+    	
+    	//var_dump($checkLot->getNextRate(405, $offset = 1));
+    	
     	
 
     	Url::remember();
     	
     	$modelId = $this->findModel($slug);
-    	$rates = Rate::find()->where(['lot_id'=>$modelId->id])->orderBy('price desc')->all();
-    	$count = Rate::find()->where(['lot_id'=>$modelId->id])->count();
+    	$lotRateStatistic = LotRateStatistic::find()->where(['lot_id'=>$modelId->id])->orderBy('id desc')->one();
+    	$temp = 0;
+    	if($lotRateStatistic){
+			if($lotRateStatistic->status)
+			{
+				$rates = Rate::find()->where(['lot_id'=>$modelId->id])->andWhere(['refusal'=>0])->andWhere(['>',  'id', $lotRateStatistic->last_rate])->orderBy('price desc')->all();
+    			$count = Rate::find()->where(['lot_id'=>$modelId->id])->andWhere(['refusal'=>0])->andWhere(['>',  'id', $lotRateStatistic->last_rate])->count();
+    			$temp = 1;
+			}
+		}
+		
+		if(!$temp){
+			$rates = Rate::find()->where(['lot_id'=>$modelId->id])->andWhere(['refusal'=>0])->orderBy('price desc')->all();
+    		$count = Rate::find()->where(['lot_id'=>$modelId->id])->andWhere(['refusal'=>0])->count();
+		}
+		
+
     	$count = $count.' '.$this->plural($count,['ставка', 'ставки', 'ставок']);
     	
     	if(!$rates)
@@ -506,7 +571,7 @@ class LotController extends Controller
 			'text' => "Присоединяйтесь к нам.",
 		];
 		
-		if($modelId->remaining_time > Yii::$app->formatter->asDate('now', 'yyyy-MM-dd hh:mm:ss'))
+		if($modelId->remaining_time > Yii::$app->formatter->asDate('now', 'yyyy-MM-dd HH:mm:ss'))
 		{
 			$lotLeft = $this->renderPartial('_lotLeft', [
             	'model' => $modelId->toArray([], ['subjects','branchs', 'images']),

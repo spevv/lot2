@@ -15,8 +15,8 @@ use yii\widgets\Pjax;
 					<div class="lot-remaining_time-header">До  окончания торгов</div> 
 					<div class="lot-remaining_time-text">
 					<?php
-					$model['remaining_time'] = '2015-06-16 12:27:00';
-						if(isset($model['remaining_time']) and ($model['remaining_time'] > Yii::$app->formatter->asDate('now', 'yyyy-MM-dd hh:mm:ss'))){
+					//$model['remaining_time'] = '2015-06-16 12:27:00';
+						if(isset($model['remaining_time']) and ($model['remaining_time'] > Yii::$app->formatter->asDate('now', 'yyyy-MM-dd HH:mm:ss'))){
 							echo \russ666\widgets\Countdown::widget([
 							    'datetime' => $model['remaining_time'],
 							    'format' => '%Dд %Hч:%Mм:%Sс',
