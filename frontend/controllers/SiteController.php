@@ -102,33 +102,24 @@ class SiteController extends Controller
     
     public function actionFollower()
 	{
-	   // var_dump('sdfsfsfsdf');
-	   // var_dump(Yii::$app->request->post());
-	    //Yii::$app->formatter->asDate('now', 'yyyy-MM-dd hh:mm:ss')
 	    $model = new Follower();
-
 	    if ($model->load(Yii::$app->request->post())) {
 	        if ($model->validate()) {
 	            // form inputs are valid, do something here
 	            $model->date = Yii::$app->formatter->asDate('now', 'yyyy-MM-dd HH:mm:ss');
 	            $model->save();
-	            //var_dump($model->mail);
-	            // сделать сохранение
-	            
+	                      
 	            return '<div class="success-follower">Вы успешно подписались!</div>';
 	        }
-	        else{
+	        else
+	        {
 				 return '<div class="success-follower">Такой e-mail уже существует!</div>';
 			}
 	    }
-	    else{
+	    else
+	    {
 	    	return $this->redirect(Url::previous());
-			 //return '<div class="success-follower">Такой e-mail уже существует!   2</div>';
 		}
-		
-	   /* return $this->render('follower', [
-	        'model' => $model,
-	    ]);*/
 	}
 
     /*public function successCallback($client)
@@ -139,96 +130,14 @@ class SiteController extends Controller
 
     public function actionIndex()
     {
-
-	    /*return $this->render('follower', [
-	        
-	    ]);*/
-	    
-		    Yii::$app->opengraph->set([
-			    'title' => 'ИНТЕРНЕТ-АУКЦИОН БИЗНЕС-ОБРАЗОВАНИЯ',
-			    'description' => 'описание сайта',
-			    'image' => 'http://lot2.localhost/image/bg1.png',
-			]);
-
-    		if(!Yii::$app->session->get('KCFINDER')){
-				$kcfOptions = array_merge(KCFinder::$kcfDefaultOptions, [
-				    'uploadURL' => Yii::getAlias('@uploadURL'), //'/uploads',
-				    'uploadDir' => Yii::getAlias('@uploadDir'), //dirname(dirname(__DIR__)).'/uploads',
-				    'access' => [
-				        'files' => [
-				            'upload' => true,
-				            'delete' => true,
-				            'copy' => true,
-				            'move' => true,
-				            'rename' => true,
-				        ],
-				        'dirs' => [
-				            'create' => true,
-				            'delete' => true,
-				            'rename' => true,
-				        ],
-				    ],
-				    'disabled' => false,
-			        'denyZipDownload' => true,
-			        'denyUpdateCheck' => true,
-			        'denyExtensionRename' => true,
-			        'theme' => 'default',
-			        'types' => [  // @link http://kcfinder.sunhater.com/install#_types
-			            'files' => [
-			                'type' => '',
-			            ],
-			        ],
-					    'access' => [
-					        'files' => [
-					            'upload' => true,
-					            'delete' => true,
-					            'copy' => true,
-					            'move' => true,
-					            'rename' => true,
-					        ],
-					        'dirs' => [
-					            'create' => true,
-					            'delete' => true,
-					            'rename' => true,
-					        ],
-					    ],
-					    'lang' => 'ru',
-					    'thumbsDir' => 'thumbs',
-				        'thumbWidth' => 100,
-				        'thumbHeight' => 100,
-				        'filenameChangeChars' => array(
-						    " " => "_",
-						    ":" => ".",
-						   "Є"=>"YE","І"=>"I","Ѓ"=>"G","і"=>"i","№"=>"-","є"=>"ye","ѓ"=>"g",
-						   "А"=>"A","Б"=>"B","В"=>"V","Г"=>"G","Д"=>"D",
-						   "Е"=>"E","Ё"=>"YO","Ж"=>"ZH",
-						   "З"=>"Z","И"=>"I","Й"=>"J","К"=>"K","Л"=>"L",
-						   "М"=>"M","Н"=>"N","О"=>"O","П"=>"P","Р"=>"R",
-						   "С"=>"S","Т"=>"T","У"=>"U","Ф"=>"F","Х"=>"X",
-						   "Ц"=>"C","Ч"=>"CH","Ш"=>"SH","Щ"=>"SHH","Ъ"=>"'",
-						   "Ы"=>"Y","Ь"=>"","Э"=>"E","Ю"=>"YU","Я"=>"YA",
-						   "а"=>"a","б"=>"b","в"=>"v","г"=>"g","д"=>"d",
-						   "е"=>"e","ё"=>"yo","ж"=>"zh",
-						   "з"=>"z","и"=>"i","й"=>"j","к"=>"k","л"=>"l",
-						   "м"=>"m","н"=>"n","о"=>"o","п"=>"p","р"=>"r",
-						   "с"=>"s","т"=>"t","у"=>"u","ф"=>"f","х"=>"x",
-						   "ц"=>"c","ч"=>"ch","ш"=>"sh","щ"=>"shh","ъ"=>"",
-						   "ы"=>"y","ь"=>"","э"=>"e","ю"=>"yu","я"=>"ya",
-						   " "=>"_","—"=>"_",","=>"_","!"=>"_","@"=>"_",
-						   "#"=>"-","$"=>"","%"=>"","^"=>"","&"=>"","*"=>"",
-						   "("=>"",")"=>"","+"=>"","="=>"",";"=>"",":"=>"",
-						   "'"=>"", "\""=>"","~"=>"","`"=>"","?"=>"","/"=>"",
-						   "\\"=>"","["=>"","]"=>"","{"=>"","}"=>"","|"=>""
-						),
-				]);
-				// Set kcfinder session options
-				Yii::$app->session->set('KCFINDER', $kcfOptions);
-			}
-
-    	//var_dump(Yii::$app->session->get('KCFINDER'));
-    	
-    	
-    	
+	    Yii::$app->opengraph->set([
+		    'title' => Yii::$app->parems['siteInfo']['title'],
+		    'description' =>Yii::$app->parems['siteInfo']['description'],
+		    'image' => Yii::$app->parems['siteInfo']['image'],
+		]);
+		
+		$this->setKCFINDER();
+    		
 		$categoryInfo = Category::find()
 		    ->where(['public' => 1])
 		    ->orderBy('priority')
@@ -239,12 +148,6 @@ class SiteController extends Controller
 			$items[$key]['linkOptions'] =  ['class'=> $value['slug']];
 			$items[$key]['url'] = ['category/view', 'category' => $value['slug']];
 		}
-
-       /* return $this->render('index', [
-            'searchModel' => $searchModel,
-            'dataProvider' => $dataProvider,
-            'categoryInfo' => $items,
-        ]);*/
         
         $lot = ArrayHelper::map(Lot::find()->all(), 'id', 'city_id');
 		$lot = array_unique($lot);
@@ -342,18 +245,13 @@ class SiteController extends Controller
 	            
 	        ]);
 		}
-    	
-    	
-        /*return $this->render('index');*/
     }
     
 
-	public function actionLogin() {
-		//var_dump(Url::to(''));
-		//var_dump(Url::previous());
-		//die;
+	public function actionLogin() 
+	{
+
         $serviceName = Yii::$app->getRequest()->getQueryParam('service');
-          //var_dump($serviceName); exit;
 
         if (isset($serviceName)) {
             /** @var $eauth \nodge\eauth\ServiceBase */
@@ -404,22 +302,6 @@ class SiteController extends Controller
     }
 
 
-   /* public function actionLogin()
-    {
-        if (!\Yii::$app->user->isGuest) {
-            return $this->goHome();
-        }
-
-        $model = new LoginForm();
-        if ($model->load(Yii::$app->request->post()) && $model->login()) {
-            return $this->goBack();
-        } else {
-            return $this->render('login', [
-                'model' => $model,
-            ]);
-        }
-    }*/
-
     public function actionLogout()
     {
         Yii::$app->user->logout();
@@ -444,11 +326,91 @@ class SiteController extends Controller
             ]);
         }
     }
+    
+    private function setKCFINDER()
+    {
+		if(!Yii::$app->session->get('KCFINDER')){
+			$kcfOptions = array_merge(KCFinder::$kcfDefaultOptions, [
+			    'uploadURL' => Yii::getAlias('@uploadURL'), //'/uploads',
+			    'uploadDir' => Yii::getAlias('@uploadDir'), //dirname(dirname(__DIR__)).'/uploads',
+			    'access' => [
+			        'files' => [
+			            'upload' => true,
+			            'delete' => true,
+			            'copy' => true,
+			            'move' => true,
+			            'rename' => true,
+			        ],
+			        'dirs' => [
+			            'create' => true,
+			            'delete' => true,
+			            'rename' => true,
+			        ],
+			    ],
+			    'disabled' => false,
+		        'denyZipDownload' => true,
+		        'denyUpdateCheck' => true,
+		        'denyExtensionRename' => true,
+		        'theme' => 'default',
+		        'types' => [  // @link http://kcfinder.sunhater.com/install#_types
+		            'files' => [
+		                'type' => '',
+		            ],
+		        ],
+				    'access' => [
+				        'files' => [
+				            'upload' => true,
+				            'delete' => true,
+				            'copy' => true,
+				            'move' => true,
+				            'rename' => true,
+				        ],
+				        'dirs' => [
+				            'create' => true,
+				            'delete' => true,
+				            'rename' => true,
+				        ],
+				    ],
+				    'lang' => 'ru',
+				    'thumbsDir' => 'thumbs',
+			        'thumbWidth' => 100,
+			        'thumbHeight' => 100,
+			        'filenameChangeChars' => array(
+					    " " => "_",
+					    ":" => ".",
+					   "Є"=>"YE","І"=>"I","Ѓ"=>"G","і"=>"i","№"=>"-","є"=>"ye","ѓ"=>"g",
+					   "А"=>"A","Б"=>"B","В"=>"V","Г"=>"G","Д"=>"D",
+					   "Е"=>"E","Ё"=>"YO","Ж"=>"ZH",
+					   "З"=>"Z","И"=>"I","Й"=>"J","К"=>"K","Л"=>"L",
+					   "М"=>"M","Н"=>"N","О"=>"O","П"=>"P","Р"=>"R",
+					   "С"=>"S","Т"=>"T","У"=>"U","Ф"=>"F","Х"=>"X",
+					   "Ц"=>"C","Ч"=>"CH","Ш"=>"SH","Щ"=>"SHH","Ъ"=>"'",
+					   "Ы"=>"Y","Ь"=>"","Э"=>"E","Ю"=>"YU","Я"=>"YA",
+					   "а"=>"a","б"=>"b","в"=>"v","г"=>"g","д"=>"d",
+					   "е"=>"e","ё"=>"yo","ж"=>"zh",
+					   "з"=>"z","и"=>"i","й"=>"j","к"=>"k","л"=>"l",
+					   "м"=>"m","н"=>"n","о"=>"o","п"=>"p","р"=>"r",
+					   "с"=>"s","т"=>"t","у"=>"u","ф"=>"f","х"=>"x",
+					   "ц"=>"c","ч"=>"ch","ш"=>"sh","щ"=>"shh","ъ"=>"",
+					   "ы"=>"y","ь"=>"","э"=>"e","ю"=>"yu","я"=>"ya",
+					   " "=>"_","—"=>"_",","=>"_","!"=>"_","@"=>"_",
+					   "#"=>"-","$"=>"","%"=>"","^"=>"","&"=>"","*"=>"",
+					   "("=>"",")"=>"","+"=>"","="=>"",";"=>"",":"=>"",
+					   "'"=>"", "\""=>"","~"=>"","`"=>"","?"=>"","/"=>"",
+					   "\\"=>"","["=>"","]"=>"","{"=>"","}"=>"","|"=>""
+					),
+			]);
+			// Set kcfinder session options
+			Yii::$app->session->set('KCFINDER', $kcfOptions);
+		}
+		return TRUE;	
+	}
 
-    public function actionAbout()
+   /* public function actionAbout()
     {
         return $this->render('about');
-    }
+    }*/
+    
 
     public function actionSignup()
     {

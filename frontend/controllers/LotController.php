@@ -10,21 +10,17 @@ use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 
 use common\models\Rate;
-use common\models\RateWinner;
 use common\models\LotRateStatistic;
-use frontend\models\UserSocial;
-use yii\helpers\VarDumper;
+//use frontend\models\UserSocial;
+//use yii\helpers\VarDumper;
+//use common\models\RateWinner;
 
 use yii\helpers\Html;
 use yii\helpers\Url;
 use yii\web\Response;
 use backend\models\UserInterests;
-
 use frontend\models\ContactForm;
 use common\models\CategoryLot;
-
-
-
 use common\models\CheckLot;
 
 
@@ -40,8 +36,6 @@ class LotController extends Controller
         ];
     }
     
-    
-
     /**
      * Lists all Lot models.
      * @return mixed
@@ -52,13 +46,10 @@ class LotController extends Controller
 		
 		if(Yii::$app->request->isPost){
 			$dataProvider = $searchModel->search(Yii::$app->request->post());
-			//var_dump('post');
-			//die();
-			
 			return $this->renderAjax('index', [
-            'searchModel' => $searchModel,
-            'dataProvider' => $dataProvider,
-        ]);
+	            'searchModel' => $searchModel,
+	            'dataProvider' => $dataProvider,
+	        ]);
 		}
 		else
 		{
@@ -68,33 +59,10 @@ class LotController extends Controller
 	            'dataProvider' => $dataProvider,
 	        ]);
 		}
-       /* return $this->render('index', [
-            'searchModel' => $searchModel,
-            'dataProvider' => $dataProvider,
-        ]);*/
-    }
-
-    /**
-     * Displays a single Lot model.
-     * @param string $id
-     * @return mixed
-     */
-    /*public function actionView($id)
-    {
-    	$modelId = $this->findModel($id);
-        return $this->render('view', [
-           // 'model' => $this->findModel($id),
-             'model' => $modelId->toArray([], ['subjects','branchs', 'images']),
-        ]);
-    }*/
-    
-    
+    }    
     
     public function actionContact()
-    {
-    	/*var_dump('actionContact');
-    	die;*/
-    	
+    {  	
         $model = new ContactForm();
         if ($model->load(Yii::$app->request->post()) && $model->validate()) {
             if ($model->sendEmail(Yii::$app->params['adminEmail'])) {
@@ -102,27 +70,20 @@ class LotController extends Controller
             } else {
                 Yii::$app->session->setFlash('error', 'Не удалось отправить сообщение.');
             }
-
-           // return $this->refresh();
-           //return '<div class="success-follower">Вы успешно подписались! 111111</div>';
+            
             $modelNew = new ContactForm();
-           return $this->renderPartial('contact', [
+            return $this->renderPartial('contact', [
                 'model' => $modelNew,
-                ]);
+            ]);
         } 
     }
     
     public function actionFinishLot()
     {
-
 		if (Yii::$app->request->isPost) {
 	    	$post = Yii::$app->request->post();
 	    	Yii::$app->response->format = Response::FORMAT_JSON;
-	    	
-	    	//выполнить проверки
-	    	
-	    	
-	
+
 	    	$identity = Yii::$app->getUser()->getIdentity();
 		    if (isset($identity->profile)) 
 		    {
@@ -141,20 +102,15 @@ class LotController extends Controller
 		    return array(
 		        'success' => false,
 		    );
-			
 	    }
 	} 
     
     public function actionGetRateInfo() 
     {
-    	//var_dump('simple');
 	    if (Yii::$app->request->isPost) {
 	    	$post = Yii::$app->request->post();
-	    	
 	        Yii::$app->response->format = Response::FORMAT_JSON;
-	       	
 	       	$rate = Rate::find()->where(['lot_id'=>$post['lot_id']])->orderBy('price desc')->one();
-	       	
 	       	if($rate){
 				$res = array(
 		            'success' => true,
@@ -177,34 +133,17 @@ class LotController extends Controller
     {
     	if(Yii::$app->request->isPost)
     	{
-    		//var_dump('in');
 			$post = Yii::$app->request->post();
-			//$rates = Rate::find()->where(['lot_id'=>$post["Rate"]['lot_id']])->orderBy('price desc')->all();
+			$modelId = $this->findModelId($post["Rate"]['lot_id']);
+			$rates = $this->getRateState($modelId);
 			
-			$lotRateStatistic = LotRateStatistic::find()->where(['lot_id'=>$post["Rate"]['lot_id']])->orderBy('id desc')->one();
-	    	$temp = 0;
-	    	if($lotRateStatistic){
-				if($lotRateStatistic->status)
-				{
-					$rates = Rate::find()->where(['lot_id'=>$post["Rate"]['lot_id']])->andWhere(['refusal'=>0])->andWhere(['>',  'id', $lotRateStatistic->last_rate])->orderBy('price desc')->all();
-	    			//$count = Rate::find()->where(['lot_id'=>$modelId->id])->andWhere(['>',  'id', $lotRateStatistic->last_rate])->count();
-	    			$temp = 1;
-				}
-			}
-			
-			if(!$temp){
-				$rates = Rate::find()->where(['lot_id'=>$modelId->id])->andWhere(['refusal'=>0])->orderBy('price desc')->all();
-	    		//$count = Rate::find()->where(['lot_id'=>$modelId->id])->count();
-			}
-		
-		
 			if(!$rates)
     		{
     			$rate = new Rate();
     			$rate->price=0;
-    			
     		}
-    		else{
+    		else
+    		{
 				$rate = clone $rates[0];
 			}
     		
@@ -215,8 +154,6 @@ class LotController extends Controller
 		    }
 		    else
 		    {
-		    	//return $this->redirect(Url::previous());
-				$modelId = $this->findModelId($post["Rate"]['lot_id']);
 		        return $this->redirect(['/lot/view', 'slug' => $modelId->slug]);
 			}
 			
@@ -227,247 +164,144 @@ class LotController extends Controller
 				$model->price = $post["Rate"]['price'];
 				$model->lot_id = $post["Rate"]['lot_id'];
 				$model->user2_id = $user2_id;
+				$model->refusal = 0;
 				$model->save();
 				
-				
-				/*$checkLot = new CheckLot();
-						
-				Yii::$app->params['emailText']['slewRate']['email'] = '';
-    			$checkLot->sendEmail(Yii::$app->params['emailText']['slewRate']);*/
-				
-				
-				
-				
-				$lotRateStatistic = LotRateStatistic::find()->where(['lot_id'=>$post["Rate"]['lot_id']])->orderBy('id desc')->one();
-		    	$temp = 0;
-		    	if($lotRateStatistic){
-					if($lotRateStatistic->status)
-					{
-						$rates2 = Rate::find()->where(['lot_id'=>$post["Rate"]['lot_id']])->andWhere(['>',  'id', $lotRateStatistic->last_rate])->orderBy('price desc')->all();
-		    			$count = Rate::find()->where(['lot_id'=>$modelId->id])->andWhere(['>',  'id', $lotRateStatistic->last_rate])->count();
-		    			$temp = 1;
-					}
-				}
-				
-				if(!$temp){
-					$rates2 = Rate::find()->where(['lot_id'=>$modelId->id])->orderBy('price desc')->all();
-		    		$count = Rate::find()->where(['lot_id'=>$modelId->id])->count();
-				}
-				
-				//$rates2 = Rate::find()->where(['lot_id'=>$post["Rate"]['lot_id']])->orderBy('price desc')->all();
-		    	//$count = Rate::find()->where(['lot_id'=>$post["Rate"]['lot_id']])->count();
-		    	$count = $count.' '.$this->plural($count,['ставка', 'ставки', 'ставок']);
-		    	
-		    	if(!$rates2)
-		    	{
-		    		$rates2 = new Rate();
-		    		$rate2 = new Rate();
-		    		$rate2->lot_id = $post["Rate"]['lot_id'];
-		    		$rate2->price = 0;
-			    	$currentPrice = 0;
-		    	}
-		    	else
-		    	{
-					$rate2 = clone $rates2[0];
-			    	$currentPrice = $rates2[0]->price;
-			    	
-			    	foreach($rates2 as $value)
-			    	{
-						$user = UserSocial::findOne(['user_id'=>$value->user2_id]);
-						if($user){
-							$value->user2_id = 	Html::a($user['name'],  Url::to($user['link']), ['target' => '_blank']);
-						}
-						
-					}
-				}
-				
-		    	if($currentPrice<10){
-					$rate2->price = $rate2->price+1;
-				}elseif($currentPrice<100 and $currentPrice>=10){
-					$rate2->price = $rate2->price+10;
-				}elseif($currentPrice<600 and $currentPrice>=100){
-					$rate2->price = $rate2->price+50;
-				}elseif($currentPrice>=600){
-					$rate2->price = $rate2->price+100;
-				}
-				
-				$modelId = $this->findModelId($post["Rate"]['lot_id']);
-				
-				
-				/* spevv s - Interests 	*/
-				$categoryLot = CategoryLot::find()
-					->select('category_id')
-				    ->where(['lot_id' => $modelId->id])
-				    ->all();
-				    
-				if($categoryLot !== null)
-				{  
-					if (($userInterests = UserInterests::findOne(['user_id' => $user2_id])) !== null) 
-					{
-						if($userInterests->interests)
-						{
-							$interestsArray = json_decode($userInterests->interests, TRUE);
-							foreach($categoryLot as $key=>$value)
-							{
-								if(isset($interestsArray[$value->category_id]))
-								{
-									$interestsArray[$value->category_id] = $interestsArray[$value->category_id]+1;
-								}
-								else
-								{
-									$interestsArray[$value->category_id] = 1;
-								}
-							}
-							$userInterests->interests = json_encode($interestsArray);
-							$userInterests->save();
-						}
-						else
-						{	
-							foreach($categoryLot as $key=>$value)
-							{
-								$interestsArray[$value->category_id] = 1;
-							}
-							$userInterests->interests = json_encode($interestsArray);
-							$userInterests->save();
-						}
-					}
-					else
-					{
-						$userInterestsNew = new UserInterests();
-						$userInterestsNew->user_id = $user2_id;
-						foreach($categoryLot as $key=>$value)
-						{
-							$interestsArray[$value->category_id] = 1;
-						}
-						$userInterestsNew->interests = json_encode($interestsArray);
-						$userInterestsNew->save();
-					}
-				}
-				/* spevv f	*/
-				
-						//данные по соцсетям
-				$string = Url::to('');
-				if($string{0} == '/')
-				{
-					$st = substr(Url::to(''), 1);
-					$url = Url::home(true).$st;
-				}
-				else
-				{
-					$url = Url::home(true).Url::to('');
-				}
-				if($modelId->image{0} == '/')
-				{
-					$st = substr($modelId->image, 1);
-					$img = Url::home(true).$st;
-				}
-				else
-				{
-					$img = Url::home(true).$modelId->image;
-				}
-				
-				$attachment =  '{"media": [{"type": "link","url": "'.$url.'"},{"type": "text", "text": "Моя ставка - '.$rate2->price.' р"}]}';
-				$sigSource = 'st.attachment='.$attachment.Yii::$app->params['odnoklassniki']['clientSecret'];
-				$sign = md5($sigSource);
-				
-				$okUrl = 'http://connect.ok.ru/dk?st.cmd=WidgetMediatopicPost'.
-					'&st.app='.Yii::$app->params['odnoklassniki']['clientId'].
-					'&st.attachment='.urlencode($attachment).
-					'&st.signature='.$sign.
-					"&st.silent=on";
-				
-				$social = [
-					'vk' => [
-						'apiId' => Yii::$app->params['vkontakte']['clientId'],
-						'url' => $url,
-						'message' => 'Моя ставка - '.$rate2->price.' р',
-						'title' => $modelId->name,
-						'image' => $img,
-					],
-					'fb' => [
-						'apiId' => Yii::$app->params['facebook']['clientId'],
-						'name' => $modelId->name,
-						'caption' => '',
-						'link' => $url,
-						'picture' => $img,
-						'description' => 'Моя ставка - '.$rate2->price.' р',
-					],
-					'ok' => [
-						//'apiId' => Yii::$app->params['odnoklassniki']['clientId'],
-						//'clientSecret' => Yii::$app->params['odnoklassniki']['clientSecret'],
-						'url' => $okUrl,
-					],
-				];
+		    	$count = $this->getRateCount($modelId);
+    			$rates2 = $this->getRateState($modelId);
+		    	$ratesInfo = $this->getRateAndRetes($rates2);
+		    	//$this->slewRate($modelId->id);		    	
+		    	$this->setInterests($modelId, $user2_id);
+		    	$socialShare = $this->social($modelId, $ratesInfo['rate']);
 				
 				return $this->renderPartial('_lotLeft', [
 	            	 'model' => $modelId->toArray([], ['subjects','branchs', 'images']),
-		             'rate' => $rate2,
-		             'rates' =>  $rates2,
+		             'rate' => $ratesInfo['rate'],
+		             'rates' =>  $ratesInfo['rates'],
 		             'count' =>  $count,
-		             'currentPrice' => $currentPrice,
-		             'social' => json_encode($social),
+		             'currentPrice' => $ratesInfo['currentPrice'],
+		             'social' => json_encode($socialShare['social']),
                 ]);
 			}
-			else
-			{
-				 return $this->redirect(Url::previous());
-				//var_dump('ups2');
-				//die;
-				//$modelId = $this->findModelId($post["Rate"]['lot_id']);
-		        //return $this->redirect(['/lot/view', 'slug' => $modelId->slug]);
-			}
-			
 		}
-		else
-		{
-			//Url::previous();
-			//var_dump(Url::previous());
-			//die;
-			//$modelId = $this->findModelId($post["Rate"]['lot_id']);
-		    return $this->redirect(Url::previous());
-		}
+		
+		return $this->redirect(Url::previous());
 		
 	}
     
-    public function actionView($slug)
+    public function actionView($slug)   
     {
-	
-		/*$time = '2015-06-17 15:48:10';
-		$new_date = date('Y-m-d H:m:s', strtotime("+3 hours", strtotime($time)));
-		var_dump($new_date);*/
-	
-	
 		//поместить в finishLot
     	$checkLot = new CheckLot();
     	$checkLot->checkAndUpdate();
-    	
-    	//var_dump($checkLot->getNextRate(405, $offset = 1));
-    	
-    	
+    	//
 
     	Url::remember();
     	
     	$modelId = $this->findModel($slug);
-    	$lotRateStatistic = LotRateStatistic::find()->where(['lot_id'=>$modelId->id])->orderBy('id desc')->one();
-    	$temp = 0;
-    	if($lotRateStatistic){
-			if($lotRateStatistic->status)
+    	$count = $this->getRateCount($modelId);
+    	$rates = $this->getRateState($modelId);
+    	$ratesInfo = $this->getRateAndRetes($rates);
+		$socialShare = $this->social($modelId, $ratesInfo['rate']);
+		
+		Yii::$app->opengraph->set([
+		    'title' => $modelId->name,
+		    'description' => $modelId->meta_description,
+		    'image' => $this->getImage($modelId->image),
+		]);
+		
+		if($modelId->remaining_time > Yii::$app->formatter->asDate('now', 'yyyy-MM-dd HH:mm:ss'))
+		{
+			$lotLeft = $this->renderPartial('_lotLeft', [
+            	'model' => $modelId->toArray([], ['subjects','branchs', 'images']),
+                'rate' => $ratesInfo['rate'],
+	            'rates' =>  $ratesInfo['rates'],
+	            'count' =>  $count,
+	            'currentPrice' => $ratesInfo['currentPrice'],
+	            'social' => json_encode($socialShare['social']),
+            ]);
+		}
+		else
+		{
+			$lotLeft = $this->renderPartial('_lotLeftNoactive', [
+            	'model' => $modelId->toArray([], ['subjects','branchs', 'images']),
+                'rate' => $ratesInfo['rate'],
+	            'rates' =>  $ratesInfo['rates'],
+	            'count' =>  $count,
+	            'currentPrice' => $ratesInfo['currentPrice'],
+            ]);
+		}
+		
+		$contact = new ContactForm();
+		
+        return $this->render('view', [
+            'model' => $modelId->toArray([], ['subjects','branchs', 'images']),
+            'lotLeft' => $lotLeft,   
+            'contact' => $this->renderPartial('_contact', [
+                'model' => $contact,
+            ]),
+            'share' => $socialShare['share'],
+        ]);
+    }
+    
+    // add user Interests
+    private function setInterests($modelId, $user2_id)
+    {
+		$categoryLot = CategoryLot::find()
+			->select('category_id')
+		    ->where(['lot_id' => $modelId->id])
+		    ->all();
+		    
+		if($categoryLot !== null)
+		{  
+			if (($userInterests = UserInterests::findOne(['user_id' => $user2_id])) !== null) 
 			{
-				$rates = Rate::find()->where(['lot_id'=>$modelId->id])->andWhere(['refusal'=>0])->andWhere(['>',  'id', $lotRateStatistic->last_rate])->orderBy('price desc')->all();
-    			$count = Rate::find()->where(['lot_id'=>$modelId->id])->andWhere(['refusal'=>0])->andWhere(['>',  'id', $lotRateStatistic->last_rate])->count();
-    			$temp = 1;
+				if($userInterests->interests)
+				{
+					$interestsArray = json_decode($userInterests->interests, TRUE);
+					foreach($categoryLot as $key=>$value)
+					{
+						if(isset($interestsArray[$value->category_id]))
+						{
+							$interestsArray[$value->category_id] = $interestsArray[$value->category_id]+1;
+						}
+						else
+						{
+							$interestsArray[$value->category_id] = 1;
+						}
+					}
+					$userInterests->interests = json_encode($interestsArray);
+					$userInterests->save();
+				}
+				else
+				{	
+					foreach($categoryLot as $key=>$value)
+					{
+						$interestsArray[$value->category_id] = 1;
+					}
+					$userInterests->interests = json_encode($interestsArray);
+					$userInterests->save();
+				}
+			}
+			else
+			{
+				$userInterestsNew = new UserInterests();
+				$userInterestsNew->user_id = $user2_id;
+				foreach($categoryLot as $key=>$value)
+				{
+					$interestsArray[$value->category_id] = 1;
+				}
+				$userInterestsNew->interests = json_encode($interestsArray);
+				$userInterestsNew->save();
 			}
 		}
-		
-		if(!$temp){
-			$rates = Rate::find()->where(['lot_id'=>$modelId->id])->andWhere(['refusal'=>0])->orderBy('price desc')->all();
-    		$count = Rate::find()->where(['lot_id'=>$modelId->id])->andWhere(['refusal'=>0])->count();
-		}
-		
-
-    	$count = $count.' '.$this->plural($count,['ставка', 'ставки', 'ставок']);
-    	
-    	if(!$rates)
+		return TRUE;
+	}
+    
+    // создание новой ставки
+    private function getRateAndRetes($rates)
+    {
+		if(!$rates)
     	{
     		$rates = new Rate();
     		$rate = new Rate();
@@ -480,15 +314,7 @@ class LotController extends Controller
     	{
 			$rate = clone $rates[0];
 	    	$currentPrice = $rates[0]->price;
-	    	
-	    	foreach($rates as $value)
-	    	{
-				$user = UserSocial::findOne(['user_id'=>$value->user2_id]);
-				if($user){
-					$value->user2_id = 	Html::a($user['name'],  Url::to($user['link']), ['target' => '_blank']);
-				}
-				
-			}
+	    	$rates = $this->changeRateUserInfo($rates);
 		}
 		
     	if($currentPrice<10){
@@ -499,11 +325,86 @@ class LotController extends Controller
 			$rate->price = $rate->price+50;
 		}elseif($currentPrice>=600){
 			$rate->price = $rate->price+100;
-		}	
+		}
 		
-		$contact = new ContactForm();
+		return 	[
+			'currentPrice' => $currentPrice,
+			'rates' => $rates,
+			'rate' => $rate,
+		];
+	}
+    
+    // создание ссылки на пользователя
+    private function changeRateUserInfo($rates)
+    {
+		foreach($rates as $rate)
+    	{
+    		$rate->user2_id = Html::a($rate->user['name'],  Url::to($rate->user['link']), ['target' => '_blank']);
+		}
+		return $rates;
+	}
+    
+    // ставка была перебита
+    private function slewRate($id)
+    {
+		$rate = Rate::find()->where(['lot_id'=>$id])->orderBy('price desc')->offset($offset)->one();
+		if($rate)
+		{
+			$checkLot = new CheckLot();
+			Yii::$app->params['emailText']['slewRate']['email'] = $rate->user['email'];
+	    	$checkLot->sendEmail(Yii::$app->params['emailText']['slewRate']);
+		}
+		return false;
 		
-		//данные по соцсетям
+		
+	}
+    
+    // получить ставки
+    private function getRateState($modelId)
+    {
+		$lotRateStatistic = LotRateStatistic::find()->where(['lot_id'=>$modelId->id])->orderBy('id desc')->one();
+    	if($lotRateStatistic){
+			if($lotRateStatistic->status)
+			{
+				return Rate::find()->where(['lot_id'=>$modelId->id])->andWhere(['refusal'=>0])->andWhere(['>',  'id', $lotRateStatistic->last_rate])->orderBy('price desc')->all();
+			}
+		}
+		return Rate::find()->where(['lot_id'=>$modelId->id])->andWhere(['refusal'=>0])->orderBy('price desc')->all();
+	}
+	
+	// получить количество ставок
+	private function getRateCount($modelId)
+	{
+		$lotRateStatistic = LotRateStatistic::find()->where(['lot_id'=>$modelId->id])->orderBy('id desc')->one();
+    	if($lotRateStatistic){
+			if($lotRateStatistic->status)
+			{
+    			$count = Rate::find()->where(['lot_id'=>$modelId->id])->andWhere(['refusal'=>0])->andWhere(['>',  'id', $lotRateStatistic->last_rate])->count();
+    			return  $count.' '.$this->plural($count,['ставка', 'ставки', 'ставок']);
+			}
+		}
+    	$count = Rate::find()->where(['lot_id'=>$modelId->id])->andWhere(['refusal'=>0])->count();
+    	return $count.' '.$this->plural($count,['ставка', 'ставки', 'ставок']);
+	}
+    
+    // возврат изображения
+    private function getImage($image)
+    {
+		if($image{0} == '/')
+		{
+			$st = substr($image, 1);
+			$img = Url::home(true).$st;
+		}
+		else
+		{
+			$img = Url::home(true).$image;
+		}
+		return $img;
+	}
+	
+	// return current url
+	private function getUrl()
+    {
 		$string = Url::to('');
 		if($string{0} == '/')
 		{
@@ -514,23 +415,16 @@ class LotController extends Controller
 		{
 			$url = Url::home(true).Url::to('');
 		}
-		if($modelId->image{0} == '/')
-		{
-			$st = substr($modelId->image, 1);
-			$img = Url::home(true).$st;
-		}
-		else
-		{
-			$img = Url::home(true).$modelId->image;
-		}
-		
-		Yii::$app->opengraph->set([
-		    'title' => $modelId->name,
-		    'description' => $modelId->meta_description,
-		    'image' => $img,
-		]);
-		
-		//$attachment =  '{"media": [{"type": "link","url": "http://yii.awam-it.ru"},{"type": "text", "text": "hello world!"}]}';
+		return $url;
+	}
+    
+    // return socil info
+    private function social($modelId, $rate)
+    {
+    	$img = $this->getImage($modelId->image);
+    	$url = $this->getUrl();
+    	
+    	//$attachment =  '{"media": [{"type": "link","url": "http://yii.awam-it.ru"},{"type": "text", "text": "hello world!"}]}';
 		$attachment =  '{"media": [{"type": "link","url": "'.$url.'"},{"type": "text", "text": "Моя ставка - '.$rate->price.' р"}]}';
 		$sigSource = 'st.attachment='.$attachment.Yii::$app->params['odnoklassniki']['clientSecret'];
 		$sign = md5($sigSource);
@@ -571,42 +465,12 @@ class LotController extends Controller
 			'text' => "Присоединяйтесь к нам.",
 		];
 		
-		if($modelId->remaining_time > Yii::$app->formatter->asDate('now', 'yyyy-MM-dd HH:mm:ss'))
-		{
-			$lotLeft = $this->renderPartial('_lotLeft', [
-            	'model' => $modelId->toArray([], ['subjects','branchs', 'images']),
-                'rate' => $rate,
-	            'rates' =>  $rates,
-	            'count' =>  $count,
-	            'currentPrice' => $currentPrice,
-	            'social' => json_encode($social),
-            ]);
-		}
-		else
-		{
-			$lotLeft = $this->renderPartial('_lotLeftNoactive', [
-            	'model' => $modelId->toArray([], ['subjects','branchs', 'images']),
-                'rate' => $rate,
-	            'rates' =>  $rates,
-	            'count' =>  $count,
-	            'currentPrice' => $currentPrice,
-            ]);
-		}
+		return ['social' => $social, 'share' => $share];
 		
-		
-        return $this->render('view', [
-            'model' => $modelId->toArray([], ['subjects','branchs', 'images']),
-            'lotLeft' => $lotLeft,   
-            'contact' => $this->renderPartial('_contact', [
-                'model' => $contact,
-            ]),
-            'share' => $share,
-        ]);
-    }
-
-
-
-	public function plural($n, $forms){
+	}
+    
+	public function plural($n, $forms)
+	{
 		
 		    $plural = 0;
 		    if ($n % 10 == 1 && $n % 100 != 11) {
@@ -620,9 +484,6 @@ class LotController extends Controller
 		    }
 		    return $forms[$plural];
 	}
-	
-
-
     /**
      * Finds the Lot model based on its primary key value.
      * If the model is not found, a 404 HTTP exception will be thrown.
@@ -638,6 +499,7 @@ class LotController extends Controller
             throw new NotFoundHttpException('The requested page does not exist.');
         }
     }
+
     protected function findModel($slug)
     {
         if (($model = Lot::findOne(['slug' => $slug])) !== null) {

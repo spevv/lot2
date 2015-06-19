@@ -35,8 +35,8 @@ class Rate extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['user2_id', 'lot_id', 'refusal'], 'required'],
-            [[ 'lot_id','price'], 'integer'],
+            [['user2_id', 'lot_id'], 'required'],
+            [[ 'lot_id','price', 'refusal'], 'integer'],
             [['time'], 'string', 'max' => 45],
             [['user2_id'], 'string', 'max' => 255]
         ];

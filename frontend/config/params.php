@@ -13,4 +13,10 @@ return [
     	'clientId' => '1137718016',
 	    'clientSecret' => '6320D57ED9A1D769B992081B',
     ],
+    
+    'siteInfo' => [
+    	'title' => 'ИНТЕРНЕТ-АУКЦИОН БИЗНЕС-ОБРАЗОВАНИЯ',
+		'description' => 'описание сайта',
+		'image' => 'http://lot2.localhost/image/bg1.png',
+    ],
 ];
