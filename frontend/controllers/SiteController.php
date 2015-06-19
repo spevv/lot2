@@ -131,9 +131,9 @@ class SiteController extends Controller
     public function actionIndex()
     {
 	    Yii::$app->opengraph->set([
-		    'title' => Yii::$app->parems['siteInfo']['title'],
-		    'description' =>Yii::$app->parems['siteInfo']['description'],
-		    'image' => Yii::$app->parems['siteInfo']['image'],
+		    'title' => Yii::$app->params['siteInfo']['title'],
+		    'description' =>Yii::$app->params['siteInfo']['description'],
+		    'image' => Yii::$app->params['siteInfo']['image'],
 		]);
 		
 		$this->setKCFINDER();
