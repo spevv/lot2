@@ -16,15 +16,42 @@ $this->title = $model->name;
 
 <div class="row filter-row">
 	<div class="col-xs-9">	
-	<?php Pjax::begin(['id' => 'index-lot']) ?>
-    <?php echo $this->render('_search', ['model' => $searchModel, 'region' => $region, 'subjects' => $subjects,'branchs' => $branchs, 'modelUrl' => $model]); ?>
+	<?php Pjax::begin(['id' => 'main-lot']) ?>
+	   
+	   <?php echo $this->render('_search', ['model' => $searchModel, 'region' => $region, 'subjects' => $subjects,'branchs' => $branchs, 'modelUrl' => $model]); ?>
 	   <div class="lot-search-header">Активные лоты</div>
 	   <div class="lot-list">
+
 		    <?= ListView::widget([
 		        'dataProvider' => $dataProvider,
-		        'itemOptions' => ['class' => 'lot'],
-		        'layout' => "{items}",
+		        'itemOptions' => ['class' => 'lot item'],
+		        //'layout' => "{items}",
+		        //'layout' => "{items}\n{pager}",
 		        'itemView' => '_lot',
+		        //'pager' => ['class' => \kop\y2sp\ScrollPager::className()]
+		        
+		        
+		        'id' => 'my-listview-id',
+			    'layout' => "<div class=\"items\">{items}</div>\n{pager}",
+			    'pager' => [
+			        'class' => InfiniteScrollPager::className(),
+			        'widgetId' => 'my-listview-id',
+			        'itemsCssClass' => 'items',
+			        'contentLoadedCallback' => 'afterAjaxListViewUpdate',
+			        'nextPageLabel' => 'Показать еще',
+			        'linkOptions' => [
+			            'class' => 'icon-more',
+			        ],
+			        'pluginOptions' => [
+			            'loading' => [
+			                'msgText' => "<em>Загрузка...</em>",
+			                'finishedMsg' => "<em>Все елементы загружены</em>",
+			            ],
+			            'behavior' => InfiniteScrollPager::BEHAVIOR_TWITTER,
+			        ],
+			    ],
+		        
+		        
 		    ]) ?>
 		    <?php
 			$js = "$('#lot-search').on('beforeSubmit', function(){
@@ -40,16 +67,16 @@ $this->title = $model->name;
 $js = <<< JS
 	obj = {
 		refresh: function() {
-		    $.pjax({container: '#index-lot', timeout: 0, scrollTo: false});
+		    $.pjax({container: '#main-lot', timeout: 0, scrollTo: false});
 		}
 	}
-	setTimeout(	function(){ obj.refresh(); }, 15000);
+	setTimeout(	function(){ obj.refresh(); }, 30000);
 JS;
 $this->registerJs($js,  $this::POS_READY);
-?>	
+?>		
 	<?php Pjax::end(); ?>
+
 	
-		
 	</div>
 	<div class="col-xs-3">
 		<div class="category-list">
@@ -62,7 +89,6 @@ $this->registerJs($js,  $this::POS_READY);
 		</div>
 	</div>
 </div>
-
 
 
 <div class="lot-search-header-noactive">Сыграные лоты</div>
@@ -86,7 +112,7 @@ $this->registerJs($js,  $this::POS_READY);
 			        'contentLoadedCallback' => 'afterAjaxListViewUpdate',
 			        'nextPageLabel' => 'Показать еще',
 			        'linkOptions' => [
-			            'class' => 'btn btn-lg btn-block',
+			            'class' => 'icon-more',
 			        ],
 			        'pluginOptions' => [
 			            'loading' => [

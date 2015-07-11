@@ -18,11 +18,15 @@ use common\models\LotRateStatistic;
 use yii\helpers\Html;
 use yii\helpers\Url;
 use yii\web\Response;
-use backend\models\UserInterests;
+use common\models\UserInterests;
 use frontend\models\ContactForm;
 use common\models\CategoryLot;
 use common\models\CheckLot;
+use common\models\Comment;
 
+use common\models\Delivery;
+
+use frontend\models\UserSocial;
 
 /**
  * LotController implements the CRUD actions for Lot model.
@@ -81,6 +85,11 @@ class LotController extends Controller
     public function actionFinishLot()
     {
 		if (Yii::$app->request->isPost) {
+			
+			//поместить в finishLot
+	    	$checkLot = new CheckLot();
+	    	$checkLot->checkAndUpdate();
+    	
 	    	$post = Yii::$app->request->post();
 	    	Yii::$app->response->format = Response::FORMAT_JSON;
 
@@ -88,16 +97,24 @@ class LotController extends Controller
 		    if (isset($identity->profile)) 
 		    {
 		    	$user_id =  $identity->profile['service'].'-'.$identity->profile['id'];
-		    	$rate = Rate::find()->where(['lot_id'=>$post['lot_id']])->orderBy('price desc')->one();
-		    	if($user_id == $rate['user2_id'])
-		    	{
-					$res = array(
-			            'success' => true,
-			            'url' => Url::to(['pay/index', 'id'=>$rate['id']]),
-			            
-			        );
-			        return $res;
+		    	//$rate = Rate::find()->where(['lot_id'=>$post['lot_id']])->orderBy('price desc')->one();
+		    	
+		    	
+		    	$rates = $this->getRateState($post['lot_id']);
+	    		$ratesInfo = $this->getRateAndRetes($rates, $post['lot_id']);
+
+		       	if($ratesInfo['rate']){
+					if($user_id == $ratesInfo['rate']['user2_id'])
+			    	{
+						$res = array(
+				            'success' => true,
+				            'url' => Url::to(['pay/index', 'id'=>$ratesInfo['rate']['id']]),
+				            
+				        );
+				        return $res;
+					}
 				}
+		    	
 		    }
 		    return array(
 		        'success' => false,
@@ -110,11 +127,15 @@ class LotController extends Controller
 	    if (Yii::$app->request->isPost) {
 	    	$post = Yii::$app->request->post();
 	        Yii::$app->response->format = Response::FORMAT_JSON;
-	       	$rate = Rate::find()->where(['lot_id'=>$post['lot_id']])->orderBy('price desc')->one();
-	       	if($rate){
+	        
+	       	//$rate = Rate::find()->where(['lot_id'=>$post['lot_id']])->orderBy('price desc')->one();
+	       	$rates = $this->getRateState($post['lot_id']);
+    		$ratesInfo = $this->getRateAndRetes($rates, $post['lot_id']);
+
+	       	if($ratesInfo['rate']){
 				$res = array(
 		            'success' => true,
-		            'rate' => $rate->id,
+		            'rate' => $ratesInfo['rate']['id'],
 		        );
 		        return $res;
 			}
@@ -135,7 +156,7 @@ class LotController extends Controller
     	{
 			$post = Yii::$app->request->post();
 			$modelId = $this->findModelId($post["Rate"]['lot_id']);
-			$rates = $this->getRateState($modelId);
+			$rates = $this->getRateState($modelId->id);
 			
 			if(!$rates)
     		{
@@ -168,8 +189,8 @@ class LotController extends Controller
 				$model->save();
 				
 		    	$count = $this->getRateCount($modelId);
-    			$rates2 = $this->getRateState($modelId);
-		    	$ratesInfo = $this->getRateAndRetes($rates2);
+    			$rates2 = $this->getRateState($modelId->id);
+		    	$ratesInfo = $this->getRateAndRetes($rates2, $modelId->id);
 		    	//$this->slewRate($modelId->id);		    	
 		    	$this->setInterests($modelId, $user2_id);
 		    	$socialShare = $this->social($modelId, $ratesInfo['rate']);
@@ -181,6 +202,7 @@ class LotController extends Controller
 		             'count' =>  $count,
 		             'currentPrice' => $ratesInfo['currentPrice'],
 		             'social' => json_encode($socialShare['social']),
+		             'emailForm' => '',
                 ]);
 			}
 		}
@@ -189,20 +211,60 @@ class LotController extends Controller
 		
 	}
     
+    private function checkEmail()
+    {
+    	
+    	$identity = Yii::$app->getUser()->getIdentity();
+	    if (isset($identity->profile)) 
+	    {
+	    	$user2_id =  $identity->profile['service'].'-'.$identity->profile['id'];
+	    	$user = UserSocial::find()->where(['user_id' => $user2_id])->one();
+		    if($user)
+		    {
+				if(!$user->email)
+				{
+				    /*$userHtml = $this->renderPartial('_email-form', [
+			            'user' => $user,
+			        ]);*/
+			        $userHtml = $this->renderPartial('@frontend/views/account/_email-form', [
+			            'user' => $user,
+			        ]);
+				    
+					return $userHtml;
+				}
+			}
+	    }
+		return '';
+	}
+    
     public function actionView($slug)   
     {
+    	//$url = Url::to(['pay/index', 'id'=>415]);
+    	//$url = Yii::$app->urlManager->createAbsoluteUrl(['site/reset-password', 'token' => 4654]);
+    	//echo($url);
 		//поместить в finishLot
-    	$checkLot = new CheckLot();
-    	$checkLot->checkAndUpdate();
+    	//$checkLot = new CheckLot();
+    	//$checkLot->checkAndUpdate();
     	//
+		
+		$delivery = new Delivery();
+		//$delivery->getUserInteres();
+		$delivery->getLotsInfo();
+		
+
+
 
     	Url::remember();
     	
     	$modelId = $this->findModel($slug);
     	$count = $this->getRateCount($modelId);
-    	$rates = $this->getRateState($modelId);
-    	$ratesInfo = $this->getRateAndRetes($rates);
+    	$rates = $this->getRateState($modelId->id);
+    	$ratesInfo = $this->getRateAndRetes($rates, $modelId->id);
 		$socialShare = $this->social($modelId, $ratesInfo['rate']);
+		
+		$comments = $this->getComments($modelId->id);
+		
+		//var_dump($count);
 		
 		Yii::$app->opengraph->set([
 		    'title' => $modelId->name,
@@ -212,6 +274,16 @@ class LotController extends Controller
 		
 		if($modelId->remaining_time > Yii::$app->formatter->asDate('now', 'yyyy-MM-dd HH:mm:ss'))
 		{
+			$emailForm = $this->checkEmail();
+			if($emailForm)
+			{
+				$checkEmail = '1';
+			}
+			else
+			{
+				$checkEmail = '';
+			}
+			
 			$lotLeft = $this->renderPartial('_lotLeft', [
             	'model' => $modelId->toArray([], ['subjects','branchs', 'images']),
                 'rate' => $ratesInfo['rate'],
@@ -219,6 +291,8 @@ class LotController extends Controller
 	            'count' =>  $count,
 	            'currentPrice' => $ratesInfo['currentPrice'],
 	            'social' => json_encode($socialShare['social']),
+	            'emailForm' => $emailForm,
+	            'checkEmail' => $checkEmail,
             ]);
 		}
 		else
@@ -229,8 +303,10 @@ class LotController extends Controller
 	            'rates' =>  $ratesInfo['rates'],
 	            'count' =>  $count,
 	            'currentPrice' => $ratesInfo['currentPrice'],
+	            'emailForm' => '',
             ]);
 		}
+		
 		
 		$contact = new ContactForm();
 		
@@ -241,8 +317,15 @@ class LotController extends Controller
                 'model' => $contact,
             ]),
             'share' => $socialShare['share'],
+            'comments' => $comments,
         ]);
     }
+    
+    private function getComments($lot_id)
+    {
+    	return Comment::find()->where(['lot_id' => $lot_id])->orderBy('creation_time desc')->all();
+    	
+	}
     
     // add user Interests
     private function setInterests($modelId, $user2_id)
@@ -299,14 +382,14 @@ class LotController extends Controller
 	}
     
     // создание новой ставки
-    private function getRateAndRetes($rates)
+    private function getRateAndRetes($rates,$model_id)
     {
 		if(!$rates)
     	{
     		$rates = new Rate();
     		$rate = new Rate();
     		$rate->id = 0;
-    		$rate->lot_id = $modelId->id;
+    		$rate->lot_id = $model_id;
     		$rate->price = 0;
 	    	$currentPrice = 0;
     	}
@@ -360,27 +443,53 @@ class LotController extends Controller
 	}
     
     // получить ставки
-    private function getRateState($modelId)
+    private function getRateState($modelId_id)
     {
-		$lotRateStatistic = LotRateStatistic::find()->where(['lot_id'=>$modelId->id])->orderBy('id desc')->one();
+		$lotRateStatistic = LotRateStatistic::find()->where(['lot_id'=>$modelId_id])->orderBy('id desc')->one();
+		
     	if($lotRateStatistic){
 			if($lotRateStatistic->status)
 			{
-				return Rate::find()->where(['lot_id'=>$modelId->id])->andWhere(['refusal'=>0])->andWhere(['>',  'id', $lotRateStatistic->last_rate])->orderBy('price desc')->all();
+				//var_dump($lotRateStatistic->last_rate);
+				return Rate::find()->where(['lot_id'=>$modelId_id])->andWhere(['refusal'=>0])->andWhere(['>',  'id', $lotRateStatistic->last_rate])->orderBy('price desc')->all();
+			}
+			else
+			{
+				$lotRateStatisticNext = LotRateStatistic::find()->where(['lot_id'=>$modelId_id])->orderBy('id desc')->offset(1)->one();
+				//var_dump($lotRateStatisticNext);
+				if($lotRateStatisticNext)
+				{
+					return Rate::find()->where(['lot_id'=>$modelId_id])->andWhere(['refusal'=>0])->andWhere(['>',  'id', $lotRateStatisticNext->last_rate])->orderBy('id desc')->all();
+				}
+				
 			}
 		}
-		return Rate::find()->where(['lot_id'=>$modelId->id])->andWhere(['refusal'=>0])->orderBy('price desc')->all();
+		return Rate::find()->where(['lot_id'=>$modelId_id])->andWhere(['refusal'=>0])->orderBy('price desc')->all();
 	}
 	
 	// получить количество ставок
 	private function getRateCount($modelId)
 	{
 		$lotRateStatistic = LotRateStatistic::find()->where(['lot_id'=>$modelId->id])->orderBy('id desc')->one();
+		//var_dump($lotRateStatistic);
     	if($lotRateStatistic){
 			if($lotRateStatistic->status)
 			{
     			$count = Rate::find()->where(['lot_id'=>$modelId->id])->andWhere(['refusal'=>0])->andWhere(['>',  'id', $lotRateStatistic->last_rate])->count();
+    			//var_dump($count);
     			return  $count.' '.$this->plural($count,['ставка', 'ставки', 'ставок']);
+			}
+			else
+			{
+				$lotRateStatisticNext = LotRateStatistic::find()->where(['lot_id'=>$modelId->id])->orderBy('id desc')->offset(1)->one();
+				//var_dump($lotRateStatisticNext);
+				if($lotRateStatisticNext)
+				{
+					$count = Rate::find()->where(['lot_id'=>$modelId->id])->andWhere(['refusal'=>0])->andWhere(['>',  'id', $lotRateStatisticNext->last_rate])->count();
+    			//var_dump($count);
+    			return  $count.' '.$this->plural($count,['ставка', 'ставки', 'ставок']);
+				}
+				
 			}
 		}
     	$count = Rate::find()->where(['lot_id'=>$modelId->id])->andWhere(['refusal'=>0])->count();
@@ -502,10 +611,11 @@ class LotController extends Controller
 
     protected function findModel($slug)
     {
-        if (($model = Lot::findOne(['slug' => $slug])) !== null) {
+       // if (($model = Lot::findOne(['slug' => $slug])) !== null) {
+        if (($model = Lot::find()->where(['slug' => $slug])->andWhere(['public' => 1])->one()) !== null) {
             return $model;
         } else {
-            throw new NotFoundHttpException('The requested page does not exist.');
+            throw new NotFoundHttpException('Страница не найдена.');
         }
     }
 }

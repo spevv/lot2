@@ -19,13 +19,15 @@ class AppAsset extends AssetBundle
     public $baseUrl = '@web';
     public $css = [
         'css/site.css',
+        'css/owl.carousel.css',
     ];
     public $js = [
     	
     	"http://vk.com/js/api/openapi.js",
+    	'js/owl.carousel.min.js',
     	'js/social.js',
     	'js/script.js',
-    	//'js/ajax2.js',
+    	
     	
     	//'js/social/vk.js',
     	//'js/social/facebook.js',

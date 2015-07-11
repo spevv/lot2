@@ -13,6 +13,7 @@ use common\models\BranchLot;
 use common\models\CategoryLot;
 use common\models\LotImage;
 use common\models\LotRateStatistic;
+use common\models\GeobaseCity;
 /**
  * LotController implements the CRUD actions for Lot model.
  */
@@ -119,11 +120,13 @@ class LotController extends Controller
 			
 			
 			
+			
            // return $this->redirect(['view', 'id' => $model->id]);
             return $this->redirect(['index']);
         } else {
             return $this->render('create', [
                 'model' => $model,
+                'formRate' => '',
             ]);
         }
     }
@@ -142,7 +145,7 @@ class LotController extends Controller
 				
 			}
         }
-        echo '';
+        echo '<span> </span>';
 		
 	}
 
@@ -351,10 +354,10 @@ class LotController extends Controller
         	
         	//use common\models\RateWinner;
         	
-        	
+        	//var_dump($formRateModel);
         	if($formRateModel){
         		//var_dump($formRateModel);
-        		if($formRateModel['status'] != 1){
+        		if($formRateModel['status'] == 0){
         			
         			$formRateModel->status = 1;
 					$formRate = $this->renderPartial('_form-rate', [

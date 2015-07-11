@@ -35,7 +35,8 @@ class FacebookOAuth2Service extends \nodge\eauth\services\FacebookOAuth2Service
 			$this->attributes['email'] = '';
 		}
 		
-		$this->attributes['image'] = '//graph.facebook.com/'.$this->attributes['id'].'/picture?type=normal'; 
+		//$this->attributes['image'] = '//graph.facebook.com/'.$this->attributes['id'].'/picture?type=normal'; 
+		$this->attributes['image'] = '//graph.facebook.com/'.$this->attributes['id'].'/picture?width=100&height=100'; 
 		return true;
 	}
 }

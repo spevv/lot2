@@ -183,49 +183,62 @@ text-align: left;
 	color: #727272;
 	font-size: 18px;
 	text-align: right;
-	  margin: 0 0px 0 80px;
-	 position: relative;
+	position: relative;
 }
 .menu a:hover{
-	font-family: Roboto;
 	color: #f44336;
-	font-size: 18px;
-	text-align: right;
 	text-decoration: none;
+	//transition: 0.5s;
 }
-.m-about{
-	background: url(../image/icon/info.png) no-repeat;
-	width: 31px;
-	height: 31px;
-	top: -4px;
- 	position: absolute;
-  	left: -40px;
+
+.nav-lot-menu > li a {
+    margin: 5px 0 0 30px;
+    padding: 0 0 0 45px;
 }
-.m-comment{
-	background: url(../image/icon/Layer9.png) no-repeat;
-	width: 31px;
-	height: 31px;
-	top: -4px;
- 	position: absolute;
-  	left: -40px;
+
+
+.m-about:before{
+	content: url(../image/icon/info.png);
+	position: absolute;
+	left: 0px;
+  	top: -4px;
+  	transition: 0.5s;
 }
-.m-rule{
-	background: url(../image/icon/Layer11.png) no-repeat;
-	width: 31px;
-	height: 31px;
-	top: -4px;
- 	position: absolute;
-  	left: -40px;
+.m-comment:before{
+	content: url(../image/icon/Layer9.png);
+	position: absolute;
+	left: 0px;
+  	top: -4px;
 }
-.m-next{
-	background: url(../image/icon/Layer10.png) no-repeat;
-	width: 31px;
-	height: 31px;
-	top: -4px;
- 	position: absolute;
-  	left: -40px;
+.m-rule:before{
+	content: url(../image/icon/Layer11.png);
+	position: absolute;
+	left: 0px;
+  	top: -4px;
 }
- 
+.m-next:before{
+	content: url(../image/icon/Layer10.png);
+	position: absolute;
+	left: 0px;
+  	top: -4px;
+}
+
+.nav-lot-menu a.m-about:hover:before, .active a.m-about:before{
+	content: url(../image/icon/active-Layer13.png);
+}
+.nav-lot-menu a.m-comment:hover:before, .active a.m-comment:before{
+	content: url(../image/icon/active-Layer14.png);
+	transition: 0.5s;
+}
+.nav-lot-menu a.m-rule:hover:before, .active a.m-rule:before{
+	content: url(../image/icon/active-Layer15.png);
+	transition: 0.5s;
+}
+.nav-lot-menu a.m-next:hover:before, .active a.m-next:before{
+	content: url(../image/icon/active-Layer16.png);
+	transition: 0.5s;
+}
+
 .top-menu{
 float: right;
 margin: 15px 0;
@@ -789,6 +802,7 @@ margin-bottom: 50px;
 }
 .wrap{
 	background-color:  #f8f8f8;
+	  padding-bottom: 40px;
 }
 .lot-map{
 	width: 410px;
@@ -1119,4 +1133,328 @@ text-align: center;
 
 #lotsearch-city_id, #lotsearch-subjects, #lotsearch-branchs{
 	display: none;
+}
+
+.user-img img{
+	width: 144px;
+}
+.user-name{
+	text-align: center;
+  //margin-top: 15px;
+  font-family: SegoeUI;
+color:  #000000;
+font-size: 20px; /* Приближение из-за подстановки шрифтов */
+font-weight: 600;
+text-align: center;
+}
+.lot-reviews-conternt{
+	  margin-top: 25px;
+}
+.user-comment{
+	font-family: SegoeUI;
+color: #5c5c5c;
+font-size: 18px;
+font-weight: 300;
+font-style: italic;
+line-height: 26px;
+text-align: left;
+
+background-color:  #fbfbfb;
+width: 100%;
+  min-height: 100px;
+  padding: 30px 15px 30px 30px;
+  margin-top: 25px;
+}
+.owl-nav .owl-prev{
+	background: url(../image/icon/owl-nav.png);
+	width: 60px;
+	height: 60px;
+	
+	margin: 0 70px;
+	display: inline-block;
+}
+.owl-nav .owl-next{
+	  background: url(../image/icon/owl-nav.png);
+  width: 60px;
+  height: 60px;
+	display: inline-block;
+	background-position: 60px 0px;
+}
+.owl-nav{
+	text-align: right;
+}
+
+.user-comment:before{
+	/* background: url(../image/icon/owl-before.png);
+	 width: 48px;
+height: 31px;*/
+content: url(../image/icon/owl-before.png);
+position: absolute;
+  top: 60px;
+  left: -25px;
+}
+
+
+
+.article-view h1{
+	 font-family: Roboto;
+color: #212121;
+font-size: 52px;
+text-align: left;
+}
+
+.article-left{
+	border-radius: 5px;
+	background-color: #ffffff;
+	box-shadow: 0px 1px 2px 0px rgba(0, 0, 0, 0.23);
+
+}
+
+.article-description{
+	padding: 60px;
+
+font-family: Roboto;
+color: #7b7b7b;
+font-size: 16px;
+font-weight: 300;
+text-align: left;
+
+}
+
+.article-description h2{
+		
+	font-family: Roboto;
+color: #222222;
+font-size: 30px;
+text-align: left;
+}
+
+.article-right li a{
+	text-transform: uppercase;
+}
+
+.icon-more{
+	  padding-left: 40px !important;
+}
+
+.icon-more:before{
+	content: url(../image/icon/Layer54.png);
+	position: absolute;
+	left: 0;
+}
+.mypager{
+	text-align: center;
+}
+#infscr-loading{
+	text-align: center;
+}
+
+
+.pagination > li > a, .pagination > li > span{
+	border:none;
+	float: none;
+	
+	font-family: Roboto;
+color: #b6b6b6;
+font-size: 20px;
+font-weight: 700;
+text-align: center;
+}
+.pagination > li > a:hover, .pagination > li > span:hover, .pagination > li > a:focus, .pagination > li > span:focus{
+	background: none;
+	border: none;
+	color: #b6b6b6;
+}
+
+.comment-row{
+	  min-height: 225px;
+}
+.user-img {
+  text-align: center;
+}
+
+
+
+.organization-form{
+	padding: 15px;
+	background: #fff;
+}
+.organization-bg1{
+	width: 100%;
+	height: 4px;
+	background-position: center;
+	background: url(../image/icon/red-blue_cr.png);
+}
+.organization-bg2{
+	width: 100%;
+	height: 4px;
+	background-position: center;
+	background: url(../image/icon/red-blue_cr.png);
+}
+.organization-header{
+	font-family: Roboto;
+color: #222222;
+font-size: 30px;
+font-weight: 700;
+line-height: 45px;
+text-align: center;
+}
+.organization-text{
+	font-family: Arial;
+color: #555555;
+font-size: 17px;
+font-weight: 400;
+letter-spacing: 0.85px;
+text-align: center;
+padding: 10px 0;
+}
+.organization-form input {
+	background-color: rgba(198, 198, 198, 0.1);
+	height: 59px;
+	
+	font-family: Arial;
+color: #acacac;
+font-size: 17px;
+font-weight: 400;
+line-height: 40px;
+text-align: left;
+}
+.organization-form textarea {
+	background-color: rgba(198, 198, 198, 0.1);
+	
+	font-family: Arial;
+color: #acacac;
+font-size: 17px;
+font-weight: 400;
+text-align: left;
+}
+
+.organization-btn{
+	border-radius: 4px;
+background: -webkit-linear-gradient(90deg, #d32f2f 0%, #f44336 100%);
+background: -moz-linear-gradient(90deg, #d32f2f 0%, #f44336 100%);
+background: -o-linear-gradient(90deg, #d32f2f 0%, #f44336 100%);
+background: -ms-linear-gradient(90deg, #d32f2f 0%, #f44336 100%);
+background: linear-gradient(0deg, #d32f2f 0%, #f44336 100%);
+width: 100%;
+height: 60px;
+
+font-family: Roboto;
+color: #ffffff;
+font-size: 20px;
+text-align: center;
+  outline: none;
+  border: none;
+}
+.organization-prefooter{
+	font-family: Arial;
+color: rgba(85, 85, 85, 0.4);
+font-size: 12px;
+font-style: italic;
+letter-spacing: 0.6px;
+text-align: center;
+}
+.organization-hr{
+	border-bottom: 1px solid #f3f3f3;
+	padding-top: 10px;
+}
+
+
+.pay-button{
+		border-radius: 4px;
+background: -webkit-linear-gradient(90deg, #d32f2f 0%, #f44336 100%);
+background: -moz-linear-gradient(90deg, #d32f2f 0%, #f44336 100%);
+background: -o-linear-gradient(90deg, #d32f2f 0%, #f44336 100%);
+background: -ms-linear-gradient(90deg, #d32f2f 0%, #f44336 100%);
+background: linear-gradient(0deg, #d32f2f 0%, #f44336 100%);
+width: 260px;
+height: 60px;
+
+font-family: Roboto;
+color: #ffffff;
+font-size: 20px;
+text-align: center;
+  outline: none;
+  cursor: pointer;
+    padding: 14px;
+}
+
+.account-row .category-list{
+  margin: 25px 0 0 0;
+}
+
+.account-drop{
+	display: inline-block;
+}
+.account-drop a{
+	font-family: OpenSans;
+  color: #ffffff;
+  font-size: 17px;
+  font-weight: 400;
+  text-align: right;
+  text-decoration: none;
+  margin: 0px 15px;
+}
+.account-drop .dropdown-menu a{
+	color: #727272;
+}
+.account-drop .dropdown-menu a:hover{
+	  color: #f44336;
+}
+
+.btn-lot{
+	font-family: Roboto;
+	color: #ffffff;
+	font-size: 17px;
+	text-align: center;
+	background-color: #f44336;
+  	border-color: #f44336;
+  	  padding: 5px 20px;
+  	  border-radius: 5px;
+  	    border: none;
+}
+
+.btn-lot:hover {
+ 
+
+border-radius: 5px;
+background-color: #f44336;
+  border-color: #f44336;
+}
+
+
+.btn-primary {
+	 color: #fff;
+ 	font-family: Roboto;
+color: #ffffff;
+//font-size: 17px;
+text-align: center;
+	
+
+  background-color: #f44336;
+  border-color: #f44336;
+}
+
+.btn-primary:hover {
+ 
+
+border-radius: 5px;
+background-color: #f44336;
+  border-color: #f44336;
+}
+
+.btn-primary:active, .btn-primary.active, .open > .dropdown-toggle.btn-primary {
+  color: #fff;
+  background-color: #f44336;
+  border-color: #f44336;
+}
+
+.btn-primary:focus, .btn-primary.focus {
+  color: #fff;
+  background-color: #f44336;
+  border-color: #f44336;
+}
+
+.lot-list .pagination > li > a, .lot-list-noactive .pagination > li > a{
+	background: none;
 }

@@ -5,6 +5,7 @@ use yii\helpers\Url;
 use yii\i18n\Formatter;
 use common\models\Rate;
 use common\models\LotRateStatistic;
+use common\models\Plural;
 
 ?>
 
@@ -23,9 +24,6 @@ use common\models\LotRateStatistic;
 	</a>
 	<div class="lot-footer">
 		
-
-	
-
 		<div class="current-price">
 			<div class="current-price-text">Текущая цена лота: </div>
 			<div class="current-price-price">
@@ -41,8 +39,7 @@ use common\models\LotRateStatistic;
 				}
 				if(!$temp){
 					$rate = Rate::find()->where(['lot_id'=>$model->id])->andWhere(['refusal'=>0])->orderBy('price desc')->one();
-				}
-				//$rate = Rate::find()->where(['lot_id'=>$model->id])->orderBy('price desc')->one(); ?>
+				} ?>
 				<?php if($rate): ?>
 					<?= Yii::$app->formatter->asDecimal($rate->price,0);?>
 				<?php else: ?>
@@ -64,27 +61,37 @@ use common\models\LotRateStatistic;
 		<div class="lot-torg">
 			<div class="lot-time">
 				<div class="lot-time-header">До окончания торгов:</div>
-				<div class="lot-time-time">
+				<div class="lot-time-time">			
 				<?php
 				if(isset($model->remaining_time) and ($model->remaining_time > Yii::$app->formatter->asDate('now', 'yyyy-MM-dd HH:mm:ss'))){
-					echo \russ666\widgets\Countdown::widget([
+					 $countdown =  \russ666\widgets\Countdown::widget([
 					    'datetime' => $model->remaining_time,
 					    'format' => '%Dд %Hч:%Mм:%Sс',
+					    'id' => 'countdown'.$model->id,
 					    'events' => [
-					        //'finish' => 'function(){location.reload()}',
+					        'finish' => 'function(){location.reload()}',
 					        'update' => 'function(event){
 					        	var format = "%-Sс";
-				                if(event.offset.minutes > 0) format = "%-Mм " + format;
-				                if(event.offset.hours   > 0) format = "%-Hч " + format;
-				                if(event.offset.days    > 0) format = "%-Dд " + format;
-				                if(event.offset.weeks   > 0) format = "%-Dд %-Hч:%-Mм:%-Sс";
+				                if(event.offset.minutes > 0) format = "%-M " + Text.plural(event.offset.minutes, ["минута ", "минуты ", "минут "]);
+				                if(event.offset.hours   > 0) format = "%-H " + Text.plural(event.offset.hours, ["час ", "часа ", "часов "]);
+				                if(event.offset.days    > 0) format = "%-D " + Text.plural(event.offset.days, ["день ", "дня ", "дней "])  + "%-H " + Text.plural(event.offset.hours, ["час ", "часа ", "часов "]);
+				                if(event.offset.weeks   > 0) format = "%-D " + Text.plural((7*event.offset.weeks)+event.offset.days, ["день ", "дня ", "дней "])  + "%-H " + Text.plural(event.offset.hours, ["час ", "часа ", "часов "]);
 				                if(event.offset.days == 0 && event.offset.hours == 0 && event.offset.minutes == 0 && event.offset.seconds < 60) {
-				                    format = "<em>%-S секунд осталось...</em>";
+				                    format = "<em>%-D " + Text.plural(event.offset.seconds, ["секунда", "секунды", "секунд"]) + "...</em>";
 				                }
 				                $(this).html(event.strftime(format));
 					        }',
 					    ],
 					]);
+					
+					if(strlen($countdown) < 100)
+					{
+						echo $countdown;
+					}
+					else
+					{
+						echo Plural::downcounter($model->remaining_time);
+					}
 				}
 				?>
 				</div>
@@ -102,26 +109,5 @@ use common\models\LotRateStatistic;
 			?>
 		</div>
 	</div>
-<?php // Html::a(Html::encode($model->name), ['view', 'slug' => $model->slug]);?>
-<?php
-
-
-
-
-/**
-* 'update' => 'function(event){
-	        	var format = "%-Sс";
-                if(event.offset.minutes > 0) format = "%-Mм " + format;
-                if(event.offset.hours   > 0) format = "%-Hч " + format;
-                if(event.offset.days    > 0) format = "%-dд " + format;
-
-                if(event.offset.days == 0 && event.offset.hours == 0 && event.offset.minutes == 0 && event.offset.seconds < 60) {
-                    format = "<em>%-S second left...</em>";
-                }
-
-                $(this).html(event.strftime(format));
-	        }',
-*/ 
-?>
 
 

@@ -1,9 +1,15 @@
 <?php
-/* @var $this yii\web\View */
-?>
-<h1>pay/thanks</h1>
 
-<p>
-    You may change the content of this page by modifying
-    the file <code><?= __FILE__; ?></code>.
-</p>
+use yii\helpers\Html;
+
+$this->title = 'Успешная оплата.';
+?>
+
+<div class="row">
+	<div class="col-xs-12">
+		<h1>Поздравляем.</h1>
+		<p>
+			<?= $messege ?>
+		</p>
+	</div>
+</div>

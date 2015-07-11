@@ -4,7 +4,7 @@
         "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "0000d0a6f565a1ed4b2e0fd015957ca0",
+    "hash": "338f5954133303a9d20937bf73ee15cc",
     "packages": [
         {
             "name": "2amigos/yii2-ckeditor-widget",
@@ -2306,6 +2306,51 @@
             "time": "2015-05-17 01:26:13"
         },
         {
+            "name": "mrclay/minify",
+            "version": "2.2.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/mrclay/minify.git",
+                "reference": "3c11ba8232a2155a1a29552aafc528be5fb0a662"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/mrclay/minify/zipball/3c11ba8232a2155a1a29552aafc528be5fb0a662",
+                "reference": "3c11ba8232a2155a1a29552aafc528be5fb0a662",
+                "shasum": ""
+            },
+            "require": {
+                "ext-pcre": "*",
+                "php": ">=5.2.1"
+            },
+            "require-dev": {
+                "tubalmartin/cssmin": "~2.4.8"
+            },
+            "suggest": {
+                "tubalmartin/cssmin": "Support minify with CSSMin (YUI PHP port)"
+            },
+            "type": "library",
+            "autoload": {
+                "classmap": [
+                    "min/lib/"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "BSD-3-Clause"
+            ],
+            "authors": [
+                {
+                    "name": "Stephen Clay",
+                    "email": "steve@mrclay.org",
+                    "role": "Developer"
+                }
+            ],
+            "description": "Minify is a PHP5 app that helps you follow several rules for client-side performance. It combines multiple CSS or Javascript files, removes unnecessary whitespace and comments, and serves them with gzip encoding and optimal client-side cache headers",
+            "homepage": "http://code.google.com/p/minify/",
+            "time": "2014-10-30 22:58:02"
+        },
+        {
             "name": "nirvana-msu/yii2-infinite-scroll",
             "version": "dev-master",
             "source": {
@@ -2487,6 +2532,51 @@
             "time": "2014-11-17 18:49:28"
         },
         {
+            "name": "rmrevin/yii2-minify-view",
+            "version": "1.8.6",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/rmrevin/yii2-minify-view.git",
+                "reference": "d4a446e41c191814596cff3c473062b902213f1a"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/rmrevin/yii2-minify-view/zipball/d4a446e41c191814596cff3c473062b902213f1a",
+                "reference": "d4a446e41c191814596cff3c473062b902213f1a",
+                "shasum": ""
+            },
+            "require": {
+                "mrclay/minify": "2.2.*",
+                "yiisoft/yii2": "2.0.*"
+            },
+            "type": "yii2-extension",
+            "autoload": {
+                "psr-4": {
+                    "rmrevin\\yii\\minify\\": ""
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Revin Roman",
+                    "email": "xgismox@gmail.com",
+                    "homepage": "http://phptime.ru/"
+                }
+            ],
+            "description": "Yii2 View component with minification css & js",
+            "keywords": [
+                "JS",
+                "css",
+                "minify",
+                "view",
+                "yii2"
+            ],
+            "time": "2015-06-19 11:23:18"
+        },
+        {
             "name": "russ666/yii2-countdown",
             "version": "dev-master",
             "source": {
@@ -2522,48 +2612,6 @@
                 "yii2"
             ],
             "time": "2015-03-04 10:12:10"
-        },
-        {
-            "name": "spanjeta/yii2-backup",
-            "version": "dev-master",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/spanjeta/yii2-backup.git",
-                "reference": "c1fd82ed287230f211ab12de5244dd373c72a079"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/spanjeta/yii2-backup/zipball/c1fd82ed287230f211ab12de5244dd373c72a079",
-                "reference": "c1fd82ed287230f211ab12de5244dd373c72a079",
-                "shasum": ""
-            },
-            "require": {
-                "yiisoft/yii2": "*"
-            },
-            "type": "yii2-extension",
-            "autoload": {
-                "psr-4": {
-                    "spanjeta\\modules\\backup\\": ""
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "Apache-2.0"
-            ],
-            "authors": [
-                {
-                    "name": "Shiv Charan Panjeta",
-                    "email": "shivcharan.panjeta@gmail.com"
-                }
-            ],
-            "description": "Database Backup and Restore functionality",
-            "keywords": [
-                "backup",
-                "database",
-                "restore",
-                "yii2"
-            ],
-            "time": "2015-04-15 08:56:06"
         },
         {
             "name": "stefangabos/zebra_image",
@@ -3529,6 +3577,48 @@
             ],
             "description": "A comprehensive library for generating differences between two hashable objects (strings or arrays).",
             "time": "2013-11-01 13:02:21"
+        },
+        {
+            "name": "spanjeta/yii2-backup",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/spanjeta/yii2-backup.git",
+                "reference": "c1fd82ed287230f211ab12de5244dd373c72a079"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/spanjeta/yii2-backup/zipball/c1fd82ed287230f211ab12de5244dd373c72a079",
+                "reference": "c1fd82ed287230f211ab12de5244dd373c72a079",
+                "shasum": ""
+            },
+            "require": {
+                "yiisoft/yii2": "*"
+            },
+            "type": "yii2-extension",
+            "autoload": {
+                "psr-4": {
+                    "spanjeta\\modules\\backup\\": ""
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "Apache-2.0"
+            ],
+            "authors": [
+                {
+                    "name": "Shiv Charan Panjeta",
+                    "email": "shivcharan.panjeta@gmail.com"
+                }
+            ],
+            "description": "Database Backup and Restore functionality",
+            "keywords": [
+                "backup",
+                "database",
+                "restore",
+                "yii2"
+            ],
+            "time": "2015-04-15 08:56:06"
         },
         {
             "name": "vova07/yii2-console-runner-extension",

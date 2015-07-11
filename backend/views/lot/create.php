@@ -6,8 +6,8 @@ use yii\helpers\Html;
 /* @var $this yii\web\View */
 /* @var $model backend\models\Lot */
 
-$this->title = 'Create Lot';
-$this->params['breadcrumbs'][] = ['label' => 'Lots', 'url' => ['index']];
+$this->title = 'Создание лота';
+$this->params['breadcrumbs'][] = ['label' => 'Лоты', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="lot-create">
@@ -16,6 +16,7 @@ $this->params['breadcrumbs'][] = $this->title;
 
     <?= $this->render('_form', [
         'model' => $model,
+        'formRate' => $formRate,
     ]) ?>
 
 </div>

@@ -2,13 +2,16 @@
 use yii\helpers\Html;
 use common\models\GeobaseCity;
 use yii\helpers\Url;
+use yii\i18n\Formatter;
+use common\models\Rate;
+use common\models\LotRateStatistic;
 
 ?>
 
 	<a href="<?= Url::toRoute(['lot/view', 'slug' => $model->slug]); ?>">
 		<div class="lot-img">
 			<div class="lot-name">
-				<?= $model->name;?>
+				<?= $model->short_name;?>
 			</div>
 			<?php 
 			if(isset($model->image) and is_file(".".$model->image)){
@@ -25,7 +28,29 @@ use yii\helpers\Url;
 
 		<div class="current-price">
 			<div class="current-price-text">Текущая цена лота: </div>
-			<div class="current-price-price">75 <span class="glyphicon glyphicon-ruble"></span></div>
+			<div class="current-price-price">
+				<?php 
+				$lotRateStatistic = LotRateStatistic::find()->where(['lot_id'=>$model->id])->orderBy('id desc')->one();
+		    	$temp = 0;
+		    	if($lotRateStatistic){
+					if($lotRateStatistic->status)
+					{
+						$rate = Rate::find()->where(['lot_id'=>$model->id])->andWhere(['refusal'=>0])->andWhere(['>',  'id', $lotRateStatistic->last_rate])->orderBy('price desc')->one();
+		    			$temp = 1;
+					}
+				}
+				if(!$temp){
+					$rate = Rate::find()->where(['lot_id'=>$model->id])->andWhere(['refusal'=>0])->orderBy('price desc')->one();
+				}
+				//$rate = Rate::find()->where(['lot_id'=>$model->id])->orderBy('price desc')->one(); ?>
+				<?php if($rate): ?>
+					<?= Yii::$app->formatter->asDecimal($rate->price,0);?>
+				<?php else: ?>
+					0
+				<?php endif; ?>
+				
+				 <span class="glyphicon glyphicon-ruble"></span>
+			</div>
 		</div>
 		
 		<div class="real-price">
@@ -41,14 +66,14 @@ use yii\helpers\Url;
 				<div class="lot-time-header">До окончания торгов:</div>
 				<div class="lot-time-time">
 				<?php
-				if(isset($model->remaining_time) and ($model->remaining_time > Yii::$app->formatter->asDate('now', 'yyyy-MM-dd hh:mm:ss'))){
+				if(isset($model->remaining_time) and ($model->remaining_time > Yii::$app->formatter->asDate('now', 'yyyy-MM-dd HH:mm:ss'))){
 					echo \russ666\widgets\Countdown::widget([
 					    'datetime' => $model->remaining_time,
-					    'format' => '%-Dд %-Hч:%-Mм:%-Sс',
+					    'format' => '%Dд %Hч:%Mм:%Sс',
 					    'events' => [
 					        //'finish' => 'function(){location.reload()}',
 					        'update' => 'function(event){
-					        	var format = "%S %!S:секунда,секунд;";
+					        	var format = "%-Sс";
 				                if(event.offset.minutes > 0) format = "%-Mм " + format;
 				                if(event.offset.hours   > 0) format = "%-Hч " + format;
 				                if(event.offset.days    > 0) format = "%-Dд " + format;

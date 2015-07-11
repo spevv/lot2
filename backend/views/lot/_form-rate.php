@@ -23,7 +23,7 @@ use yii2mod\alert\Alert;
 	        	<?= $form->field($model, 'lot_id')->hiddenInput();  ?> 
 	        	<?= $form->field($model, 'status')->hiddenInput();  ?> 
 	            <div class="form-group">
-	                <?= Html::submitButton('Повторно выложить лот', ['class' => 'btn btn-primary clear-lot']) ?>
+	                <?= Html::submitButton('Повторно выложить лот', ['class' => 'btn btn-primary clear-lot', 'data-method' => 'post', 'data-confirm' => 'Вы действительно хотите удалить все сделаные ставки этого лота?']) ?>
 	            </div>
 	        <?php ActiveForm::end(); ?>
 	    </div>
@@ -33,7 +33,7 @@ use yii2mod\alert\Alert;
 <?php
 $js = <<< JS
 
-	$( ".clear-lot" ).on( "click", function(event) {
+	/*$( ".clear-lot" ).on( "click", function(event) {
 		
 		event.preventDefault();
 		
@@ -55,7 +55,7 @@ $js = <<< JS
 		        } 
 		    }
 		);	
-	});
+	});*/
 	
 
 	

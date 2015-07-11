@@ -1,13 +1,14 @@
 <?php
 
 use yii\helpers\Html;
+use yii\helpers\Url;
 use yii\grid\GridView;
 
 /* @var $this yii\web\View */
 /* @var $searchModel backend\models\CommentSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
-$this->title = 'Comments';
+$this->title = 'Отзывы';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="comment-index">
@@ -15,9 +16,9 @@ $this->params['breadcrumbs'][] = $this->title;
     <h1><?= Html::encode($this->title) ?></h1>
     <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
 
-    <p>
+   <!-- <p>
         <?= Html::a('Create Comment', ['create'], ['class' => 'btn btn-success']) ?>
-    </p>
+    </p>-->
 
     <?= GridView::widget([
         'dataProvider' => $dataProvider,
@@ -25,15 +26,44 @@ $this->params['breadcrumbs'][] = $this->title;
         'columns' => [
             ['class' => 'yii\grid\SerialColumn'],
 
-            'id',
-            'text:ntext',
-            'public',
+            //'id',
+            
+            [
+             	'attribute' => 'userSocial.name',
+			    'value'=> function ($model){
+			    	return Html::a($model->userSocial['name'],  Url::to($model->userSocial['link']), ['target' => '_blank']);
+			    },
+			    'format' => 'html',
+			    'label' => 'Имя',
+            ],
+            [
+             	'attribute' => 'lot.short_name',
+			    'value'=> function ($model) {
+			    	return $model->lot['short_name'];
+			    },
+			    'format' => 'html',
+            ],
+            //'public',
+            [
+            	'attribute' => 'public',
+			    'value'=> function ($model){
+			    	if($model->public){
+						return 'Опубликован';
+					}
+					else
+					{
+						return 'Не опубликован';
+					}
+			    },
+            ],
             'creation_time',
-            'update_time',
+            'text:ntext',
+            //'update_time',
             // 'user2_id',
             // 'lot_id',
 
-            ['class' => 'yii\grid\ActionColumn'],
+            //['class' => 'yii\grid\ActionColumn'],
+            ['class' => 'yii\grid\ActionColumn', 'template' => '{update} {delete}'],
         ],
     ]); ?>
 

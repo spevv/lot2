@@ -3,7 +3,6 @@
 function afterAjaxListViewUpdate(){
 	//alert('afterAjaxListViewUpdate');
 	console.log('afterAjaxListViewUpdate');
-	//$.pjax.reload({container:"#countries"});  //Reload GridView
 }
 
 
@@ -193,6 +192,20 @@ $(document).on('click', '.social_share', function(){
     Share.go(this);
 });
 
+
+
+
+$('.owl-carousel').owlCarousel({
+    //animateOut: 'slideOutDown',
+   // animateIn: 'flipInX',
+    items:1,
+    loop:true,
+    margin:0,
+    //stagePadding:0,
+    smartSpeed:450,
+    nav:true,
+    navText:["",""],
+});
 
 
 

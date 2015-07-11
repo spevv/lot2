@@ -7,7 +7,7 @@ $params = array_merge(
 );
 
 return [
-	'name' => 'ИНТЕРНЕТ-АУКЦИОН БИЗНЕС-ОБРАЗОВАНИЯ',
+	'name' => 'Интернет-аукцион бизнес-образования',
     'id' => 'spevvlot',
     'basePath' => dirname(__DIR__),
     'bootstrap' => ['log'],
@@ -16,6 +16,18 @@ return [
     'homeUrl' => '/',
     
     'components' => [
+    	/* 'view' => [
+            'class' => '\rmrevin\yii\minify\View',
+            'enableMinify' => YII_DEBUG,
+            'web_path' => 'http://lot2.localhost/', // path alias to web base
+            'base_path' => 'E:\xampp\htdocs\lot2', // path alias to web base
+            'minify_path' => 'E:\xampp\htdocs\lot2/minify', // path alias to save minify result
+            'js_position' => [ \yii\web\View::POS_END ], // positions of js files to be minified
+            'force_charset' => 'UTF-8', // charset forcibly assign, otherwise will use all of the files found charset
+            'expand_imports' => true, // whether to change @import on content
+            'compress_output' => true, // compress result html page
+        ],*/
+    
     	'request' => [
             'baseUrl' => '',
         ],
@@ -27,29 +39,45 @@ return [
             'showScriptName' => false,
             'enableStrictParsing' => true,
             'rules' => [
-            	//'login/<service:google|facebook|etc>' => 'site/login',
-            	/*[
-            		'pattern' => 'login/<service:google|facebook|etc>',
-                    'route' => 'site/login',
-                    'suffix' => ''
-            	],*/
-            	
-            	/*[
-            		'class' => 'yii\rest\UrlRule', 
-            		'controller' => 'lot',
-            		'patterns' => [
-		                'PUT,PATCH {id}/update' => 'update',
-		                'DELETE {id}/delete' => 'delete',
-		                'GET,HEAD {id}' => 'view',
-		                'POST {id}/create' => 'create',
-		                'GET,HEAD' => 'index',
-		                '{id}' => 'options',
-		                '' => 'options',
-		            ],
-            	],*/
             	[
             		'pattern' => 'lot/get-rate-info',
                     'route' => 'lot/get-rate-info',
+                    'suffix' => ''
+            	],
+            	[
+            		'pattern' => 'cancel-subscription/<email>',
+                    'route' => 'site/cancel-subscription',
+                    'suffix' => ''
+            	],
+            	[
+            		'pattern' => 'account/<action>',
+                    'route' => 'account/<action>',
+                    'suffix' => ''
+            	],
+            	[
+            		'pattern' => 'comment/<id>',
+                    'route' => 'comment/index',
+                    'suffix' => ''
+            	],
+            	[
+            		'pattern' => 'comments',
+                    'route' => 'comment/comments',
+                    'suffix' => '.html'
+            	],
+            	
+            	/*[
+            		'pattern' => 'pay/<action>',
+                    'route' => 'pay/<action>',
+                    'suffix' => ''
+            	],*/
+            	[
+            		'pattern' => 'pay/payment-failure',
+                    'route' => 'pay/payment-failure',
+                    'suffix' => ''
+            	],
+            	[
+            		'pattern' => 'pay/payment-ok',
+                    'route' => 'pay/payment-ok',
                     'suffix' => ''
             	],
             	[
@@ -57,11 +85,11 @@ return [
                     'route' => 'pay/index',
                     'suffix' => ''
             	],
-            	[
+            	/*[
             		'pattern' => 'thanks',
                     'route' => 'pay/thanks',
                     'suffix' => ''
-            	],
+            	],*/
             	[
             		'pattern' => 'lot/finish-lot',
                     'route' => 'lot/finish-lot',
@@ -70,6 +98,11 @@ return [
             	[
             		'pattern' => 'lot/contact',
                     'route' => 'lot/contact',
+                    'suffix' => ''
+            	],
+            	[
+            		'pattern' => 'article/contact',
+                    'route' => 'article/contact',
                     'suffix' => ''
             	],
             	[
@@ -97,11 +130,11 @@ return [
                     'route' => 'lot/index',
                     'suffix' => '.html'
                 ],
-                [
+               /* [
                     'pattern' => 'categories',
                     'route' => 'category/index',
                     'suffix' => '.html'
-                ],
+                ],*/
                 [
                     'pattern' => '<category>',
                     'route' => 'category/view',
@@ -142,17 +175,25 @@ return [
             ],
             
         ],
+        'cache' => array(
+			'class' => 'yii\caching\FileCache',
+		),
         'eauth' => array(
 	            'class' => 'nodge\eauth\EAuth',
 	            'popup' => true, // Use the popup window instead of redirecting.
-	            'cache' => false, // Cache component name or false to disable cache. Defaults to 'cache' on production environments.
+	            'cache' => true, // Cache component name or false to disable cache. Defaults to 'cache' on production environments.
 	            'cacheExpire' => 0, // Cache lifetime. Defaults to 0 - means unlimited.
-	            'httpClient' => array(
+	            //'httpClient' => array(
 	                // uncomment this to use streams in safe_mode
-	                //'useStreamsFallback' => true,
-	            ),
+	                //'useStreamsFallback' => true, // времено поставил что бы протестить 09.07.15
+	            //),
+	            // spevv s
+	            /*'tokenStorage' => array(
+	                'class' => '@app\eauth\DatabaseTokenStorage',
+	            ),*/
+	            //spevv f
 	            'services' => array( // You can change the providers and their classes.
-	                'facebook' => array(
+	                 'facebook' => array(
 	                    // register your app here: https://developers.facebook.com/apps/
 	                    'class' => 'frontend\models\social\FacebookOAuth2Service',
 	                    'clientId' => '848319381869872', // '860300950671715', //'848319381869872',
@@ -193,6 +234,15 @@ return [
                     'categories' => array('nodge\eauth\*'),
                     'logVars' => array()
                 ],
+                 [
+		            'class' => 'yii\log\FileTarget',
+		            'levels' => ['info'],
+		            'categories' => ['payment'],
+		            'logFile' => '@frontend/runtime/logs/payment.log',
+		            'maxFileSize' => 1024 * 2,
+		            'maxLogFiles' => 50,
+		            'logVars' => [],
+		        ],
             ],
         ],
         'errorHandler' => [

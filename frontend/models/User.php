@@ -8,6 +8,7 @@ use yii\db\ActiveRecord;
 use yii\web\IdentityInterface;
 
 use frontend\models\UserSocial;
+use common\models\UserSettings;
 /**
  * User model
  *
@@ -230,6 +231,12 @@ class User extends ActiveRecord implements IdentityInterface
 			$user2->image = $service->getAttribute('image');
 			$user2->link = $service->getAttribute('link');
 			$user2->save();
+			
+			// создание настроек пользователя
+			$userSettings = new UserSettings();
+			$userSettings->user_id = $id;
+			$userSettings->save();
+			
 		}
        
         

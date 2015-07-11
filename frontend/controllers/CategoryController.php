@@ -28,91 +28,94 @@ use common\models\Branch;
  */
 class CategoryController extends Controller
 {
-    public function behaviors()
-    {
-        return [
-            'verbs' => [
-                'class' => VerbFilter::className(),
-                'actions' => [
-                    'delete' => ['post'],
-                ],
-            ],
-        ];
-    }
+	
 
-    /**
-     * Lists all Category models.
-     * @return mixed
-     */
-    public function actionIndex()
+  	public function actionView($category)
     {
-        $searchModel = new CategorySearch();
-        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+    	$categoryInfo =  $this->findModelSlug($category);
+		$lotIds = $this->getLotsOfCategory($categoryInfo->id);	
+		$searchModel = new CategoryLotSearch();	
+		$dataProvider2 = $searchModel->search(null,$lotIds, false);
+		$categoryLot = ArrayHelper::map(CategoryLot::find()->where(['category_id' => $categoryInfo->id])->all(), 'id', 'lot_id');
+		$categoryLot = array_unique($categoryLot);
 
-        return $this->render('index', [
-            'searchModel' => $searchModel,
-            'dataProvider' => $dataProvider,
+		$search =  $this->renderPartial('/site/_search', [
+			'action' => ['view', 'category' => $category],
+        	'model' => $searchModel, 
+        	'region' => $this->getActiveRegions($categoryLot), 
+        	'subjects' => $this->getActiveSubjects($categoryLot), 
+        	'branchs' => $this->getActiveBranchs($categoryLot)
         ]);
-    }
-
-    /**
-     * Displays a single Category model.
-     * @param string $id
-     * @return mixed
-     */
-   /* public function actionView($id)
-    {
-    	
-    	$categoryLot = CategoryLot::find()
-		    ->where(['category_id' => $id])
-		    ->orderBy('id')
-		    ->all();
-		//$lotId = [];
-		foreach($categoryLot as $key => $value){
-			$lotId[] = $value["lot_id"];
-		}
-		$lots = Lot::find()
-		    ->where(['id' => $lotId])
-		    ->orderBy('id')
-		    ->all();
-		    //var_dump($lots);
-		return $this->render('view', [
-            'lots' => $lots,
-            'model' => $this->findModel($id)
-        ]);
-        /*return $this->render('view', [
-            'model' => $this->findModel($id),
-        ]);*/
-   /* }*/
-    public function actionView($category)
-    {
-    	
-    	$categoryInfo = Category::find()
-		    ->where(['public' => 1])
-		    ->orderBy('priority')
-		    ->all();
-		
-		foreach($categoryInfo as $key => $value){
-			$items[$key]['label'] = $value['name'];
-			$items[$key]['linkOptions'] =  ['class'=> $value['slug']];
-			$items[$key]['url'] = ['category/view', 'category' => $value['slug']];
-		}
-    	//var_dump($category);
-    	//die();
-    	$categoryInfo = Category::find()
-		    ->where(['slug' => $category])
-		    ->orderBy('id')
-		    ->all();
-		    
-		if(!isset($categoryInfo[0]['id'])){
-			return $this->render('/site/error', [
-	            'message' => 'Страница не найдена',
-	            'name' => 'Страница не найдена',
+        
+		if(Yii::$app->request->isPost)
+		{
+			//var_dump('is post');
+			Yii::$app->session->set('searchData', Yii::$app->request->post());
+			//$dataProvider = $searchModel->search(Yii::$app->request->post(), true);
+			$dataProvider = $searchModel->search(Yii::$app->request->post(), $lotIds, true);
+			
+			$search =  $this->renderAjax('/site/_search', [
+				'action' => ['view', 'category' => $category],
+	        	'model' => $searchModel, 
+	        	'region' => $this->getActiveRegions($categoryLot), 
+        		'subjects' => $this->getActiveSubjects($categoryLot), 
+        		'branchs' => $this->getActiveBranchs($categoryLot)
+	        ]);
+			
+			return $this->renderPartial('/site/_active-block-lot', [
+			 	'search' => $search,
+			 	'dataProvider' => $dataProvider,
 	        ]);
 		}
-		$id = $categoryInfo[0]['id'];
-    	$categoryLot = CategoryLot::find()
-		    ->where(['category_id' => $id])
+		elseif(Yii::$app->request->isPjax)
+        {
+        	//$dataProvider = $searchModel->search(Yii::$app->request->queryParams, true);
+        	$dataProvider = $searchModel->search(Yii::$app->request->queryParams, $lotIds, true);
+        	$search =  $this->renderAjax('/site/_search', [
+        		'action' => ['view', 'category' => $category],
+	        	'model' => $searchModel, 
+	        	'region' => $this->getActiveRegions($categoryLot), 
+        		'subjects' => $this->getActiveSubjects($categoryLot), 
+        		'branchs' => $this->getActiveBranchs($categoryLot)
+	        ]);
+			
+			return $this->renderPartial('/site/_active-block-lot', [
+			 	'search' => $search,
+			 	'dataProvider' => $dataProvider,
+	        ]);
+		}
+		else
+		{
+			
+			Yii::$app->opengraph->set([
+			    'title' => $categoryInfo->name,
+			    'description' =>$categoryInfo->meta_description,
+			    'image' => Yii::$app->params['siteInfo']['image'],
+			]);
+			
+			//var_dump($categoryInfo->name);	
+			Yii::$app->session->remove('searchData');
+			$dataProvider = $searchModel->search(Yii::$app->request->queryParams, $lotIds, true);
+			
+			$activeBlockLot =  $this->renderPartial('/site/_active-block-lot', [
+			 	'search' => $search,
+			 	'dataProvider' => $dataProvider,
+	        ]);
+			
+			return $this->render('/site/index', [
+	            'dataProvider2' => $dataProvider2,
+	            'categoryInfo' => $this->getCategoty(),
+	            'activeBlockLot' => $activeBlockLot,
+	            'model'=> $categoryInfo,
+	            
+	        ]);
+		}
+    }
+    
+    protected function getLotsOfCategory($categoryId)
+	{
+		$categoryLot = CategoryLot::find()
+		    ->where(['category_id' => $categoryId])
 		    ->orderBy('id')
 		    ->all();
 		    
@@ -124,124 +127,83 @@ class CategoryController extends Controller
 		else{
 			$lotId = 0;
 		}
-		  
-		$lots = Lot::find()
+		 
+		/*$lots = Lot::find()
 		    ->where(['id' => $lotId])
 		    ->orderBy('id')
-		    ->all();
-		    
+		    ->all();*/
 		
-		$searchModel = new CategoryLotSearch();
-		
-		$dataProvider2 = $searchModel->search(null,$lotId, false);
-		
-		if(Yii::$app->request->isPost){
-			$dataProvider = $searchModel->search(Yii::$app->request->post(), $lotId, true);
-		}
-		else
+		return $lotId;
+		//return ['lots'=>$lots, 'lotIds'=>$lotId];
+	}
+	
+	// return all active subjects
+	private function getActiveSubjects($categoryLot)
+	{
+		$subjectLots = SubjectLot::find()->where(['lot_id' => $categoryLot])->all();
+		foreach($subjectLots as $key => $subjectLot)
 		{
-			$dataProvider = $searchModel->search(Yii::$app->request->queryParams, $lotId, true);
+			if($subjectLot->lot->public != 1)
+			{
+				unset($subjectLots[$key]);
+			}
+			if($subjectLot->lot->remaining_time < Yii::$app->formatter->asDate('now', 'yyyy-MM-dd HH:mm:ss'))
+			{
+				unset($subjectLots[$key]);
+			}
 		}
 		
-		$categoryLot = ArrayHelper::map(CategoryLot::find()->where(['category_id' => $id])->all(), 'id', 'lot_id');
-		$categoryLot = array_unique($categoryLot);
-
-		$lot = ArrayHelper::map(Lot::find()->where(['id' => $categoryLot, 'public'=> 1])
-			->andWhere('remaining_time>"'.Yii::$app->formatter->asDate('now', 'yyyy-MM-dd hh:mm:ss').'"')
-			->all(), 'id', 'city_id');
-		$lot = array_unique($lot);
-		$region = ArrayHelper::map(GeobaseCity::findAll($lot), 'id', 'name');
-
-		$subjectLot = ArrayHelper::map(SubjectLot::find()->where(['lot_id' => $categoryLot])->all(), 'id', 'subject_id');
+		$subjectLot = ArrayHelper::map($subjectLots, 'id', 'subject_id');
 		$subjectLot = array_unique($subjectLot);
-		$subjects = ArrayHelper::map(Subject::findAll($subjectLot), 'id', 'name');
-
-
-		$branchLot = ArrayHelper::map(BranchLot::find()->where(['lot_id' => $categoryLot])->all(), 'id', 'branch_id');
+		return ArrayHelper::map(Subject::findAll($subjectLot), 'id', 'name');
+	}
+	
+	// return all active Branchs
+	private function getActiveBranchs($categoryLot)
+	{
+		$branchLots = BranchLot::find()->where(['lot_id' => $categoryLot])->all();
+		foreach($branchLots as $key => $branchLot)
+		{
+			if($branchLot->lot->public != 1)
+			{
+				unset($branchLots[$key]);
+			}
+			
+			if($branchLot->lot->remaining_time < Yii::$app->formatter->asDate('now', 'yyyy-MM-dd HH:mm:ss'))
+			{
+				unset($branchLots[$key]);
+			}
+		}
+		
+		$branchLot = ArrayHelper::map($branchLots, 'id', 'branch_id');
 		$branchLot = array_unique($branchLot);
-		$branchs = ArrayHelper::map(Branch::findAll($branchLot), 'id', 'name');
-
-		
-
-		
-		
-		/*$lot = ArrayHelper::map(Lot::find()->all(), 'id', 'city_id');
+		return ArrayHelper::map(Branch::findAll($branchLot), 'id', 'name');
+	}
+	
+	//return region
+	private function getActiveRegions($categoryLot)
+	{
+		$lot = ArrayHelper::map(Lot::find()->where(['id' => $categoryLot, 'public'=> 1])->andWhere(['>',  'remaining_time', Yii::$app->formatter->asDate('now', 'yyyy-MM-dd HH:mm:ss')])->all(), 'id', 'city_id');
 		$lot = array_unique($lot);
-		$region = ArrayHelper::map(GeobaseCity::findAll($lot), 'id', 'name');
-
-		$subjectLot = ArrayHelper::map(SubjectLot::find()->all(), 'id', 'subject_id');
-		$subjectLot = array_unique($subjectLot);
-		$subjects = ArrayHelper::map(Subject::findAll($subjectLot), 'id', 'name');
-
-		$branchLot = ArrayHelper::map(BranchLot::find()->all(), 'id', 'branch_id');
-		$branchLot = array_unique($branchLot);
-		$branchs = ArrayHelper::map(Branch::findAll($branchLot), 'id', 'name');*/
+		return  ArrayHelper::map(GeobaseCity::findAll($lot), 'id', 'name');
+	}
+	
+    
+    //return public category
+    private function getCategoty()
+    {
+		$categoryInfo = Category::find()
+		    ->where(['public' => 1])
+		    ->orderBy('priority')
+		    ->all();
 		
-		return $this->render('view', [
-            'lots' => $lots,
-            'searchModel' => $searchModel,
-            'dataProvider' => $dataProvider,
-            'dataProvider2' => $dataProvider2,
-            'model' => $this->findModel($id),
-            'categoryInfo' => $items,
-            'region' => $region,
-            'subjects' => $subjects,
-            'branchs' => $branchs,
-        ]);
-        /*return $this->render('view', [
-            'model' => $this->findModel($id),
-        ]);*/
-    }
-
-    /**
-     * Creates a new Category model.
-     * If creation is successful, the browser will be redirected to the 'view' page.
-     * @return mixed
-     */
-    public function actionCreate()
-    {
-        $model = new Category();
-
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
-        } else {
-            return $this->render('create', [
-                'model' => $model,
-            ]);
-        }
-    }
-
-    /**
-     * Updates an existing Category model.
-     * If update is successful, the browser will be redirected to the 'view' page.
-     * @param string $id
-     * @return mixed
-     */
-    public function actionUpdate($id)
-    {
-        $model = $this->findModel($id);
-
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
-        } else {
-            return $this->render('update', [
-                'model' => $model,
-            ]);
-        }
-    }
-
-    /**
-     * Deletes an existing Category model.
-     * If deletion is successful, the browser will be redirected to the 'index' page.
-     * @param string $id
-     * @return mixed
-     */
-    public function actionDelete($id)
-    {
-        $this->findModel($id)->delete();
-
-        return $this->redirect(['index']);
-    }
+		foreach($categoryInfo as $key => $value){
+			$items[$key]['label'] = $value['name'];
+			$items[$key]['linkOptions'] =  ['class'=> $value['slug']];
+			$items[$key]['url'] = ['category/view', 'category' => $value['slug']];
+		}
+		return $items;
+	}
 
     /**
      * Finds the Category model based on its primary key value.
@@ -250,12 +212,21 @@ class CategoryController extends Controller
      * @return Category the loaded model
      * @throws NotFoundHttpException if the model cannot be found
      */
+    protected function findModelSlug($slug)
+    {
+        if (($model = Category::find()->where(['slug'=> $slug])->one()) !== null) {
+            return $model;
+        } else {
+            throw new NotFoundHttpException('Страница не существует.');
+        }
+    }
+    
     protected function findModel($id)
     {
         if (($model = Category::findOne($id)) !== null) {
             return $model;
         } else {
-            throw new NotFoundHttpException('The requested page does not exist.');
+            throw new NotFoundHttpException('Страница не существует.');
         }
     }
 }

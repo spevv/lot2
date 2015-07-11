@@ -50,4 +50,9 @@ class GeobaseCity extends \yii\db\ActiveRecord
             'longitude' => 'Longitude',
         ];
     }
+    
+    public function getGeobase()
+    {
+        return $this->hasOne(GeobaseIp::className(), ['city_id' => 'id']);
+    }
 }

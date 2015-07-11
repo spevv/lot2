@@ -18,5 +18,6 @@ return [
     	'title' => 'ИНТЕРНЕТ-АУКЦИОН БИЗНЕС-ОБРАЗОВАНИЯ',
 		'description' => 'описание сайта',
 		'image' => 'http://lot2.localhost/image/bg1.png',
+		'keyword' => 'Keywords',
     ],
 ];

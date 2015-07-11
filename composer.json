@@ -48,7 +48,8 @@
         "darkcs/yii2-infinite-scroll": "*",
         "nodge/yii2-eauth": "dev-master",
         "uran1980/yii2-jquery-essential": "dev-master",
-        "dragonjet/yii2-opengraph": "*"
+        "dragonjet/yii2-opengraph": "*",
+        "rmrevin/yii2-minify-view": "1.8.*"
     },
     "require-dev": {
         "yiisoft/yii2-codeception": "*",

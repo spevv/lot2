@@ -8,6 +8,7 @@ use frontend\models\ArticleSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
+use frontend\models\ContactForm2;
 
 /**
  * ArticleController implements the CRUD actions for Article model.
@@ -47,10 +48,76 @@ class ArticleController extends Controller
         ]);
     }*/
     
+    public function actionContact()
+    {  	
+    //var_dump('sdf');
+        $model = new ContactForm2();
+        if ($model->load(Yii::$app->request->post()) && $model->validate()) {
+            if ($model->sendEmail(Yii::$app->params['adminEmail'])) {
+                //Yii::$app->session->setFlash('success', 'Поздравляем! Ваше сообщение успешно отправлено.');
+                $return = '1';
+            } else {
+                //Yii::$app->session->setFlash('error', 'Не удалось отправить сообщение.');
+                 $return = '';
+            }
+            
+            $modelNew = new ContactForm2();
+            return $this->renderPartial('_form', [
+                'model' => $modelNew,
+                'send' => $return,
+            ]);
+        } 
+    }
+    
+    
     public function actionView($article)
     {
+    	
+    	//$modelNew = new ContactForm2();
+
+       /* $model = new ContactForm2();
+        if ($model->load(Yii::$app->request->post()) && $model->validate()) {
+            if ($model->sendEmail(Yii::$app->params['adminEmail'])) {
+                Yii::$app->session->setFlash('success', 'Поздравляем! Ваше сообщение успешно отправлено.');
+            } else {
+                Yii::$app->session->setFlash('error', 'Не удалось отправить сообщение.');
+            }
+            
+            $modelNew = new ContactForm();
+            return $this->renderPartial('_form', [
+                'model' => $modelNew,
+            ]);
+        } */
+    	
     	//var_dump($article);
     	//die();
+    	
+		/*
+		$articles = [
+			[
+				'label' => 'О проекте', 
+				'linkOptions'=> ['class'=> ''], 
+				'url'=> '',
+			],
+			[
+				'label' => 'Отзывы', 
+				'linkOptions'=> ['class'=> ''], 
+				'url'=> '',
+			],
+			[
+				'label' => 'Правила участвия', 
+				'linkOptions'=> ['class'=> ''], 
+				'url'=> '',
+			],
+			[
+				'label' => 'Как развиваться дальше?', 
+				'linkOptions'=> ['class'=> ''], 
+				'url'=> '',
+			],
+		];*/
+    	
+    	//$contactForm = new ContactForm();
+    	
     	$model =  $this->findModel($article);
     	if($model)
     	{
@@ -59,9 +126,24 @@ class ArticleController extends Controller
 			    'description' => $model->meta_description,
 			]);
 		}
+		
+		if($model->id == 10){
+			$modelNew = new ContactForm2();
+	        $contactForm =  $this->renderPartial('_form', [
+	            'model' => $modelNew,
+	            'send' => '',
+	        ]);
+		}
+		else
+		{
+			$contactForm ="";
+		}
+		
     	  
         return $this->render('view', [
             'model' => $model,
+            'contactForm' => $contactForm,
+            //'articles' => $articles,
         ]);
     }
 

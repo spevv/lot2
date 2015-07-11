@@ -64,6 +64,7 @@ class GeobaseCitySearch extends GeobaseCity
         ]);
 
         $query->andFilterWhere(['like', 'name', $this->name]);
+        
 
         return $dataProvider;
     }

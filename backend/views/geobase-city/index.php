@@ -24,6 +24,7 @@ $this->params['breadcrumbs'][] = $this->title;
 
             //'id',
             'name',
+            'geobase.country_code',
             //'region_id',
            // 'latitude',
             //'longitude',

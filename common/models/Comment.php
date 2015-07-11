@@ -3,7 +3,7 @@
 namespace common\models;
 
 use Yii;
-
+use frontend\models\UserSocial;
 /**
  * This is the model class for table "comment".
  *
@@ -27,6 +27,21 @@ class Comment extends \yii\db\ActiveRecord
     {
         return 'comment';
     }
+    
+    
+    public function behaviors()
+    {
+        return [
+            'timestamp' => [
+                'class' => 'yii\behaviors\TimestampBehavior',
+                'attributes' => [
+                   \yii\db\ActiveRecord::EVENT_BEFORE_INSERT => ['creation_time', 'update_time'],
+                   \yii\db\ActiveRecord::EVENT_BEFORE_UPDATE => ['update_time'],
+                ],
+                'value' => new \yii\db\Expression('NOW()'),
+            ],
+        ];
+     }
 
     /**
      * @inheritdoc
@@ -37,7 +52,7 @@ class Comment extends \yii\db\ActiveRecord
             [['text'], 'string'],
             [['public', 'user2_id', 'lot_id'], 'integer'],
             [['creation_time', 'update_time'], 'safe'],
-            [['user2_id', 'lot_id'], 'required']
+            [['user2_id', 'lot_id', 'text'], 'required']
         ];
     }
 
@@ -48,8 +63,8 @@ class Comment extends \yii\db\ActiveRecord
     {
         return [
             'id' => 'ID',
-            'text' => 'Комментарий',
-            'public' => 'Публиковаит',
+            'text' => 'Отзыв',
+            'public' => 'Публиковать',
             'creation_time' => 'Создание',
             'update_time' => 'Обновление',
             'user2_id' => 'User2 ID',
@@ -68,8 +83,8 @@ class Comment extends \yii\db\ActiveRecord
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getUser2()
+    public function getUserSocial()
     {
-        return $this->hasOne(User2::className(), ['id' => 'user2_id']);
+        return $this->hasOne(UserSocial::className(), ['id' => 'user2_id']);
     }
 }

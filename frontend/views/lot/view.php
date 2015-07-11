@@ -61,8 +61,10 @@ $this->title = $model['name'];
 			<div class="lot-menu-social">
 				<div class="lot-menu">
 					<a href="#condition">Условия</a> / 
-					<a href="#description">Описание</a> / 
-					<a href="#reviews">Отзывы</a>
+					<a href="#description">Описание</a>
+					<?php if($comments): ?> / 
+						<a href="#reviews">Отзывы</a>
+					<?php endif; ?>
 				</div>
 				<div class="lot-social"> <div>Поделиться:</div>  
 					<div class="social-fb social_share" data-type="fb" data-image="<?=$share['image'];?>" data-text="<?=$share['text'];?>"></div>
@@ -134,10 +136,29 @@ $this->title = $model['name'];
 					</div>
 				</div>
 				<div class="lot-view-hr"></div>
+				<?php if($comments): ?>
 				<div class="lot-reviews" id="reviews">
-					<div class="lot-reviews-head"></div>
-					<div class="lot-reviews-conternt"></div>
+					<div class="lot-condition-header">Отзывы</div>
+					<div class="lot-reviews-conternt">
+						<div class="owl-carousel">
+							<?php foreach($comments as $comment): ?>
+						    <div class="item">
+						    	<div class="row">
+									<div class="col-xs-3">
+										<div class="user-img"> <img class="img-circle" src="<?=  $comment->userSocial['image'] ?>" alt="<?= $comment->userSocial['name'] ?>" /> </div>
+										<div class="user-name"><?= $comment->userSocial['name'] ?></div>
+									</div>
+									<div class="col-xs-9">
+										<div class="user-comment"><?= $comment->text ?></div>
+									</div>
+								</div>
+						    </div>
+						    <?php endforeach; ?>
+						</div>
+						
+					</div>
 				</div>
+				<?php endif; ?>
 			</div>
 		</div>
 		

@@ -8,12 +8,24 @@ use backend\models\CategorySearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
+use dosamigos\editable\EditableAction;
 
 /**
  * CategoryController implements the CRUD actions for Category model.
  */
 class CategoryController extends Controller
 {
+	public function actions()
+	{
+	    return [
+	        'editable' => [
+	            'class' => EditableAction::className(),
+	            'modelClass' => Category::className(),
+	            'forceCreate' => false
+	        ]
+	    ];
+	}
+	
     public function behaviors()
     {
         return [

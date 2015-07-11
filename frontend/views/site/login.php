@@ -19,9 +19,8 @@ $this->title = 'Вход';
 
 	
     <div class="row">
-        <div class="col-xs-12">
-            
-			<p class="lead">Войдите через соцсеть:</p>
+        <div class="col-xs-12" style="text-align: center">
+			<p class="lead">Для того что бы выполнить какие то действия на сайте, вы должны войти через соцсеть:</p>
 			<?php echo \nodge\eauth\Widget::widget(array('action' => 'site/login')); ?>
             
         </div>

@@ -4,7 +4,8 @@ use yii\bootstrap\Nav;
 use yii\bootstrap\NavBar;
 use yii\widgets\Breadcrumbs;
 use frontend\assets\AppAsset;
-use frontend\widgets\Alert;
+use yii2mod\alert\Alert;
+//use frontend\widgets\Alert;
 use yii\helpers\Url;
 
 use common\models\Lot;
@@ -46,7 +47,7 @@ Url::remember();
 					<div class="col-xs-12">
 						<div class="top-menu">
 							<a href="<?= Url::toRoute(['article/view', 'article' => 'organizatoram-treningov']); ?>">Организаторам тренингов</a>
-							<a href="<?= Url::toRoute(['article/view', 'article' => 'otzyvy']); ?>">Отзывы о сайте</a>
+							<a href="<?= Url::toRoute(['comment/comments']); ?>">Отзывы о сайте</a>
 							<?php if(Yii::$app->user->isGuest):	?>
 							
 								<?php Modal::begin([
@@ -65,10 +66,19 @@ Url::remember();
 									Modal::end(); 
 								?>
 							<?php else: ?>
-								<a  href="<?= Url::toRoute(['/site/logout']) ?>" data-method="post">Выход ( <?= Yii::$app->user->identity->username; ?> )</a>
+								<div class="dropdown account-drop">
+									<a id="dLabel" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" href=""><?= Yii::$app->user->identity->username; ?></a>
+							  		<div class="dropdown-menu" role="menu" aria-labelledby="dLabel">
+							  			<a  href="<?= Url::toRoute(['/account/active']) ?>">Личный кабинет</a><br>
+							  			<a  href="<?= Url::toRoute(['/site/logout']) ?>" data-method="post">Выход</a>
+							  		</div>
+							  	</div>
+								
+							
+								
 							<?php endif; ?>
 							
-							<a href="">Мой регион: Москва и МО</a>
+							<!--<a href="">Мой регион: Москва и МО</a>-->
 							
 							<!--<div class="dropdown">
 								<a id="dLabel" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" href="">Мой регион: Москва и МО</a>
@@ -143,10 +153,33 @@ Url::remember();
 								<div class="logo"></div>
 							</a>
 							<div class="menu">
-								<a href="<?= Url::toRoute(['article/view', 'article' => 'o-proyekte']); ?>"><div class="m-about"></div> О проекте</a>
-								<a href="<?= Url::toRoute(['article/view', 'article' => 'otzyvy']); ?>"><span class="m-comment"></span> Отзывы</a>
-								<a href="<?= Url::toRoute(['article/view', 'article' => 'pravila-uchastiya']); ?>"><span class="m-rule"></span> Правила участия</a>
-								<a href="<?= Url::toRoute(['article/view', 'article' => 'kak-razvivatsya-deshevle']); ?>"><span class="m-next"></span> Как развиваться дешевле</a>                                                     
+								<?php
+						            echo Nav::widget([
+									    'items' => [
+									   		[
+										    	'label' => 'О проекте',
+												'linkOptions' =>  ['class'=> 'm-about'],
+												'url' => ['article/view', 'article' => 'o-proyekte'],
+											],
+											[
+										    	'label' => 'Отзывы',
+												'linkOptions' =>  ['class'=> 'm-comment'],
+												'url' => ['article/view', 'article' => 'otzyvy'],
+											],
+											[
+										    	'label' => 'Правила участия',
+												'linkOptions' =>  ['class'=> 'm-rule'],
+												'url' => ['article/view', 'article' => 'pravila-uchastiya'],
+											],
+											[
+										    	'label' => 'Как развиваться дешевле',
+												'linkOptions' =>  ['class'=> 'm-next'],
+												'url' => ['article/view', 'article' => 'kak-razvivatsya-deshevle'],
+											],
+									    ],
+									    'options' => ['class' =>'nav nav-pills  nav-lot-menu'],
+									]);
+						        ?>                                                 
 							</div>
 						</div>
 					</div>
@@ -203,7 +236,11 @@ Url::remember();
         <?php /* echo yii\authclient\widgets\AuthChoice::widget([
      'baseAuthUrl' => ['site/auth']
 	])  */ ?>
-        <?= Alert::widget() ?>
+          	<?php
+  	if(\Yii::$app->session->getFlash('success') or \Yii::$app->session->getFlash('error')){
+		echo  Alert::widget();
+	}
+  	?>
         <?= $content ?>
         </div>
     </div>
@@ -260,6 +297,7 @@ Url::remember();
 									    ]
 									])->input('email', ['placeholder'=>'Ваш e-mail']); ?>
 							    <?php ActiveForm::end(); ?>
+
 							<?php Pjax::end(); ?>
 						</div><!-- follower -->
 					</div>
@@ -279,7 +317,7 @@ Url::remember();
 	        	</div>
 	        	<div class="col-xs-12">
 				<?php
-				$lot = ArrayHelper::map(Lot::find()->all(), 'id', 'city_id');
+				$lot = ArrayHelper::map(Lot::find()->where(['public'=> 1])->andWhere(['>',  'remaining_time', Yii::$app->formatter->asDate('now', 'yyyy-MM-dd HH:mm:ss')])->all(), 'id', 'city_id');
 				$lot = array_unique($lot);
 				//$region = ArrayHelper::map(GeobaseCity::findAll($lot), 'id', 'name');
 				$region = ArrayHelper::map(GeobaseCity::find()

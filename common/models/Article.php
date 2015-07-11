@@ -49,7 +49,7 @@ class Article extends \yii\db\ActiveRecord
     {
         return [
             [['description'], 'string'],
-            [['name', 'meta_description', 'meta_keyword'], 'string', 'max' => 255]
+            [['name', 'meta_description', 'meta_keyword', 'image'], 'string', 'max' => 255]
         ];
     }
 
@@ -65,6 +65,7 @@ class Article extends \yii\db\ActiveRecord
             'meta_description' => 'Meta Description',
             'meta_keyword' => 'Meta Keyword',
             'slug' => 'slug',
+            'image' => 'Изображение',
         ];
     }
 }

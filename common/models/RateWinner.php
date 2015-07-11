@@ -32,7 +32,7 @@ class RateWinner extends \yii\db\ActiveRecord
         return [
             [['pay', 'rate_id', 'status'], 'integer'],
             [['rate_id'], 'required'],
-            [['winner_time', 'pay_time'], 'safe'],
+            [['winner_time', 'pay_time', 'send_email_time'], 'safe'],
             [['rate_info', 'comment'], 'string']
         ];
     }
@@ -44,20 +44,23 @@ class RateWinner extends \yii\db\ActiveRecord
     {
         return [
             'id' => 'ID',
-            'pay' => 'Pay',
+            'pay' => 'Оплата',
             'rate_id' => 'Rate ID',
-            'comment' => 'Comment',
+            'comment' => 'Комментарий',
             'rate_info' => 'Info',
-            'winner_time' => 'winner_time',
+            'winner_time' => 'Время',
             'pay_time' => 'pay_time',
+            'send_email_time' => 'send_email_time',
+            'rate.user.name' => 'Пользователь',
+            'rate.lot.short_name' => 'Лот',
         ];
     }
 
     /**
      * @return \yii\db\ActiveQuery
      */
-   /* public function getRate()
+    public function getRate()
     {
         return $this->hasOne(Rate::className(), ['id' => 'rate_id']);
-    }*/
+    }
 }

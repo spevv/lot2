@@ -2,6 +2,7 @@
 
 use yii\helpers\Html;
 use yii\grid\GridView;
+use dosamigos\editable\Editable;
 
 /* @var $this yii\web\View */
 /* @var $searchModel backend\models\CategorySearch */
@@ -26,7 +27,16 @@ $this->params['breadcrumbs'][] = $this->title;
             ['class' => 'yii\grid\SerialColumn'],
 
             //'id',
-            'name',
+            //'name',
+            [
+				    'class' => \dosamigos\grid\EditableColumn::className(),
+				    'attribute' => 'name',
+				    'url' => ['editable'],
+				    'type' => 'text',
+				    'editableOptions' => [
+				        'mode' => 'inline',
+				    ]
+				],
             //'description:ntext',
             //'meta_description',
             //'meta_keyword',

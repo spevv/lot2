@@ -3,6 +3,8 @@
 use kartik\form\ActiveForm;
 use yii\helpers\Html;
 use yii\widgets\Pjax;
+use yii\bootstrap\Modal;
+
 ?>
 <?php Pjax::begin(['options' => ['id'=>'lot-left', 'timeout'=>false, 'enablePushState' => false], 'enablePushState' => false]) ?> 
 <div class="lot-left">
@@ -15,25 +17,24 @@ use yii\widgets\Pjax;
 					<div class="lot-remaining_time-header">До  окончания торгов</div> 
 					<div class="lot-remaining_time-text">
 					<?php
-					//$model['remaining_time'] = '2015-06-16 12:27:00';
 						if(isset($model['remaining_time']) and ($model['remaining_time'] > Yii::$app->formatter->asDate('now', 'yyyy-MM-dd HH:mm:ss'))){
 							echo \russ666\widgets\Countdown::widget([
 							    'datetime' => $model['remaining_time'],
 							    'format' => '%Dд %Hч:%Mм:%Sс',
 							    'events' => [
 							        'finish' => 'function(){
-							        	console.log("finish");
+							        	//console.log("finish");
 							        	finishLot();
 							        	//location.reload()
 							        	}',
 							        'update' => 'function(event){
 							        	var format = "%-Sс";
-						                if(event.offset.minutes > 0) format = "%-Mм " + format;
-						                if(event.offset.hours   > 0) format = "%-Hч " + format;
-						                if(event.offset.days    > 0) format = "%-Dд " + format;
-						                if(event.offset.weeks   > 0) format = "%-Dд %-Hч:%-Mм:%-Sс";
+						                if(event.offset.minutes > 0) format = "%-M " + Text.plural(event.offset.minutes, ["минута ", "минуты ", "минут "]);
+						                if(event.offset.hours   > 0) format = "%-H " + Text.plural(event.offset.hours, ["час ", "часа ", "часов "]);
+						                if(event.offset.days    > 0) format = "%-D " + Text.plural(event.offset.days, ["день ", "дня ", "дней "])  + "%-H " + Text.plural(event.offset.hours, ["час ", "часа ", "часов "]);
+						                if(event.offset.weeks   > 0) format = "%-D " + Text.plural((7*event.offset.weeks)+event.offset.days, ["день ", "дня ", "дней "])  + "%-H " + Text.plural(event.offset.hours, ["час ", "часа ", "часов "]);
 						                if(event.offset.days == 0 && event.offset.hours == 0 && event.offset.minutes == 0 && event.offset.seconds < 60) {
-						                    format = "<em>%-S секунд осталось...</em>";
+						                    format = "<em>%-D " + Text.plural(event.offset.seconds, ["секунда", "секунды", "секунд"]) + "...</em>";
 						                }
 						                $(this).html(event.strftime(format));
 							        }',
@@ -140,8 +141,10 @@ $js = <<< JS
 		rateVar:  $rate->id,
 		modelId: $modelId,
 		service: '$service',
+		checkEmail: '$checkEmail',
 		social: $social,
 		refresh: function() {
+			//console.log('refresh obj');
 		    getRateInfo(this.modelId, this.rateVar);
 		}
 	}
@@ -175,7 +178,7 @@ $js = <<< JS
 				title: "Поздравляем!",
 				text: "Вы победили в лоте. Перейдите по <a href='"+url+"'>этой ссылке</a>, что бы оплатить лот.",
 				type: "success",
-				timer: 30000,
+				timer: 300000,
 				html: true,
 				showConfirmButton: false
 				//confirmButtonColor: "#2A8FBD",
@@ -184,7 +187,7 @@ $js = <<< JS
 		}
 	}
 	
-
+	
 	setTimeout(	function(){ obj.refresh(); }, 5000);
 	
 	function getRateInfo(lotId, rate)
@@ -215,14 +218,16 @@ $js = <<< JS
 	}
 	
 	
-	
-	
-	
+		
 	$( ".lot-button" ).on( "click", function(event) {
 		event.preventDefault();
 		if($(this).data('auth')==0){
 			$('#modal-auth').modal();
 			event.preventDefault();
+		}
+		else if(obj.checkEmail)
+		{
+			$('#change-email').modal('show');
 		}
 		else
 		{
@@ -308,13 +313,28 @@ $js = <<< JS
 		    console.log( "error" );
 		  });
 	}
+ var Text = {
+  plural: function(n, forms) {
+    var plural = 0;
+    if (n % 10 == 1 && n % 100 != 11) {
+      plural = 0;
+    } else {
+      if ((n % 10 >= 2 && n % 10<=4) && (n % 100 < 10 || n % 100 >= 20)) {
+        plural = 1;
+      } else {
+        plural = 2;
+      }
+    }
+    return forms[plural];
+  }
+};
 	
 	
 	
 JS;
 $this->registerJs($js,  $this::POS_READY);
 ?>		
-			</div>	
+			</div>		
 <?php Pjax::end(); ?>
 
 <?php
@@ -327,6 +347,40 @@ $js = <<< JS
 JS;
 $this->registerJs($js,  $this::POS_READY);
 ?>	
+
+
+<?php if($checkEmail): ?>
+	<?php if(!Yii::$app->user->isGuest): ?>
+		<?php Modal::begin([
+			    'header' => '<h2>Введите ваш email</h2>',
+			    'options' => ['class'=> 'aut-modal', 'id'=>'change-email'],
+			]);
+			?>
+			<div class="eauth-link">
+				<?= $emailForm; ?>
+			</div>
+			<?php
+			Modal::end(); 
+		?>
+	<?php endif; ?>	
+<?php endif; ?>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

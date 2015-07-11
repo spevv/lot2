@@ -32,6 +32,7 @@ class UserSocial extends \yii\db\ActiveRecord
         return [
             [['client', 'user_id', 'name'], 'required'],
             [['image'], 'string'],
+            ['email', 'email'],
             [['client', 'user_id', 'name', 'email', 'link'], 'string', 'max' => 255]
         ];
     }
@@ -51,4 +52,6 @@ class UserSocial extends \yii\db\ActiveRecord
             'link' => 'link',
         ];
     }
+    
+    
 }

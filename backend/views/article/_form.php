@@ -2,7 +2,7 @@
 
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
-
+use iutbay\yii2kcfinder\KCFinderInputWidget;
 use backend\models\CKEditor;
 /* @var $this yii\web\View */
 /* @var $model backend\models\Article */
@@ -19,6 +19,8 @@ use backend\models\CKEditor;
         'options' => ['rows' => 6],
         'preset' => 'full',
     ]) ?>
+    
+    <?=  $form->field($model, 'image')->widget(KCFinderInputWidget::className(), []); ?>
 
     <?= $form->field($model, 'meta_description')->textInput(['maxlength' => true]) ?>
 

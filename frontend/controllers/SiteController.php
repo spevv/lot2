@@ -29,6 +29,7 @@ use common\models\SubjectLot;
 use common\models\BranchLot;
 use common\models\GeobaseCity;
 use common\models\Subject;
+use common\models\CheckLot;
 use common\models\Branch;
 
 use frontend\models\User;
@@ -97,8 +98,22 @@ class SiteController extends Controller
             ],
         ];
     }
-    
-    
+   
+    public function actionCancelSubscription($email = null)
+    {
+    	if($email)
+    	{
+    		//var_dump($email);
+			$follower = Follower::find()->where(['mail' => $email])->one();
+			if($follower)
+			{
+				$follower->delete();
+				Yii::$app->getSession()->setFlash('success', 'Вы успешно отписались от подписки.');
+				//редирект на стрницу с сообщением
+			}
+		}
+		return $this->redirect('/',302);
+	}
     
     public function actionFollower()
 	{
@@ -108,12 +123,17 @@ class SiteController extends Controller
 	            // form inputs are valid, do something here
 	            $model->date = Yii::$app->formatter->asDate('now', 'yyyy-MM-dd HH:mm:ss');
 	            $model->save();
-	                      
+	            $post = Yii::$app->request->post();
+	            //var_dump($post["Follower"]['mail']);
+	            $this->sendEmail($post["Follower"]['mail']);
+	            
+	            //Yii::$app->getSession()->setFlash('success', 'Вы успешно подписались!');
 	            return '<div class="success-follower">Вы успешно подписались!</div>';
 	        }
 	        else
 	        {
-				 return '<div class="success-follower">Такой e-mail уже существует!</div>';
+	        	//Yii::$app->getSession()->setFlash('success', 'Такой e-mail уже существует!');
+				return '<div class="success-follower">Такой e-mail уже существует!</div>';
 			}
 	    }
 	    else
@@ -121,23 +141,142 @@ class SiteController extends Controller
 	    	return $this->redirect(Url::previous());
 		}
 	}
-
-    /*public function successCallback($client)
+	
+	private function sendEmail($userEmail)
     {
-        $attributes = $client->getUserAttributes();
-        // user login or signup comes here
-    }*/
+    	//var_dump(Yii::$app->params['emailText']['followerFirst']);
+    	//return TRUE;
+    	$checkLot = new CheckLot();
+    	$url = Yii::$app->urlManager->createAbsoluteUrl(['site/index']);
+    	Yii::$app->params['emailText']['followerFirst']['email'] = $userEmail;
+		//Yii::$app->params['emailText']['followerFirst']['subject'] = sprintf(Yii::$app->params['emailText']['followerFirst']['subject'], $rate->lot['name']);
+		Yii::$app->params['emailText']['followerFirst']['messege'] = sprintf(Yii::$app->params['emailText']['followerFirst']['messege'], $url);
+		return $checkLot->sendEmail(Yii::$app->params['emailText']['followerFirst']);
+	}
 
     public function actionIndex()
     {
-	    Yii::$app->opengraph->set([
-		    'title' => Yii::$app->params['siteInfo']['title'],
-		    'description' =>Yii::$app->params['siteInfo']['description'],
-		    'image' => Yii::$app->params['siteInfo']['image'],
-		]);
+	     /*Yii::$app->opengraph->set([
+			    'title' => Yii::$app->params['siteInfo']['title'],
+			    'description' =>Yii::$app->params['siteInfo']['description'],
+			    'image' => Yii::$app->params['siteInfo']['image'],
+			]);*/
+		
 		
 		$this->setKCFINDER();
-    		
+        $searchModel = new LotSearch();
+        $dataProvider2 = $searchModel->search(null, false);
+        
+       // $searchModel['city_id'] = 710;
+        
+        $search =  $this->renderPartial('_search', [
+        	'model' => $searchModel, 
+        	'action' => ['/site/index'], 
+        	'region' => $this->getActiveRegions(), 
+        	'subjects' => $this->getActiveSubjects(), 
+        	'branchs' => $this->getActiveBranchs()
+        ]);
+        
+        
+		if(Yii::$app->session->get('city'))
+		{
+			//var_dump('city');
+			$searchModel['city_id'] = Yii::$app->session->get('city');
+			
+			$param["LotSearch"]["city_id"][0] = Yii::$app->session->get('city');
+			Yii::$app->session->remove('city');
+			$dataProvider = $searchModel->search($param, true);
+			
+        
+	        $search =  $this->renderPartial('_search', [
+	        	'model' => $searchModel, 
+	        	'action' => ['/site/index'],
+	        	'region' => $this->getActiveRegions(), 
+	        	'subjects' => $this->getActiveSubjects(), 
+	        	'branchs' => $this->getActiveBranchs()
+	        ]);
+			$activeBlockLot =  $this->renderPartial('_active-block-lot', [
+			 	'search' => $search,
+			 	'dataProvider' => $dataProvider,
+	        ]);
+			
+			return $this->render('index', [
+	            'dataProvider2' => $dataProvider2,
+	            'categoryInfo' => $this->getCategoty(),
+	            'activeBlockLot' => $activeBlockLot, 
+	        ]);  	
+		}
+
+		if(Yii::$app->request->isPost)
+		{
+			//var_dump('is post');
+			Yii::$app->session->set('searchData', Yii::$app->request->post());
+			$dataProvider = $searchModel->search(Yii::$app->request->post(), true);
+			
+			$search =  $this->renderAjax('_search', [
+	        	'model' => $searchModel, 
+	        	'action' => ['/site/index'],
+	        	'region' => $this->getActiveRegions(), 
+        		'subjects' => $this->getActiveSubjects(), 
+        		'branchs' => $this->getActiveBranchs()
+	        ]);
+			
+			return $this->renderPartial('_active-block-lot', [
+			 	'search' => $search,
+			 	'dataProvider' => $dataProvider,
+	        ]);
+		}
+		elseif(Yii::$app->request->isPjax)
+        {
+        	$dataProvider = $searchModel->search(Yii::$app->request->queryParams, true);
+        	$search =  $this->renderAjax('_search', [
+        		'action' =>['/site/index'],
+	        	'model' => $searchModel, 
+	        	'region' => $this->getActiveRegions(), 
+        		'subjects' => $this->getActiveSubjects(), 
+        		'branchs' => $this->getActiveBranchs()
+	        ]);
+			
+			return $this->renderPartial('_active-block-lot', [
+			 	'search' => $search,
+			 	'dataProvider' => $dataProvider,
+	        ]);
+		}
+		else
+		{
+			Yii::$app->opengraph->set([
+			    'title' => Yii::$app->params['siteInfo']['title'],
+			    'description' => Yii::$app->params['siteInfo']['description'],
+			    'image' => Yii::$app->params['siteInfo']['image'],
+			]);
+			$siteInfo = (object) [
+				'name' => Yii::$app->params['siteInfo']['title'],
+				'meta_description' => Yii::$app->params['siteInfo']['description'],
+				'meta_keyword' => Yii::$app->params['siteInfo']['keyword'],
+			];
+			
+			//var_dump('else post');	
+			Yii::$app->session->remove('searchData');
+			$dataProvider = $searchModel->search(Yii::$app->request->queryParams, true);
+			
+			$activeBlockLot =  $this->renderPartial('_active-block-lot', [
+			 	'search' => $search,
+			 	'dataProvider' => $dataProvider,
+	        ]);
+			
+			return $this->render('index', [
+	            'dataProvider2' => $dataProvider2,
+	            'categoryInfo' => $this->getCategoty(),
+	            'activeBlockLot' => $activeBlockLot,
+	            'model'=> $siteInfo,
+	            
+	        ]);
+		}
+    }
+    
+    //return public category
+    private function getCategoty()
+    {
 		$categoryInfo = Category::find()
 		    ->where(['public' => 1])
 		    ->orderBy('priority')
@@ -148,104 +287,101 @@ class SiteController extends Controller
 			$items[$key]['linkOptions'] =  ['class'=> $value['slug']];
 			$items[$key]['url'] = ['category/view', 'category' => $value['slug']];
 		}
-        
-        $lot = ArrayHelper::map(Lot::find()->all(), 'id', 'city_id');
-		$lot = array_unique($lot);
-		$region = ArrayHelper::map(GeobaseCity::findAll($lot), 'id', 'name');
-
-		$subjectLot = ArrayHelper::map(SubjectLot::find()->all(), 'id', 'subject_id');
-		$subjectLot = array_unique($subjectLot);
-		$subjects = ArrayHelper::map(Subject::findAll($subjectLot), 'id', 'name');
-
-		$branchLot = ArrayHelper::map(BranchLot::find()->all(), 'id', 'branch_id');
-		$branchLot = array_unique($branchLot);
-		$branchs = ArrayHelper::map(Branch::findAll($branchLot), 'id', 'name');
-        
-        $searchModel = new LotSearch();
-        
-        $dataProvider2 = $searchModel->search(null, false);
-        
-		if(Yii::$app->session->get('city')){
-			$param["LotSearch"]["city_id"][0] = Yii::$app->session->get('city');
-			Yii::$app->session->remove('city');
-			$dataProvider = $searchModel->search($param, true);
+		return $items;
+	}
+	
+	// return all active subjects
+	private function getActiveSubjects()
+	{
+		$subjectLots = SubjectLot::find()->all();
+		if($subjectLots)
+		{
 			
-	           return $this->render('index', [
-	            'searchModel' => $searchModel,
-	            'dataProvider' => $dataProvider,
-	            'dataProvider2' => $dataProvider2,
-	            'categoryInfo' => $items,
-	            'region' => $region,
-	            'subjects' => $subjects,
-	            'branchs' => $branchs,
-	            
-	        ]);
-	       	
+			foreach($subjectLots as $key => $subjectLot)
+			{
+				if($subjectLot->lot)
+				{
+					if($subjectLot->lot->public != 1)
+					{
+						unset($subjectLots[$key]);
+					}
+					if($subjectLot->lot->remaining_time < Yii::$app->formatter->asDate('now', 'yyyy-MM-dd HH:mm:ss'))
+					{
+						unset($subjectLots[$key]);
+					}
+				}
+				else
+				{
+					unset($subjectLots[$key]);
+				}
+			}
+			
+			$subjectLot = ArrayHelper::map($subjectLots, 'id', 'subject_id');
+			$subjectLot = array_unique($subjectLot);
+			return ArrayHelper::map(Subject::findAll($subjectLot), 'id', 'name');
+		}
+		return false;
+		
+	}
+	
+	// return all active Branchs
+	private function getActiveBranchs()
+	{
+		$branchLots = BranchLot::find()->all();
+		if($branchLots)
+		{
+			
+			foreach($branchLots as $key => $branchLot)
+			{
+				if($branchLot->lot)
+				{
+					if($branchLot->lot->public != 1)
+					{
+						unset($branchLots[$key]);
+					}
+					if($branchLot->lot->remaining_time < Yii::$app->formatter->asDate('now', 'yyyy-MM-dd HH:mm:ss'))
+					{
+						unset($branchLots[$key]);
+					}
+				}
+				else
+				{
+					unset($branchLots[$key]);
+				}
+			}
+			
+			$branchLot = ArrayHelper::map($branchLots, 'id', 'branch_id');
+			$branchLot = array_unique($branchLot);
+			return ArrayHelper::map(Subject::findAll($branchLot), 'id', 'name');
+		}
+		return false;
+		
+		
+		/*foreach($branchLots as $key => $branchLot)
+		{
+			if($branchLot->lot->public != 1)
+			{
+				unset($branchLots[$key]);
+			}
+			
+			if($branchLot->lot->remaining_time < Yii::$app->formatter->asDate('now', 'yyyy-MM-dd HH:mm:ss'))
+			{
+				unset($branchLots[$key]);
+			}
 		}
 		
-		if(isset(Yii::$app->request->queryParams['page']))
-		{
-			if(Yii::$app->session->get('searchData'))
-			{
-				$dataProvider = $searchModel->search(Yii::$app->session->get('searchData'), true);
-		           return $this->render('index', [
-		            'searchModel' => $searchModel,
-		            'dataProvider' => $dataProvider,
-		             'dataProvider2' => $dataProvider2,
-		            'categoryInfo' => $items,
-		            'region' => $region,
-		            'subjects' => $subjects,
-		            'branchs' => $branchs,
-		            
-		        ]);
-			}
-			else
-			{
-				$dataProvider = $searchModel->search(Yii::$app->request->queryParams, true);
-				return $this->render('index', [
-		            'searchModel' => $searchModel,
-		            'dataProvider' => $dataProvider,
-		             'dataProvider2' => $dataProvider2,
-		            'categoryInfo' => $items,
-		            'region' => $region,
-		            'subjects' => $subjects,
-		            'branchs' => $branchs,
-		            
-		        ]);
-			}
-		}
-
-		if(Yii::$app->request->isPost){
-			
-			Yii::$app->session->set('searchData', Yii::$app->request->post());
-			$dataProvider = $searchModel->search(Yii::$app->request->post(), true);
-			return $this->renderAjax('index', [
-	            'searchModel' => $searchModel,
-	            'dataProvider' => $dataProvider,
-	             'dataProvider2' => $dataProvider2,
-	            'categoryInfo' => $items,
-	            'region' => $region,
-	            'subjects' => $subjects,
-	            'branchs' => $branchs,
-	            
-	        ]);
-		}
-		else
-		{
-			Yii::$app->session->remove('searchData');
-			$dataProvider = $searchModel->search(Yii::$app->request->queryParams, true);
-			return $this->render('index', [
-	            'searchModel' => $searchModel,
-	            'dataProvider' => $dataProvider,
-	             'dataProvider2' => $dataProvider2,
-	            'categoryInfo' => $items,
-	            'region' => $region,
-	            'subjects' => $subjects,
-	            'branchs' => $branchs,
-	            
-	        ]);
-		}
-    }
+		$branchLot = ArrayHelper::map($branchLots, 'id', 'branch_id');
+		$branchLot = array_unique($branchLot);
+		return ArrayHelper::map(Branch::findAll($branchLot), 'id', 'name');*/
+	}
+	
+	//return region
+	private function getActiveRegions()
+	{
+		$lot = ArrayHelper::map(Lot::find()->where(['public'=> 1])->andWhere(['>',  'remaining_time', Yii::$app->formatter->asDate('now', 'yyyy-MM-dd HH:mm:ss')])->all(), 'id', 'city_id');
+		$lot = array_unique($lot);
+		return  ArrayHelper::map(GeobaseCity::findAll($lot), 'id', 'name');
+	}
     
 
 	public function actionLogin() 
@@ -464,4 +600,5 @@ class SiteController extends Controller
             'model' => $model,
         ]);
     }
+
 }

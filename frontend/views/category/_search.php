@@ -16,14 +16,51 @@ use dosamigos\multiselect\MultiSelect;
 
 ?>
 
-<?php 
-if(!empty($region) or !empty($subjects) or !empty($branchs)):
+<?php /*
+$js = <<< JS
+ 	$('#lotsearch-city_id').multiselect({
+	    buttonClass: 'btn btn-link',
+	    includeSelectAllOption: true,
+	    allSelectedText: 'Все',
+	    selectAllText: 'Выбрать все',
+	    maxHeight: 300,
+	    numberDisplayed: 2,
+	    buttonText: function(options, select) {
+	      if (options.length === 0) {
+	        return 'Ничего не выбрано';
+	      }
+	      else if (options.length > 1) {
+	        if (options.length == select.find('option').length) {
+	          return 'Все'
+	        } else {
+	          return options.length + ' ' + Text.plural(options.length, ['город', 'города', 'городов']);
+	        }
+	      }
+	      else {
+	        var labels = [];
+	        options.each(function() {
+	          if ($(this).attr('label') !== undefined) {
+	            labels.push($(this).attr('label'));
+	          }
+	          else {
+	            labels.push($(this).html());
+	          }
+	        });
+	        return labels.join(', ') + ' ';
+	      }
+	    }
+	});
+JS;
+$this->registerJs($js,  $this::POS_READY);
+*/
 ?>
 
 <div class="lot-search">
 
+
+
     <?php $form = ActiveForm::begin([
-        'action' => ['view', 'category' => $modelUrl->slug],
+        'action' => ['index'],
         'method' => 'post',
         'options' => ['data-pjax' => true, 'id'=>'lot-search'],
         'id' => 'lot-search', 
@@ -121,10 +158,6 @@ if(!empty($region) or !empty($subjects) or !empty($branchs)):
 
     <?php ActiveForm::end(); ?>
 </div>
-
-<?php else:  ?>
-<div class="empty-block" ></div>
-<?php endif;  ?>
 
 
 
