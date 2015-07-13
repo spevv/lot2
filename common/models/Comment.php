@@ -64,7 +64,7 @@ class Comment extends \yii\db\ActiveRecord
         return [
             'id' => 'ID',
             'text' => 'Отзыв',
-            'public' => 'Публиковать',
+            'public' => 'Публикован',
             'creation_time' => 'Создание',
             'update_time' => 'Обновление',
             'user2_id' => 'User2 ID',

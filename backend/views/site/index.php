@@ -2,12 +2,12 @@
  //Yii::$app->ipgeobase->updateDB();
 /* @var $this yii\web\View */
 
-var_dump(Yii::$app->ipgeobase->getLocation('144.206.192.6'));
+//var_dump(Yii::$app->ipgeobase->getLocation('144.206.192.6'));
 
 
-$settings = Yii::$app->settings;
+//$settings = Yii::$app->settings;
 //$settings->set('sitemap.update_cache_freq', 21600);
-echo $settings->get('sitemap.update_cache_freq');  // 21600
+//echo $settings->get('sitemap.update_cache_freq');  // 21600
 
 $this->title = 'Админ панель';
 

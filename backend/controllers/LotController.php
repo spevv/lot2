@@ -14,6 +14,7 @@ use common\models\CategoryLot;
 use common\models\LotImage;
 use common\models\LotRateStatistic;
 use common\models\GeobaseCity;
+use yii\filters\AccessControl;
 /**
  * LotController implements the CRUD actions for Lot model.
  */
@@ -22,6 +23,20 @@ class LotController extends Controller
     public function behaviors()
     {
         return [
+        'access' => [
+                'class' => AccessControl::className(),
+                'rules' => [
+                    [
+                        'actions' => ['login', 'error'],
+                        'allow' => true,
+                    ],
+                    [
+                        'actions' => [],
+                        'allow' => true,
+                        'roles' => ['@'],
+                    ],
+                ],
+            ],
             'verbs' => [
                 'class' => VerbFilter::className(),
                 'actions' => [

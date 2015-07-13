@@ -8,7 +8,7 @@ use backend\models\GeobaseRegionSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
-
+use yii\filters\AccessControl;
 /**
  * GeobaseRegionController implements the CRUD actions for GeobaseRegion model.
  */
@@ -17,6 +17,20 @@ class GeobaseRegionController extends Controller
     public function behaviors()
     {
         return [
+        'access' => [
+                'class' => AccessControl::className(),
+                'rules' => [
+                    [
+                        'actions' => ['login', 'error'],
+                        'allow' => true,
+                    ],
+                    [
+                        'actions' => [],
+                        'allow' => true,
+                        'roles' => ['@'],
+                    ],
+                ],
+            ],
             'verbs' => [
                 'class' => VerbFilter::className(),
                 'actions' => [

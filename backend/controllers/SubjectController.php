@@ -8,7 +8,7 @@ use backend\models\SubjectSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
-
+use yii\filters\AccessControl;
 use dosamigos\editable\EditableAction;
 /**
  * SubjectController implements the CRUD actions for Subject model.
@@ -30,6 +30,20 @@ class SubjectController extends Controller
     public function behaviors()
     {
         return [
+         'access' => [
+                'class' => AccessControl::className(),
+                'rules' => [
+                    [
+                        'actions' => ['login', 'error'],
+                        'allow' => true,
+                    ],
+                    [
+                        'actions' => [],
+                        'allow' => true,
+                        'roles' => ['@'],
+                    ],
+                ],
+            ],
             'verbs' => [
                 'class' => VerbFilter::className(),
                 'actions' => [

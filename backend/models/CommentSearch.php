@@ -45,6 +45,7 @@ class CommentSearch extends Comment
 
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
+            'sort' =>false
         ]);
 
         $this->load($params);

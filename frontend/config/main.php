@@ -16,6 +16,22 @@ return [
     'homeUrl' => '/',
     
     'components' => [
+    	/*'assetManager' => [
+            'bundles' => [
+                'all' => [
+                    'class' => 'yii\web\AssetBundle',
+                    'basePath' => '@webroot/assets',
+                    'baseUrl' => '@web/assets',
+                    'css' => ['all-xyz.css'],
+                    'js' => ['all-xyz.js'],
+                ],
+                'AppAsset' => ['css' => [], 'js' => [], 'depends' => ['all']],
+                //'B' => ['css' => [], 'js' => [], 'depends' => ['all']],
+               // 'C' => ['css' => [], 'js' => [], 'depends' => ['all']],
+               // 'D' => ['css' => [], 'js' => [], 'depends' => ['all']],
+            ],
+        ],*/
+    
     	/* 'view' => [
             'class' => '\rmrevin\yii\minify\View',
             'enableMinify' => YII_DEBUG,

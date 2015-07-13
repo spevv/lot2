@@ -38,7 +38,7 @@ AppAsset::register($this);
                 ['label' => 'Тематики', 'url' => ['/subject/index']],
                 ['label' => 'Категории', 'url' => ['/category/index']], 
                 ['label' => 'Города', 'url' => ['/geobase-city/index']],
-                ['label' => 'Ставки', 'url' => ['/rate/index']],
+                //['label' => 'Ставки', 'url' => ['/rate/index']],
                 ['label' => 'Победители', 'url' => ['/rate-winner/index']],
                 ['label' => 'Комментарии', 'url' => ['/comment/index']],
                 ['label' => 'Лоты', 'url' => ['/lot/index']],
@@ -69,8 +69,8 @@ AppAsset::register($this);
 
     <footer class="footer">
         <div class="container">
-        <p class="pull-left">&copy; My Company <?= date('Y') ?></p>
-        <p class="pull-right"><?= Yii::powered() ?></p>
+        <p class="pull-left">&copy; EduHot.biz <?= date('Y') ?></p>
+        <p class="pull-right">Разработано компанией <a href="http://awam-it.ru/" target="_blank">AWAM-IT.</a></p>
         </div>
     </footer>
 

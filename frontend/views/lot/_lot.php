@@ -37,20 +37,6 @@ if(isset($model->remaining_time) and ($model->remaining_time > Yii::$app->format
 	    ],
 	]);
 }
-/**
-* 'update' => 'function(event){
-	        	var format = "%-Sс";
-                if(event.offset.minutes > 0) format = "%-Mм " + format;
-                if(event.offset.hours   > 0) format = "%-Hч " + format;
-                if(event.offset.days    > 0) format = "%-dд " + format;
-
-                if(event.offset.days == 0 && event.offset.hours == 0 && event.offset.minutes == 0 && event.offset.seconds < 60) {
-                    format = "<em>%-S second left...</em>";
-                }
-
-                $(this).html(event.strftime(format));
-	        }',
-*/ 
 ?>
 
 

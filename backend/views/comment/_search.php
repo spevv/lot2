@@ -15,15 +15,15 @@ use yii\widgets\ActiveForm;
         'method' => 'get',
     ]); ?>
 
-    <?= $form->field($model, 'id') ?>
+    <?php // $form->field($model, 'id') ?>
 
-    <?= $form->field($model, 'text') ?>
+    <?php // $form->field($model, 'text') ?>
 
-    <?= $form->field($model, 'public') ?>
+    <?php // $form->field($model, 'public') ?>
 
-    <?= $form->field($model, 'creation_time') ?>
+    <?php // $form->field($model, 'creation_time') ?>
 
-    <?= $form->field($model, 'update_time') ?>
+    <?php // $form->field($model, 'update_time') ?>
 
     <?php // echo $form->field($model, 'user2_id') ?>
 

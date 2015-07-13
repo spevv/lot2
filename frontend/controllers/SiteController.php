@@ -177,6 +177,11 @@ class SiteController extends Controller
         	'branchs' => $this->getActiveBranchs()
         ]);
         
+        $siteInfo = (object) [
+				'name' => Yii::$app->params['siteInfo']['title'],
+				'meta_description' => Yii::$app->params['siteInfo']['description'],
+				'meta_keyword' => Yii::$app->params['siteInfo']['keyword'],
+			];
         
 		if(Yii::$app->session->get('city'))
 		{
@@ -204,6 +209,7 @@ class SiteController extends Controller
 	            'dataProvider2' => $dataProvider2,
 	            'categoryInfo' => $this->getCategoty(),
 	            'activeBlockLot' => $activeBlockLot, 
+	            'model'=> $siteInfo,
 	        ]);  	
 		}
 
@@ -249,11 +255,7 @@ class SiteController extends Controller
 			    'description' => Yii::$app->params['siteInfo']['description'],
 			    'image' => Yii::$app->params['siteInfo']['image'],
 			]);
-			$siteInfo = (object) [
-				'name' => Yii::$app->params['siteInfo']['title'],
-				'meta_description' => Yii::$app->params['siteInfo']['description'],
-				'meta_keyword' => Yii::$app->params['siteInfo']['keyword'],
-			];
+			
 			
 			//var_dump('else post');	
 			Yii::$app->session->remove('searchData');
@@ -450,9 +452,9 @@ class SiteController extends Controller
         $model = new ContactForm();
         if ($model->load(Yii::$app->request->post()) && $model->validate()) {
             if ($model->sendEmail(Yii::$app->params['adminEmail'])) {
-                Yii::$app->session->setFlash('success', 'Thank you for contacting us. We will respond to you as soon as possible.');
+                Yii::$app->session->setFlash('success', 'Спасибо, что написали нам. Мы скоро ответим вам.');
             } else {
-                Yii::$app->session->setFlash('error', 'There was an error sending email.');
+                Yii::$app->session->setFlash('error', 'Ошибка отправи email.');
             }
 
             return $this->refresh();
