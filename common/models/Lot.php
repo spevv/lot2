@@ -57,7 +57,7 @@ class Lot extends \yii\db\ActiveRecord
                 ],
                 'value' => new \yii\db\Expression('NOW()'),
             ],
-            'slug' => [
+           /* 'slug' => [
 	            'class' => 'Zelenin\yii\behaviors\Slug',
 	            'slugAttribute' => 'slug',
 	            'attribute' => 'short_name',
@@ -69,7 +69,7 @@ class Lot extends \yii\db\ActiveRecord
 	            'immutable' => false,
 	            // If intl extension is enabled, see http://userguide.icu-project.org/transforms/general. 
 	            'transliterateOptions' => 'Russian-Latin/BGN;'
-	        ]
+	        ]*/
         ];
      }
     /**
@@ -78,6 +78,8 @@ class Lot extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
+        	['slug', 'unique'],
+        	[['name', 'slug'], 'required'],
         	['coordinates', 'match', 'pattern' => '/^(\-?\d+(\.\d+)?),\s*(\-?\d+(\.\d+)?)$/',  'message' => 'привер: 55.75399400, 37.62209300'],
         	//['phone', 'match', 'pattern' => '/^\+7 \(\d\d\d\) \d\d\d\-\d\d\d\d$/',  'message' => 'привер +7 (999) 999-9999'], 
             [['remaining_time', 'creation_time', 'update_time', 'subjectLots', 'branchLots'], 'safe'],
@@ -129,6 +131,7 @@ class Lot extends \yii\db\ActiveRecord
             'branchLots' => 'Отрасли',
             'categoryLots' => 'Категории',
             'categories' => 'Категории',
+            'slug' => 'ЧПУ',
         ];
     }
     

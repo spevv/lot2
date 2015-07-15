@@ -34,6 +34,11 @@ use iutbay\yii2kcfinder\KCFinder;
 	    <div class="col-xs-6">
 	    	<?= $form->field($model, 'short_name')->textInput(['maxlength' => true]) ?>
 		</div>
+		
+		 <div class="col-xs-6">
+	    	<?= $form->field($model, 'slug')->textInput(['maxlength' => true]) ?>
+		</div>
+		
 		<div class="col-xs-12">
 	    	<?= $form->field($model, 'name')->textInput(['maxlength' => true]) ?>
 		</div>
@@ -220,6 +225,13 @@ use iutbay\yii2kcfinder\KCFinder;
 
 <?= $formRate; ?>
 
+<?php
+$js = <<< JS
 
+$("#lot-short_name").syncTranslit({destination: "lot-slug"});
+	
+JS;
+$this->registerJs($js,  $this::POS_READY);
+?>	
 
 

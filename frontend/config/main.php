@@ -16,19 +16,25 @@ return [
     'homeUrl' => '/',
     
     'components' => [
+    
     	/*'assetManager' => [
             'bundles' => [
                 'all' => [
                     'class' => 'yii\web\AssetBundle',
                     'basePath' => '@webroot/assets',
                     'baseUrl' => '@web/assets',
-                    'css' => ['all-xyz.css'],
-                    'js' => ['all-xyz.js'],
+                    'css' => ['css/all-21bdc94f39bfdd14e9ee4fd491a4d5e4.css'],
+                    'js' => ['js/all-31f88aec214af315b38d90d7ae4d0d66.js'],
                 ],
-                'AppAsset' => ['css' => [], 'js' => [], 'depends' => ['all']],
-                //'B' => ['css' => [], 'js' => [], 'depends' => ['all']],
-               // 'C' => ['css' => [], 'js' => [], 'depends' => ['all']],
-               // 'D' => ['css' => [], 'js' => [], 'depends' => ['all']],
+                //'frontend\assets\AppAsset' => ['css' => [], 'js' => [], 'depends' => ['all']],
+                'frontend\assets\AppAsset' => [
+                	'css' => [], 
+                	'js' => [
+                		"http://vk.com/js/api/openapi.js", 
+                		"http://crypto-js.googlecode.com/svn/tags/3.1.2/build/rollups/md5.js"
+                	], 
+                	'depends' => ['all']
+                ],
             ],
         ],*/
     

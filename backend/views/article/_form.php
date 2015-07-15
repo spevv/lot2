@@ -14,6 +14,8 @@ use backend\models\CKEditor;
     <?php $form = ActiveForm::begin(); ?>
 
     <?= $form->field($model, 'name')->textInput(['maxlength' => true]) ?>
+    
+    <?= $form->field($model, 'slug')->textInput(['maxlength' => true]) ?>
 
     <?= $form->field($model, 'description')->widget(CKEditor::className(), [
         'options' => ['rows' => 6],
@@ -33,3 +35,16 @@ use backend\models\CKEditor;
     <?php ActiveForm::end(); ?>
 
 </div>
+
+	
+	
+<?php
+$js = <<< JS
+
+$("#article-name").syncTranslit({destination: "article-slug"});
+	
+JS;
+$this->registerJs($js,  $this::POS_READY);
+?>	
+
+

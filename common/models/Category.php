@@ -24,7 +24,7 @@ class Category extends \yii\db\ActiveRecord
         return 'category';
     }
 	
-	public function behaviors()
+	/*public function behaviors()
     {
         return [
             'slug' => [
@@ -41,7 +41,7 @@ class Category extends \yii\db\ActiveRecord
 	            'transliterateOptions' => 'Russian-Latin/BGN;'
 	        ]
         ];
-     }
+     }*/
 	
     /**
      * @inheritdoc
@@ -49,6 +49,8 @@ class Category extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
+        	['slug', 'unique'],
+        	[['name', 'slug'], 'required'],
             [['description'], 'string'],
             [['public', 'priority'], 'integer'],
             [['name', 'meta_description', 'meta_keyword'], 'string', 'max' => 255]
@@ -68,6 +70,7 @@ class Category extends \yii\db\ActiveRecord
             'meta_keyword' => 'Meta Keyword',
             'public' => 'Публиковать',
             'priority' => 'Приоритет',
+            'slug' => 'ЧПУ',
         ];
     }
 }

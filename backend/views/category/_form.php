@@ -39,7 +39,9 @@ use backend\models\CKEditor;
 			    ]
 			]);?>
 		</div>
-		
+		<div class="col-xs-12">
+			<?= $form->field($model, 'slug')->textInput(['maxlength' => true]) ?>
+		</div>
 		<div class="col-xs-12">
 		    <?= $form->field($model, 'description')->widget(CKEditor::className(), [
 		        'options' => ['rows' => 6],
@@ -63,3 +65,12 @@ use backend\models\CKEditor;
 
 	</div>
 </div>
+
+<?php
+$js = <<< JS
+
+$("#category-name").syncTranslit({destination: "category-slug"});
+	
+JS;
+$this->registerJs($js,  $this::POS_READY);
+?>	

@@ -24,13 +24,15 @@ class AppAsset extends AssetBundle
     public $js = [
     	
     	"http://vk.com/js/api/openapi.js",
+    	"http://crypto-js.googlecode.com/svn/tags/3.1.2/build/rollups/md5.js",
+    	
     	'js/owl.carousel.min.js',
     	'js/social.js',
     	'js/script.js',
     	
 
     	'js/jquery.scrollUp.min.js',
-    	"http://crypto-js.googlecode.com/svn/tags/3.1.2/build/rollups/md5.js"
+    	
 
     ];
     public $depends = [

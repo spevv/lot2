@@ -1,7 +1,6 @@
 
 
 function afterAjaxListViewUpdate(){
-	//alert('afterAjaxListViewUpdate');
 	console.log('afterAjaxListViewUpdate');
 }
 
@@ -23,7 +22,7 @@ $(function () {
     animationInSpeed: 200, // Animation in speed (ms)
     animationOutSpeed: 200, // Animation out speed (ms)
     scrollText: 'Наверх', // Text for element
-    activeOverlay: false, // Set CSS color to display scrollUp active point, e.g '#00FFFF'
+    activeOverlay: false // Set CSS color to display scrollUp active point, e.g '#00FFFF'
   });
 });
 
@@ -51,7 +50,7 @@ Share = {
                     count_url:  location.href,  // для какой ссылки крутим счётчик
                     title:      document.title, // заголовок шаринга
                     image:      'http://yii.awam-it.ru/uploads/files/so3_-_kopiya.jpg',             // картинка шаринга
-                    text:       'Какой то текст',             // текст шаринга
+                    text:       'Какой то текст'             // текст шаринга
                 },
                 $(_element).data(), // Если параметры заданы в data, то читаем их
                 _options            // Параметры из вызова метода имеют наивысший приоритет
@@ -82,7 +81,7 @@ Share = {
                 url:    location.href,
                 title:  document.title,
                 image:  '',
-                text:   '',
+                text:   ''
             }, _options);
 
         return 'http://vkontakte.ru/share.php?'
@@ -97,7 +96,7 @@ Share = {
     ok: function(_options) {
         var options = $.extend({
                 url:    location.href,
-                text:   'Простой текст',
+                text:   'Простой текст'
             }, _options);
 
         return 'http://www.odnoklassniki.ru/dk?st.cmd=addShare&st.s=1'
@@ -111,7 +110,7 @@ Share = {
                 url:    location.href,
                 title:  document.title,
                 image:  '',
-                text:   '',
+                text:   ''
             }, _options);
             
             
@@ -136,7 +135,7 @@ Share = {
         var options = $.extend({
                 url:    location.href,
                 title:  document.title,
-                text:   '',
+                text:   ''
             }, _options);
 
         return 'http://livejournal.com/update.bml?'
@@ -150,7 +149,7 @@ Share = {
         var options = $.extend({
                 url:        location.href,
                 count_url:  location.href,
-                title:      document.title,
+                title:      document.title
             }, _options);
 
         return 'http://twitter.com/share?'
@@ -165,7 +164,7 @@ Share = {
                 url:    location.href,
                 title:  document.title,
                 image:  '',
-                text:   '',
+                text:   ''
             }, _options);
 
         return 'http://connect.mail.ru/share?'
@@ -204,7 +203,7 @@ $('.owl-carousel').owlCarousel({
     //stagePadding:0,
     smartSpeed:450,
     nav:true,
-    navText:["",""],
+    navText:["",""]
 });
 
 

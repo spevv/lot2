@@ -23,7 +23,7 @@ class Article extends \yii\db\ActiveRecord
         return 'article';
     }
     
-    public function behaviors()
+   /* public function behaviors()
 	{
 	    return [
 	        'slug' => [
@@ -40,7 +40,7 @@ class Article extends \yii\db\ActiveRecord
 	            'transliterateOptions' => 'Russian-Latin/BGN;'
 	        ]
 	    ];
-	}
+	}*/
 
     /**
      * @inheritdoc
@@ -48,8 +48,11 @@ class Article extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
+       		['slug', 'unique'],
+        	[['name', 'slug'], 'required'],
+        	//['name', 'required'],
             [['description'], 'string'],
-            [['name', 'meta_description', 'meta_keyword', 'image'], 'string', 'max' => 255]
+            [['name', 'slug', 'meta_description', 'meta_keyword', 'image'], 'string', 'max' => 255]
         ];
     }
 
@@ -64,7 +67,7 @@ class Article extends \yii\db\ActiveRecord
             'description' => 'Описание',
             'meta_description' => 'Meta Description',
             'meta_keyword' => 'Meta Keyword',
-            'slug' => 'slug',
+            'slug' => 'ЧПУ',
             'image' => 'Изображение',
         ];
     }
