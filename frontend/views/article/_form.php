@@ -3,7 +3,7 @@
 use yii\helpers\Html;
 use kartik\form\ActiveForm;
 use yii\widgets\Pjax;
-//var_dump($model);
+use yii2mod\alert\Alert;
 ?>
 
 <?php Pjax::begin(['options' => ['id'=>'organization', 'timeout'=>false, 'enablePushState' => false], 'enablePushState' => false]) ?>
@@ -41,23 +41,8 @@ use yii\widgets\Pjax;
 <div class="organization-bg2"></div>
 
 <?php
-
-$js = <<< JS
-
-var send = "$send";
-if(send){
-	swal({
-		title: "Поздравляем!",
-		text: "Вы успешно отправили сообщение.",
-		type: "success",
-		timer: 5000,
-		confirmButtonColor: "#2A8FBD",
-	    confirmButtonText: "Закрыть",
-	});
-}	
-
-JS;
-$this->registerJs($js,  $this::POS_READY);
-?>	
-
+  	if(\Yii::$app->session->getFlash('success') or \Yii::$app->session->getFlash('error')){
+		echo  Alert::widget();
+	}
+  	?>
 <?php Pjax::end(); ?>

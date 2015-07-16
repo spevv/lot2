@@ -1,7 +1,8 @@
 <?php
 
 use yii\helpers\Html;
-use frontend\widgets\Alert;
+//use frontend\widgets\Alert;
+use yii2mod\alert\Alert;
 use yii\widgets\Pjax;
 
 /* @var $this yii\web\View */
@@ -14,7 +15,11 @@ $this->title = $name;
 <div class="comment-main">
     <h1><?= Html::encode($this->title) ?></h1>
     <?= $text; ?>
-    <?= Alert::widget() ?>
+    <?php
+  	if(\Yii::$app->session->getFlash('success') or \Yii::$app->session->getFlash('error')){
+		echo  Alert::widget();
+	}
+  	?>
     <?= $content ?>
 
 </div>

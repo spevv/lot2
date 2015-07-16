@@ -170,12 +170,12 @@ $this->title = $model['name'];
 
 
 <!-- Modal -->
-<div class="modal fade" id="contactForm" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+<div class="modal fade" id="contactForm" tabindex="-1" role="dialog" aria-labelledby="contactModal" aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-        <h4 class="modal-title" id="myModalLabel">Расскажи друзьям о лоте</h4>
+        <h4 class="modal-title" id="contactModal">Расскажи друзьям о лоте</h4>
       </div>
       <div class="modal-body">
 			<?= $contact ?>

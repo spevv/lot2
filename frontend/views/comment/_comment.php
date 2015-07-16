@@ -1,7 +1,5 @@
 <?php
-
 ?>
-
 
 <div class="col-xs-3">
 	<div class="user-img"> <img class="img-circle" src="<?= $model->userSocial['image']  ?>" alt="<?= $model->userSocial['name']  ?>" /> </div>

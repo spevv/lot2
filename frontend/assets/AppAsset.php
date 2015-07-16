@@ -22,25 +22,22 @@ class AppAsset extends AssetBundle
         'css/owl.carousel.css',
     ];
     public $js = [
-    	
-    	"http://vk.com/js/api/openapi.js",
-    	"http://crypto-js.googlecode.com/svn/tags/3.1.2/build/rollups/md5.js",
-    	
-    	'js/owl.carousel.min.js',
+    	//"http://vk.com/js/api/openapi.js",
+    	//"http://crypto-js.googlecode.com/svn/tags/3.1.2/build/rollups/md5.js",
     	'js/social.js',
+    	'js/owl.carousel.min.js',
     	'js/script.js',
-    	
-
     	'js/jquery.scrollUp.min.js',
-    	
-
     ];
     public $depends = [
+    	'yii\web\JqueryAsset',
         'yii\web\YiiAsset',
+        'yii\validators\ValidationAsset',
         'yii\bootstrap\BootstrapAsset',
-        'uran1980\yii\assets\jQueryEssential\JqueryEssentialAsset',
+        'yii\bootstrap\BootstrapPluginAsset',
         'yii2mod\alert\AlertAsset',
        	//
+       	//'uran1980\yii\assets\jQueryEssential\JqueryEssentialAsset',
        	'metalguardian\fotorama\FotoramaAsset',
         'nodge\eauth\assets\WidgetAssetBundle',
         'nirvana\infinitescroll\InfiniteScrollAsset',

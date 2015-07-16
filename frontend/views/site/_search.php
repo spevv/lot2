@@ -1,7 +1,7 @@
 <?php
 
 use kartik\form\ActiveForm;
-use kartik\spinner\Spinner;
+//use kartik\spinner\Spinner;
 use kartik\helpers\Html;
 use dosamigos\multiselect\MultiSelect;
 
@@ -192,20 +192,8 @@ $this->registerJs($js,  $this::POS_READY);
 	<div class="block-multi-button">
 	    <div class="form-group">
 	 	<?php 
-	 	$snip = Spinner::widget([
-			"pluginOptions" => [
-			    "top" => "50%",
-			    "rigth" => "10px",
-			    "lines" => 11,
-			    "length" => 5,
-			    "width" => 3,
-			    "corners" => 1,
-			    "trail" => 100,
-			    "speed" => 1.25,
-			    "radius" => 4,
-			],
-			]);
-	 	$subnmae = 'Найти <span id="spinner" style="display: none; float:right; margin-left: 20px;">'.$snip.'</span>';
+
+	 	$subnmae = '<span style="float:left;">Найти</span> <span id="spinner" style="display: none; margin-top: 10px; float:right; margin-left: 20px;"></span>';
 	        ?>
 	        <?= Html::submitButton($subnmae, ['class' => ' btn-lot', 'id'=>'idb']) ?> 
 	    </div>

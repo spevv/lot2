@@ -17,12 +17,12 @@ class AccountController extends \yii\web\Controller
 	public function behaviors()
 	{
 		return [
-			'verbs' => [
+			/*'verbs' => [
 				'class' => VerbFilter::className(),
 				'actions' => [
 					'delete' => ['post'],
 				],
-			],
+			],*/
 			'access' => [
 				'class' => \yii\filters\AccessControl::className(),
 				'rules' => [

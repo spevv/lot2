@@ -38,8 +38,8 @@ class ContactForm2 extends Model
     {
         return [
             'name' => 'Имя',
-            'email' => 'email',
-            'subject' => 'Организация',
+            'email' => 'Кому (email)',
+            'subject' => 'Тема',
             'body' => 'Сообщение',
             //'verifyCode' => 'Проверочный код',
         ];

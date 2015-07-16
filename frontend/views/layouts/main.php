@@ -1,7 +1,7 @@
 <?php
 use yii\helpers\Html;
 use yii\bootstrap\Nav;
-use yii\bootstrap\NavBar;
+//use yii\bootstrap\NavBar;
 use yii\widgets\Breadcrumbs;
 use frontend\assets\AppAsset;
 use yii2mod\alert\Alert;
@@ -11,9 +11,7 @@ use yii\helpers\Url;
 use common\models\Lot;
 use yii\helpers\ArrayHelper;
 use common\models\GeobaseCity;
-
 use yii\bootstrap\Modal;
-
 use common\models\Follower;
 use kartik\form\ActiveForm;
 use yii\widgets\Pjax;					    
@@ -36,12 +34,9 @@ Url::remember();
     <?php $this->head() ?>
 </head>
 <body>
-
-
     <?php $this->beginBody() ?>
     <div class="wrap">
-
-        <div class="head">
+    	<div class="head">
 	        <div class="container">
 				<div class="row">
 					<div class="col-xs-12">
@@ -49,7 +44,6 @@ Url::remember();
 							<a href="<?= Url::toRoute(['article/view', 'article' => 'organizatoram-treningov']); ?>">Организаторам тренингов</a>
 							<a href="<?= Url::toRoute(['comment/comments']); ?>">Отзывы о сайте</a>
 							<?php if(Yii::$app->user->isGuest):	?>
-							
 								<?php Modal::begin([
 										//'size' => 'modal-sm',
 									    'header' => '<h2>Войди через любимую соцсеть</h2>',
@@ -73,74 +67,7 @@ Url::remember();
 							  			<a  href="<?= Url::toRoute(['/site/logout']) ?>" data-method="post">Выход</a>
 							  		</div>
 							  	</div>
-								
-							
-								
 							<?php endif; ?>
-							
-							<!--<a href="">Мой регион: Москва и МО</a>-->
-							
-							<!--<div class="dropdown">
-								<a id="dLabel" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" href="">Мой регион: Москва и МО</a>
-							  <div class="dropdown-menu" role="menu" aria-labelledby="dLabel">
-							    <div class="row">
-							    	
-									<?php
-									$lot = ArrayHelper::map(Lot::find()->all(), 'id', 'city_id');
-									$lot = array_unique($lot);
-									
-									//$region = ArrayHelper::map(GeobaseCity::findAll($lot), 'id', 'name');
-									$region = ArrayHelper::map(GeobaseCity::find()
-										->where(['id' => $lot])
-									    ->orderBy('name')
-									    ->all(), 'id', 'name');
-									?>
-									<?php
-									$countItemInRow = 2; 
-									$rows = ceil(count($lot)/$countItemInRow);
-									var_dump($rows);
-									if($rows): 
-										if($rows<4):	
-											if($rows == 1): ?>
-												<div class="col-xs-12">
-									        		<ul class="drop-list">
-										        		<?php foreach($region as $key => $value): ?>
-										        			<li>
-																<?= Html::a($value, ['city/view', 'id'=>$key], ['class' => '']); ?>
-															</li>
-										        		<?php endforeach; ?>
-													</ul>
-									        	</div>
-									        <?php elseif($rows == 2): 
-									        	
-									        	?>
-									        <?php elseif($rows == 3):  ?>
-									        
-									        	<div class="col-xs-12">
-									        		<ul class="drop-list">
-										        		<?php foreach($region as $key => $value): ?>
-										        			<li>
-																<?= Html::a($value, ['city/view', 'id'=>$key], ['class' => '']); ?>
-															</li>
-										        		<?php endforeach; ?>
-													</ul>
-									        	</div>
-									        
-											<?php endif; ?>	
-										<?php else: ?>
-										
-										
-										<?php endif; ?>
-										
-									<?php endif; ?>
-									
-							    </div>
-							    
-							    
-							  </div>
-							</div>-->
-							
-							
 						</div>
 					</div>
 				</div>
@@ -194,48 +121,12 @@ Url::remember();
 				</div>
 			</div>
 		</div>
-		
 
-		
+      
         <div class="container">
         <?= Breadcrumbs::widget([
             'links' => isset($this->params['breadcrumbs']) ? $this->params['breadcrumbs'] : [],
         ]) ?>
-                <?php
-           /* NavBar::begin([
-                'brandLabel' => 'My Company',
-                'brandUrl' => Yii::$app->homeUrl,
-                'options' => [
-                    'class' => 'navbar-inverse navbar-fixed-top',
-                ],
-            ]);
-            $menuItems = [
-                ['label' => 'Главная', 'url' => ['/site/index']],
-                ['label' => 'Лоты', 'url' => ['/lot/index']],
-                ['label' => 'Категории', 'url' => ['/category/index']],
-                ['label' => 'Статьи', 'url' => ['/article/index']],
-                ['label' => 'About', 'url' => ['/site/about']],
-                ['label' => 'Contact', 'url' => ['/site/contact']],
-            ];
-            if (Yii::$app->user->isGuest) {
-                $menuItems[] = ['label' => 'Signup', 'url' => ['/site/signup']];
-                $menuItems[] = ['label' => 'Login', 'url' => ['/site/login']];
-            } else {
-                $menuItems[] = [
-                    'label' => 'Logout (' . Yii::$app->user->identity->username . ')',
-                    'url' => ['/site/logout'],
-                    'linkOptions' => ['data-method' => 'post']
-                ];
-            }
-            echo Nav::widget([
-                'options' => ['class' => 'navbar-nav navbar-right'],
-                'items' => $menuItems,
-            ]);
-            NavBar::end();*/
-        ?>
-        <?php /* echo yii\authclient\widgets\AuthChoice::widget([
-     'baseAuthUrl' => ['site/auth']
-	])  */ ?>
           	<?php
   	if(\Yii::$app->session->getFlash('success') or \Yii::$app->session->getFlash('error')){
 		echo  Alert::widget();
@@ -244,6 +135,7 @@ Url::remember();
         <?= $content ?>
         </div>
     </div>
+	
 	
 	<div class="pre-footer">
 		<div class="container">
@@ -297,7 +189,6 @@ Url::remember();
 									    ]
 									])->input('email', ['placeholder'=>'Ваш e-mail']); ?>
 							    <?php ActiveForm::end(); ?>
-
 							<?php Pjax::end(); ?>
 						</div><!-- follower -->
 					</div>
@@ -309,7 +200,8 @@ Url::remember();
 		</div>
 	</div>
 	
-    <footer class="footer">
+	<?php if ($this->beginCache('footer', ['duration' => 600])): ?>
+    	<footer class="footer">
         <div class="container">
 	        <div class="row">
 	        	<div class="col-xs-12">
@@ -333,13 +225,10 @@ Url::remember();
 		        		<?php endforeach; ?>
 					</ul>
 	        	</div>
-	        	
 	        </div>
-        <!--<p class="pull-left">&copy; My Company <?= date('Y') ?></p>
-        <p class="pull-right"><?= Yii::powered() ?></p>-->
         </div>
     </footer>
-
+	<?php $this->endCache(); endif; ?>
     <?php $this->endBody() ?>
     
     <script type="text/javascript">

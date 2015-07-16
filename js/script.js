@@ -1,5 +1,4 @@
 
-
 function afterAjaxListViewUpdate(){
 	console.log('afterAjaxListViewUpdate');
 }

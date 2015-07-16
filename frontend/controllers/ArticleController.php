@@ -15,17 +15,23 @@ use frontend\models\ContactForm2;
  */
 class ArticleController extends Controller
 {
-    public function behaviors()
-    {
-        return [
-        ];
-    }
+	
+	public function behaviors()
+	{
+	    return [
+	        [
+	            'class' => 'yii\filters\PageCache',
+	            'only' => ['view'],
+	            'duration' => 3600,
+	        ],
+	    ];
+	}
 
     /**
      * Lists all Article models.
      * @return mixed
      */
-    public function actionIndex()
+   /* public function actionIndex()
     {
         $searchModel = new ArticleSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
@@ -34,7 +40,7 @@ class ArticleController extends Controller
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
         ]);
-    }
+    }*/
 
     /**
      * Displays a single Article model.
@@ -54,17 +60,17 @@ class ArticleController extends Controller
         $model = new ContactForm2();
         if ($model->load(Yii::$app->request->post()) && $model->validate()) {
             if ($model->sendEmail(Yii::$app->params['adminEmail'])) {
-                //Yii::$app->session->setFlash('success', 'Поздравляем! Ваше сообщение успешно отправлено.');
-                $return = '1';
+                Yii::$app->session->setFlash('success', 'Поздравляем! Ваше сообщение успешно отправлено.');
+                //$return = '1';
             } else {
-                //Yii::$app->session->setFlash('error', 'Не удалось отправить сообщение.');
-                 $return = '';
+                Yii::$app->session->setFlash('error', 'Не удалось отправить сообщение.');
+                // $return = '';
             }
             
             $modelNew = new ContactForm2();
             return $this->renderPartial('_form', [
                 'model' => $modelNew,
-                'send' => $return,
+                //'send' => $return,
             ]);
         } 
     }

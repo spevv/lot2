@@ -14,7 +14,7 @@ class ContactForm extends Model
     public $email;
     public $subject;
     public $body;
-    public $verifyCode;
+    //public $verifyCode;
 
     /**
      * @inheritdoc
@@ -27,7 +27,7 @@ class ContactForm extends Model
             // email has to be a valid email address
             ['email', 'email'],
             // verifyCode needs to be entered correctly
-            ['verifyCode', 'captcha'],
+            //['verifyCode', 'captcha'],
         ];
     }
 
@@ -38,10 +38,10 @@ class ContactForm extends Model
     {
         return [
             'name' => 'Имя',
-            'email' => 'Кому (email)',
-            'subject' => 'Тема',
+            'email' => 'email',
+            'subject' => 'Организация',
             'body' => 'Сообщение',
-            'verifyCode' => 'Проверочный код',
+            //'verifyCode' => 'Проверочный код',
         ];
     }
 
@@ -57,6 +57,17 @@ class ContactForm extends Model
             ->setTo($this->email)
             //->setFrom([$this->email => $this->name])
             ->setFrom([$email])
+            ->setSubject($this->subject)
+            ->setTextBody($this->body)
+            ->send();
+    }
+    
+    public function sendFromEmail($email)
+    {
+        return Yii::$app->mailer->compose()
+            ->setTo($email)
+            ->setFrom([$this->email => $this->name])
+            //->setFrom([$email])
             ->setSubject($this->subject)
             ->setTextBody($this->body)
             ->send();

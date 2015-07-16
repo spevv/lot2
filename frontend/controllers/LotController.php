@@ -7,38 +7,33 @@ use common\models\Lot;
 use frontend\models\LotSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
-use yii\filters\VerbFilter;
-
-use common\models\Rate;
-use common\models\LotRateStatistic;
-//use frontend\models\UserSocial;
-//use yii\helpers\VarDumper;
-//use common\models\RateWinner;
+//use yii\filters\VerbFilter;
 
 use yii\helpers\Html;
 use yii\helpers\Url;
 use yii\web\Response;
 use common\models\UserInterests;
-use frontend\models\ContactForm;
+use frontend\models\ContactForm2;
 use common\models\CategoryLot;
 use common\models\CheckLot;
 use common\models\Comment;
-
-use common\models\Delivery;
-
+use common\models\Rate;
+use common\models\LotRateStatistic;
 use frontend\models\UserSocial;
+
+//use common\models\Delivery;
 
 /**
  * LotController implements the CRUD actions for Lot model.
  */
 class LotController extends Controller
 {
-    public function behaviors()
+   /* public function behaviors()
     {
         return [
            
         ];
-    }
+    }*/
     
     /**
      * Lists all Lot models.
@@ -65,9 +60,10 @@ class LotController extends Controller
 		}
     }    
     
-    public function actionContact()
+    public function actionContact($id)
     {  	
-        $model = new ContactForm();
+        $model = new ContactForm2();
+        
         if ($model->load(Yii::$app->request->post()) && $model->validate()) {
             if ($model->sendEmail(Yii::$app->params['adminEmail'])) {
                 Yii::$app->session->setFlash('success', 'Поздравляем! Ваше сообщение успешно отправлено.');
@@ -75,9 +71,10 @@ class LotController extends Controller
                 Yii::$app->session->setFlash('error', 'Не удалось отправить сообщение.');
             }
             
-            $modelNew = new ContactForm();
-            return $this->renderPartial('contact', [
-                'model' => $modelNew,
+            $lot =  $this->findModelId($id);
+            return $this->renderPartial('_contact', [
+                'model' => $this->getContactData($lot),
+                'lotId' => $lot->id,
             ]);
         } 
     }
@@ -247,9 +244,9 @@ class LotController extends Controller
     	//$checkLot->checkAndUpdate();
     	//
 		
-		$delivery = new Delivery();
+		//$delivery = new Delivery();
 		//$delivery->getUserInteres();
-		$delivery->getLotsInfo();
+		//$delivery->getLotsInfo();
 		
 
 
@@ -307,19 +304,31 @@ class LotController extends Controller
             ]);
 		}
 		
-		
-		$contact = new ContactForm();
-		
         return $this->render('view', [
             'model' => $modelId->toArray([], ['subjects','branchs', 'images']),
             'lotLeft' => $lotLeft,   
             'contact' => $this->renderPartial('_contact', [
-                'model' => $contact,
+                'model' => $this->getContactData($modelId),
+                'lotId' => $modelId->id,
             ]),
             'share' => $socialShare['share'],
             'comments' => $comments,
         ]);
     }
+    
+    // формируем текст сообщения на почту
+    private function getContactData($modelId = null)
+    {
+		$contact = new ContactForm2();
+		$contact->subject = 'Тебе понравится!';		
+		$contact->body = "Привет! Смотри, что я нашел.
+		
+Торги за «".$modelId->name."».
+Давай поучаствуем в аукционе!";
+			//<p>До окончания торгов: 1 день 1 час. Текущая цена: 1 800 руб.</p>
+			
+		return $contact;
+	}
     
     private function getComments($lot_id)
     {

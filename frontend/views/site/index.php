@@ -2,14 +2,8 @@
 use yii\helpers\Html;
 use yii\widgets\ListView;
 use yii\bootstrap\Nav;
-use yii\bootstrap\NavBar;
-use yii\widgets\Pjax;
-use kartik\spinner\Spinner;
-
 use nirvana\infinitescroll\InfiniteScrollPager;
 
-
-//use yii\helpers\Url;
 /* @var $this yii\web\View */
 //$this->title = 'ИНТЕРНЕТ-АУКЦИОН БИЗНЕС-ОБРАЗОВАНИЯ';
 $this->title = $model->name;
@@ -21,28 +15,51 @@ if(isset($model->meta_keyword)){
 }
 ?>
 
-
 <div class="row filter-row">
 	<div class="col-xs-9">	
 		<?= $activeBlockLot ?>
 	</div>
-	<div class="col-xs-3">
-		<div class="category-list">
-			<?php
-            echo Nav::widget([
-			    'items' => $categoryInfo,
-			    'options' => ['class' =>'nav nav-pills nav-stacked', 'id'=>'category-list'],
-			]);
-        ?>
+		<div class="col-xs-3">
+			<div class="category-list">
+				<?= Nav::widget([
+				    'items' => $categoryInfo,
+				    'options' => ['class' =>'nav nav-pills nav-stacked', 'id'=>'category-list'],
+				]);
+	        	?>
+			</div>
+			
+			<div class="by-partner">
+				<div class="by-partner-icon"></div>
+				<div class="by-partner-text" data-toggle="modal" data-target="#contactFormPartner">
+					Станьте нашим партнером
+				</div>
+			</div>
+
+			<div class="left-banner">
+				
+			</div>
 		</div>
-	</div>
+</div>
+
+<!-- Modal -->
+<div class="modal fade" id="contactFormPartner" tabindex="-1" role="dialog" aria-labelledby="contactModal" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="contactModal">Станьте нашим партнером</h4>
+      </div>
+      <div class="modal-body">
+			<?= $contact ?>
+      </div>
+    </div>
+  </div>
 </div>
 
 
 
 <div class="lot-search-header-noactive">Сыграные лоты</div>
-		   <div class="lot-list-noactive">
-	
+	<div class="lot-list-noactive">
 		<?= ListView::widget([
 		        'dataProvider' => $dataProvider2,
 		        'itemOptions' => ['class' => 'lot-noactive item'],
@@ -65,21 +82,8 @@ if(isset($model->meta_keyword)){
 			            ],
 			            'behavior' => InfiniteScrollPager::BEHAVIOR_TWITTER,
 			        ],
-			    ], 
-		    ]) ?>
-		</div>
-		
-
-
-
-
-
-
-
-
-
-
-
-
+			    ],
+		]) ?>
+</div>
 
 

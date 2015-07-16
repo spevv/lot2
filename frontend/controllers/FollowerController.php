@@ -6,6 +6,7 @@ use common\models\Follower;
 
 class FollowerController extends \yii\web\Controller
 {
+	
     public function actionCreate()
     {
     	
@@ -13,7 +14,8 @@ class FollowerController extends \yii\web\Controller
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             return $this->redirect(['view', 'id' => $model->id]);
-        } else {
+        } else 
+        {
             return $this->render('create', [
                 'model' => $model,
             ]);

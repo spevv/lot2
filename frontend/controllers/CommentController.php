@@ -15,7 +15,6 @@ class CommentController extends \yii\web\Controller
 	
 	public function actionComments()
 	{
-		//$model
 		$model = Article::findone(6);
 		
 		$searchModel = new CommentSearch();
@@ -25,19 +24,12 @@ class CommentController extends \yii\web\Controller
             'dataProvider' => $dataProvider,  
             'model' => $model,  
         ]);
-		
-		/*$model = Comment::find()->where(['public' => 1])->all();
-		return $this->render('comments', [
-			'model' => $model,
-			'content' => '',
-		]);*/
 	}
     
 
 	
     public function actionIndex($id)
 	{
-		
 		$identity = Yii::$app->getUser()->getIdentity();
 	    if (isset($identity->profile)) 
 	    {

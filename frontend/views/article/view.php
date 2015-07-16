@@ -82,14 +82,8 @@ if(isset($model->meta_keyword)){
 				<?= $contactForm; ?>
 				<?php endif; ?>
 				
-				
-				
 			</div>
 		</div>
 	</div>
-
-   
-    
-	
 
 </div>

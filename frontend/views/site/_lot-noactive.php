@@ -37,9 +37,7 @@ use common\models\LotRateStatistic;
 				if(!$temp){
 					$rate = Rate::find()->where(['lot_id'=>$model->id])->andWhere(['refusal'=>0])->orderBy('price desc')->one();
 				}
-			
-			
-			//$rate = Rate::find()->where(['lot_id'=>$model->id])->orderBy('price desc')->one(); ?>
+				?>
 			<?php if($rate): ?>
 				<?php  
 				$user = UserSocial::findOne(['user_id'=>$rate->user2_id]);

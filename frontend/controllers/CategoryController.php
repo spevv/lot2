@@ -4,19 +4,12 @@ namespace frontend\controllers;
 
 use Yii;
 use common\models\Category;
-use frontend\models\CategorySearch;
+//use frontend\models\CategorySearch;
 use frontend\models\CategoryLotSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
-use yii\filters\VerbFilter;
-
-//use common\models\Category;
 use common\models\CategoryLot;
 use common\models\Lot;
-
-use yii\data\ActiveDataProvider;
-
-
 use yii\helpers\ArrayHelper;
 use common\models\SubjectLot;
 use common\models\BranchLot;

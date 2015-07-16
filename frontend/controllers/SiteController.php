@@ -7,12 +7,12 @@ use frontend\models\PasswordResetRequestForm;
 use frontend\models\ResetPasswordForm;
 use frontend\models\SignupForm;
 use frontend\models\ContactForm;
+use frontend\models\User;
 use yii\base\InvalidParamException;
 use yii\web\BadRequestHttpException;
 use yii\web\Controller;
 use yii\filters\VerbFilter;
 use yii\filters\AccessControl;
-
 
 use common\models\Category;
 use frontend\models\CategorySearch;
@@ -31,11 +31,10 @@ use common\models\GeobaseCity;
 use common\models\Subject;
 use common\models\CheckLot;
 use common\models\Branch;
-
-use frontend\models\User;
+use common\models\Follower;
+//use frontend\models\ContactForm;
 use yii\helpers\Url;
 
-use common\models\Follower;
 use iutbay\yii2kcfinder\KCFinder;
 /**
  * Site controller
@@ -154,20 +153,11 @@ class SiteController extends Controller
 		return $checkLot->sendEmail(Yii::$app->params['emailText']['followerFirst']);
 	}
 
-    public function actionIndex()
+	public function actionIndex()
     {
-	     /*Yii::$app->opengraph->set([
-			    'title' => Yii::$app->params['siteInfo']['title'],
-			    'description' =>Yii::$app->params['siteInfo']['description'],
-			    'image' => Yii::$app->params['siteInfo']['image'],
-			]);*/
-		
-		
 		$this->setKCFINDER();
         $searchModel = new LotSearch();
         $dataProvider2 = $searchModel->search(null, false);
-        
-       // $searchModel['city_id'] = 710;
         
         $search =  $this->renderPartial('_search', [
         	'model' => $searchModel, 
@@ -178,10 +168,16 @@ class SiteController extends Controller
         ]);
         
         $siteInfo = (object) [
-				'name' => Yii::$app->params['siteInfo']['title'],
-				'meta_description' => Yii::$app->params['siteInfo']['description'],
-				'meta_keyword' => Yii::$app->params['siteInfo']['keyword'],
-			];
+			'name' => Yii::$app->params['siteInfo']['title'],
+			'meta_description' => Yii::$app->params['siteInfo']['description'],
+			'meta_keyword' => Yii::$app->params['siteInfo']['keyword'],
+		];
+		
+		$Contact = new ContactForm();
+		$contact = $this->renderPartial('_contact', [
+                'model' => $Contact,
+            ]);
+        
         
 		if(Yii::$app->session->get('city'))
 		{
@@ -255,9 +251,7 @@ class SiteController extends Controller
 			    'description' => Yii::$app->params['siteInfo']['description'],
 			    'image' => Yii::$app->params['siteInfo']['image'],
 			]);
-			
-			
-			//var_dump('else post');	
+
 			Yii::$app->session->remove('searchData');
 			$dataProvider = $searchModel->search(Yii::$app->request->queryParams, true);
 			
@@ -271,6 +265,8 @@ class SiteController extends Controller
 	            'categoryInfo' => $this->getCategoty(),
 	            'activeBlockLot' => $activeBlockLot,
 	            'model'=> $siteInfo,
+	            'contact'=> $contact,
+	            
 	            
 	        ]);
 		}
@@ -279,15 +275,19 @@ class SiteController extends Controller
     //return public category
     private function getCategoty()
     {
-		$categoryInfo = Category::find()
-		    ->where(['public' => 1])
-		    ->orderBy('priority')
-		    ->all();
-		
-		foreach($categoryInfo as $key => $value){
-			$items[$key]['label'] = $value['name'];
-			$items[$key]['linkOptions'] =  ['class'=> $value['slug']];
-			$items[$key]['url'] = ['category/view', 'category' => $value['slug']];
+    	$items = Yii::$app->cache->get('getCategoty');
+		if ($items === false) 
+		{
+		    $categoryInfo = Category::find()
+			    ->where(['public' => 1])
+			    ->orderBy('priority')
+			    ->all();
+			foreach($categoryInfo as $key => $value){
+				$items[$key]['label'] = $value['name'];
+				$items[$key]['linkOptions'] =  ['class'=> $value['slug']];
+				$items[$key]['url'] = ['category/view', 'category' => $value['slug']];
+			}
+		    Yii::$app->cache->set('getCategoty', $items);
 		}
 		return $items;
 	}
@@ -357,24 +357,6 @@ class SiteController extends Controller
 			return ArrayHelper::map(Subject::findAll($branchLot), 'id', 'name');
 		}
 		return false;
-		
-		
-		/*foreach($branchLots as $key => $branchLot)
-		{
-			if($branchLot->lot->public != 1)
-			{
-				unset($branchLots[$key]);
-			}
-			
-			if($branchLot->lot->remaining_time < Yii::$app->formatter->asDate('now', 'yyyy-MM-dd HH:mm:ss'))
-			{
-				unset($branchLots[$key]);
-			}
-		}
-		
-		$branchLot = ArrayHelper::map($branchLots, 'id', 'branch_id');
-		$branchLot = array_unique($branchLot);
-		return ArrayHelper::map(Branch::findAll($branchLot), 'id', 'name');*/
 	}
 	
 	//return region
@@ -447,7 +429,7 @@ class SiteController extends Controller
 
     }
 
-    public function actionContact()
+   /* public function actionContact()
     {
         $model = new ContactForm();
         if ($model->load(Yii::$app->request->post()) && $model->validate()) {
@@ -463,6 +445,23 @@ class SiteController extends Controller
                 'model' => $model,
             ]);
         }
+    }*/
+    
+    public function actionContact()
+    {  	
+        $model = new ContactForm();
+        
+        if ($model->load(Yii::$app->request->post()) && $model->validate()) {
+            if ($model->sendFromEmail(Yii::$app->params['adminEmail'])) {
+                Yii::$app->session->setFlash('success', 'Поздравляем! Ваше сообщение успешно отправлено.');
+            } else {
+                Yii::$app->session->setFlash('error', 'Не удалось отправить сообщение.');
+            }
+            $Contact = new ContactForm();
+            return $this->renderPartial('_contact', [
+                'model' => $Contact,
+            ]);
+        } 
     }
     
     private function setKCFINDER()

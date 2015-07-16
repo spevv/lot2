@@ -1,12 +1,9 @@
 <?php
-
 use yii\helpers\Html;
 use kartik\form\ActiveForm;
 //use backend\models\CKEditor;
 use dosamigos\ckeditor\CKEditor;
 ?>
-
-
 
 <?php $form = ActiveForm::begin([
 	'method' => 'post',

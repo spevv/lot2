@@ -1,8 +1,8 @@
 <?php
 
 use yii\helpers\Html;
-use frontend\widgets\Alert;
-//use yii2mod\alert\Alert;
+use yii2mod\alert\Alert;
+//use frontend\widgets\Alert;
 
 /* @var $this yii\web\View */
 /* @var $model common\models\Comment */
@@ -13,19 +13,21 @@ $this->title = $name;
 
 <div class="comment-main">
     <h1><?= Html::encode($this->title) ?></h1>
-    <?= Alert::widget() ?>
     <?= $content ?>
     <?php if($button): ?>
     	<div class="pay-button-wrapper">
     		<div class="pay-button">Оплатить</div>
     	</div>
     <?php endif; ?>
-
 </div>
 
+<?php
+if(\Yii::$app->session->getFlash('success') or \Yii::$app->session->getFlash('error')){
+	echo  Alert::widget();
+}
+?>
 
 <?php
-//var_dump($url);
 $identity = Yii::$app->getUser()->getIdentity();
 if (isset($identity->profile)) {
 	$service = $identity->profile['service'];	

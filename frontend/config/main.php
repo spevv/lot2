@@ -17,26 +17,46 @@ return [
     
     'components' => [
     
-    	/*'assetManager' => [
+    
+    	'assetManager' => [
             'bundles' => [
                 'all' => [
                     'class' => 'yii\web\AssetBundle',
                     'basePath' => '@webroot/assets',
                     'baseUrl' => '@web/assets',
-                    'css' => ['css/all-21bdc94f39bfdd14e9ee4fd491a4d5e4.css'],
-                    'js' => ['js/all-31f88aec214af315b38d90d7ae4d0d66.js'],
+                    'css' => ['css/all-da3700e020e038602699e51ed32bdaa9.css'],
+                    'js' => [
+                    	"http://vk.com/js/api/openapi.js", 
+                		"http://crypto-js.googlecode.com/svn/tags/3.1.2/build/rollups/md5.js",
+                    	'js/all-964688fba33e775865cd35f2d67bc42c.js'
+                    ],
                 ],
-                //'frontend\assets\AppAsset' => ['css' => [], 'js' => [], 'depends' => ['all']],
-                'frontend\assets\AppAsset' => [
+                
+		       //'uran1980\yii\assets\jQueryEssential\JqueryEssentialAsset' => ['css' => [], 'js' => [], 'depends' => []],
+		        'yii2mod\alert\AlertAsset' => ['css' => [], 'js' => [], 'depends' => ['all']],
+		        'dosamigos\multiselect\MultiSelectAsset' => ['css' => [], 'js' => [], 'depends' => ['all']],
+		       	'metalguardian\fotorama\FotoramaAsset' => ['css' => [], 'js' => [], 'depends' => ['all']],
+		        'nodge\eauth\assets\WidgetAssetBundle' => ['css' => [], 'js' => [], 'depends' => ['all']],
+		        'nirvana\infinitescroll\InfiniteScrollAsset' => ['css' => [], 'js' => [], 'depends' => ['all']],
+		        'kartik\spinner\SpinnerAsset' => ['css' => [], 'js' => [], 'depends' => ['all']],
+		        'russ666\widgets\CountdownAsset' => ['css' => [], 'js' => [], 'depends' => ['all']],
+		        'kartik\form\ActiveFormAsset' => ['css' => [], 'js' => [], 'depends' => ['all']],
+		        'yii\widgets\ActiveFormAsset' => ['css' => [], 'js' => [], 'depends' => ['all']],
+		        'yii\widgets\PjaxAsset' => ['css' => [], 'js' => [], 'depends' => ['all']],
+		        
+		        
+		        'yii\bootstrap\BootstrapAsset' => ['css' => [], 'js' => [], 'depends' => ['all']],
+		        'yii\bootstrap\BootstrapPluginAsset' => ['css' => [], 'js' => [], 'depends' => ['all']],
+		        'yii\web\YiiAsset'  => ['css' => [], 'js' => [], 'depends' => ['all']],
+		        'yii\validators\ValidationAsset'  => ['css' => [], 'js' => [], 'depends' => ['all']],
+		        'yii\web\JqueryAsset'  => ['css' => [], 'js' => [], 'depends' => ['all']],
+		        'frontend\assets\AppAsset' => [
                 	'css' => [], 
-                	'js' => [
-                		"http://vk.com/js/api/openapi.js", 
-                		"http://crypto-js.googlecode.com/svn/tags/3.1.2/build/rollups/md5.js"
-                	], 
+                	'js' => [], 
                 	'depends' => ['all']
                 ],
             ],
-        ],*/
+        ],
     
     	/* 'view' => [
             'class' => '\rmrevin\yii\minify\View',
