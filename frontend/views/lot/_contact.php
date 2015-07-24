@@ -13,7 +13,7 @@ use yii\widgets\Pjax;
 	<div class="row">
 	    <div class="col-lg-12">
 	        <?php $form = ActiveForm::begin(['options' => ['data-pjax' => true], 'action'=> ['lot/contact', 'id'=> $lotId]]); ?>
-	            <?= $form->field($model, 'name') ?>
+	            <?php // $form->field($model, 'name') ?>
 	            <?= $form->field($model, 'email') ?>
 	            <?= $form->field($model, 'subject') ?>
 	            <?= $form->field($model, 'body')->textArea(['rows' => 6]) ?>

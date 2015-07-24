@@ -21,7 +21,7 @@ use common\models\Rate;
 use common\models\LotRateStatistic;
 use frontend\models\UserSocial;
 
-//use common\models\Delivery;
+use common\models\Delivery;
 
 /**
  * LotController implements the CRUD actions for Lot model.
@@ -39,7 +39,7 @@ class LotController extends Controller
      * Lists all Lot models.
      * @return mixed
      */
-    public function actionIndex()
+  /*  public function actionIndex()
     {
         $searchModel = new LotSearch();
 		
@@ -58,13 +58,13 @@ class LotController extends Controller
 	            'dataProvider' => $dataProvider,
 	        ]);
 		}
-    }    
+    }   */ 
     
     public function actionContact($id)
     {  	
         $model = new ContactForm2();
         
-        if ($model->load(Yii::$app->request->post()) && $model->validate()) {
+        if ($model->load(Yii::$app->request->post()) ) {
             if ($model->sendEmail(Yii::$app->params['adminEmail'])) {
                 Yii::$app->session->setFlash('success', 'Поздравляем! Ваше сообщение успешно отправлено.');
             } else {
@@ -81,11 +81,10 @@ class LotController extends Controller
     
     public function actionFinishLot()
     {
-		if (Yii::$app->request->isPost) {
-			
-			//поместить в finishLot
+		if (Yii::$app->request->isPost) 
+		{
 	    	$checkLot = new CheckLot();
-	    	$checkLot->checkAndUpdate();
+	    	$checkLot->start();
     	
 	    	$post = Yii::$app->request->post();
 	    	Yii::$app->response->format = Response::FORMAT_JSON;
@@ -154,7 +153,7 @@ class LotController extends Controller
 			$post = Yii::$app->request->post();
 			$modelId = $this->findModelId($post["Rate"]['lot_id']);
 			$rates = $this->getRateState($modelId->id);
-			
+			//var_dump($rates);
 			if(!$rates)
     		{
     			$rate = new Rate();
@@ -188,11 +187,14 @@ class LotController extends Controller
 		    	$count = $this->getRateCount($modelId);
     			$rates2 = $this->getRateState($modelId->id);
 		    	$ratesInfo = $this->getRateAndRetes($rates2, $modelId->id);
-		    	//$this->slewRate($modelId->id);		    	
+		    	
+		    	$this->slewRate($modelId->id);	
+		    		    	
 		    	$this->setInterests($modelId, $user2_id);
 		    	$socialShare = $this->social($modelId, $ratesInfo['rate']);
-				
+		    	
 				return $this->renderPartial('_lotLeft', [
+				//return $this->renderAjax('_lotLeft', [
 	            	 'model' => $modelId->toArray([], ['subjects','branchs', 'images']),
 		             'rate' => $ratesInfo['rate'],
 		             'rates' =>  $ratesInfo['rates'],
@@ -236,20 +238,17 @@ class LotController extends Controller
     
     public function actionView($slug)   
     {
-    	//$url = Url::to(['pay/index', 'id'=>415]);
-    	//$url = Yii::$app->urlManager->createAbsoluteUrl(['site/reset-password', 'token' => 4654]);
-    	//echo($url);
-		//поместить в finishLot
-    	//$checkLot = new CheckLot();
-    	//$checkLot->checkAndUpdate();
-    	//
-		
-		//$delivery = new Delivery();
-		//$delivery->getUserInteres();
-		//$delivery->getLotsInfo();
-		
-
-
+    	//$Delivery = new Delivery();
+    	//$Delivery->startCron();
+    	
+    	//$CheckLot = new CheckLot();
+    	//$CheckLot->getNextRate(463,1);
+    	//var_dump(Yii::$app->getUser());
+    	
+    	//$value = Yii::$app->getRequest()->getCookies()->getValue('_identity');
+    	//var_dump($value);
+    	
+    	//var_dump(Yii::$app->getUser());
 
     	Url::remember();
     	
@@ -317,16 +316,17 @@ class LotController extends Controller
     }
     
     // формируем текст сообщения на почту
-    private function getContactData($modelId = null)
+    private function getContactData($modelId)
     {
 		$contact = new ContactForm2();
+		$url = Yii::$app->urlManager->createAbsoluteUrl(['lot/view', 'slug'=>$modelId->slug]);
+		$contact->name = "Имя";
 		$contact->subject = 'Тебе понравится!';		
 		$contact->body = "Привет! Смотри, что я нашел.
 		
 Торги за «".$modelId->name."».
 Давай поучаствуем в аукционе!";
-			//<p>До окончания торгов: 1 день 1 час. Текущая цена: 1 800 руб.</p>
-			
+			//<p>До окончания торгов: 1 день 1 час. Текущая цена: 1 800 руб.</p>		
 		return $contact;
 	}
     
@@ -439,12 +439,22 @@ class LotController extends Controller
     // ставка была перебита
     private function slewRate($id)
     {
-		$rate = Rate::find()->where(['lot_id'=>$id])->orderBy('price desc')->offset($offset)->one();
+    	$rates = $this->getRateState($id);
+    	$ratesInfo = $this->getRateAndRetes($rates, $id);
+    	
+    	//var_dump($ratesInfo['rates'][1]);
+		//$rate = Rate::find()->where(['lot_id'=>$id])->orderBy('price desc')->offset($offset)->one();
+		$rate = $ratesInfo['rates'][1];
 		if($rate)
 		{
+			//$rateWinner = Rate::find()->where(['lot_id'=>$id])->orderBy('price desc')->one();
+			$rateWinner = $ratesInfo['rates'][0];
 			$checkLot = new CheckLot();
+			$url = Yii::$app->urlManager->createAbsoluteUrl(['lot/view', 'slug'=>$rate->lot['slug']]);
 			Yii::$app->params['emailText']['slewRate']['email'] = $rate->user['email'];
-	    	$checkLot->sendEmail(Yii::$app->params['emailText']['slewRate']);
+			Yii::$app->params['emailText']['slewRate']['messege'] = sprintf(Yii::$app->params['emailText']['slewRate']['messege'], $rate->user['name'],$rate->lot['name'], $rateWinner->user['name'], Yii::$app->formatter->asDatetime($rate->lot['remaining_time'], 'dd.MM HH:mm'), $url);
+					
+	    	return $checkLot->sendEmail(Yii::$app->params['emailText']['slewRate']);
 		}
 		return false;
 		
@@ -473,7 +483,7 @@ class LotController extends Controller
 				
 			}
 		}
-		return Rate::find()->where(['lot_id'=>$modelId_id])->andWhere(['refusal'=>0])->orderBy('price desc')->all();
+		return Rate::find()->where(['lot_id'=>$modelId_id])->andWhere(['refusal'=>0])->orderBy('id desc')->all();
 	}
 	
 	// получить количество ставок

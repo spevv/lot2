@@ -60,13 +60,14 @@ Url::remember();
 									Modal::end(); 
 								?>
 							<?php else: ?>
-								<div class="dropdown account-drop">
+								<a  href="<?= Url::toRoute(['/site/logout']) ?>" data-method="post">Выход (<?= Yii::$app->user->identity->username; ?>)</a>
+								<!--<div class="dropdown account-drop">
 									<a id="dLabel" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" href=""><?= Yii::$app->user->identity->username; ?></a>
 							  		<div class="dropdown-menu" role="menu" aria-labelledby="dLabel">
 							  			<a  href="<?= Url::toRoute(['/account/active']) ?>">Личный кабинет</a><br>
 							  			<a  href="<?= Url::toRoute(['/site/logout']) ?>" data-method="post">Выход</a>
 							  		</div>
-							  	</div>
+							  	</div>-->
 							<?php endif; ?>
 						</div>
 					</div>

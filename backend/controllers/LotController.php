@@ -15,6 +15,7 @@ use common\models\LotImage;
 use common\models\LotRateStatistic;
 use common\models\GeobaseCity;
 use yii\filters\AccessControl;
+
 /**
  * LotController implements the CRUD actions for Lot model.
  */
@@ -52,6 +53,9 @@ class LotController extends Controller
      */
     public function actionIndex()
     {
+    	
+    	//var_dump(Yii::$app->getUser());
+    	
         $searchModel = new LotSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
@@ -81,6 +85,7 @@ class LotController extends Controller
      */
     public function actionCreate()
     {
+
         $model = new Lot();
 
         if ($model->load(Yii::$app->request->post())) {
@@ -89,7 +94,8 @@ class LotController extends Controller
         	//var_dump($post);
         	$model->save();
         	//var_dump($model->id);
-        	if(isset($post["Lot"]["subjects"]))
+        	
+        	if(!empty($post["Lot"]["subjects"]))
         	{
 				foreach($post["Lot"]["subjects"] as $key)
 				{	
@@ -101,7 +107,7 @@ class LotController extends Controller
 				}
 			}
 			
-			if(isset($post["Lot"]["branchs"]))
+			if(!empty($post["Lot"]["branchs"]))
 			{
 				foreach($post["Lot"]["branchs"] as $key)
 				{	
@@ -111,7 +117,7 @@ class LotController extends Controller
 					$branch->save();
 				}
 			}
-			if(isset($post["Lot"]["categories"]))
+			if(!empty($post["Lot"]["categories"]))
 			{
 				foreach($post["Lot"]["categories"] as $key)
 				{	
@@ -121,7 +127,7 @@ class LotController extends Controller
 					$category->save();
 				}
 			}
-        	if(isset($post["Lot"]["lotImages"]) )
+        	if(!empty($post["Lot"]["lotImages"]) )
         	{
 				foreach($post["Lot"]["lotImages"] as $key => $value)
 				{
@@ -178,6 +184,7 @@ class LotController extends Controller
         if ($model->load(Yii::$app->request->post())) {
         	$post = Yii::$app->request->post();
         	//var_dump($post);
+        	//die;
         	//var_dump($post["Lot"]);
         	if(!isset($post["Lot"]['image'])){
 				//$post["Lot"]['image'] = NULL;

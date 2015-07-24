@@ -332,7 +332,6 @@ class SiteController extends Controller
 		$branchLots = BranchLot::find()->all();
 		if($branchLots)
 		{
-			
 			foreach($branchLots as $key => $branchLot)
 			{
 				if($branchLot->lot)
@@ -354,7 +353,7 @@ class SiteController extends Controller
 			
 			$branchLot = ArrayHelper::map($branchLots, 'id', 'branch_id');
 			$branchLot = array_unique($branchLot);
-			return ArrayHelper::map(Subject::findAll($branchLot), 'id', 'name');
+			return ArrayHelper::map(Branch::findAll($branchLot), 'id', 'name');
 		}
 		return false;
 	}
@@ -385,8 +384,11 @@ class SiteController extends Controller
 //                  var_dump($eauth->getIsAuthenticated(), $eauth->getAttributes()); exit;
 
                     $identity = User::findByEAuth($eauth);
-                    Yii::$app->getUser()->login($identity);
-
+                    //var_dump($identity);
+        			//die;
+                    //Yii::$app->getUser()->login($identity);
+                    //Yii::$app->getUser()->login($identity, 3600*24*30);
+					 Yii::$app->user->login($identity, 3600*24*30);
                     // special redirect with closing popup window
                     $eauth->redirect(Url::previous()); //"/lot/lot-4.html"
                 }
@@ -452,6 +454,7 @@ class SiteController extends Controller
         $model = new ContactForm();
         
         if ($model->load(Yii::$app->request->post()) && $model->validate()) {
+        	$model->subject = "Хотим стать вашим партнером - ".$model->subject;
             if ($model->sendFromEmail(Yii::$app->params['adminEmail'])) {
                 Yii::$app->session->setFlash('success', 'Поздравляем! Ваше сообщение успешно отправлено.');
             } else {

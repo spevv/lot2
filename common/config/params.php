@@ -1,27 +1,29 @@
 <?php
 return [
-    'adminEmail' => 'admin@example.com',
-    'supportEmail' => 'support@example.com',
-    'mainEmail' => 'developer.awam@gmail.com', // с какой почты будет вестись рассылка
+    'adminEmail' => 'developer.awam@gmail.com',
+    'supportEmail' => 'developer.awam@gmail.com',
+    //'mainEmail' => 'developer.awam@gmail.com', // с какой почты будет вестись рассылка
+    'mainEmail' => ['developer.awam@gmail.com' => 'EduHot.biz'], // с какой почты будет вестись рассылка
     'user.passwordResetTokenExpire' => 3600,
     'cronTime' => 5, // через какое время будет выполняться крон
-    'lot.timeToFinish' => 20, // минуты до конца лота (отправка сообшения) должно быть (lot.timeToFinish - cronTime) = 10 ~ 15
+    'lot.timeToFinish' => 9, // минуты до конца лота (отправка сообшения) должно быть (lot.timeToFinish - cronTime) = 10 ~ 15
     'lot.firstStepTimeToComment' => 7, // 7 дней, после 7 дней будут отправляться email на комменты
     'lot.secondStepTimeToComment' => 3, // следущая отправка сообщения через 3 дня, если только одна отправка то установить ""
     'delivery.countEmailInEmail' => 15, //$countEmail = 10; // количество emails которые можно отправить в одном письме = 15
     'delivery.interesStep' => 5, //шаг интереса, с которого начинается отправка email
+    //'emailName' => 'EduHot.biz',
     'emailText' => [
     	// победителю
     	'toWinner' => [
     		'view' => 'email-html',
     		'subject' => 'Вы выиграли торги!',
-			'messege' => '<h2>Здраствуйте, %s</h2><p>Поздравляем! Вы выиграл торги за лот "%s".</p><p>Для завершение сделки внесите оплату %s рублей до %s по Москве.</p><a class="button" href="%s">Перейти к оплате</a>',
+			'messege' => '<h2>Здраствуйте, %s</h2><p>Поздравляем! Вы выиграл торги за лот "%s".</p><p>Для завершение сделки внесите оплату %s руб до %s по Москве.</p><a class="button" href="%s">Перейти к оплате</a>',
     	],
     	// проигравшим
     	'toLoser' => [
     		'view' => 'email-html',
     		'subject' => 'Лот сыгран',
-			'messege' => '<h2>Здраствуйте, %s</h2><p>Торги за лот "%s" завершены.</p><p>Победила ставка %s рублей от пользователя %s.</p><p>Не падайте духом! Вас ждут другие лоты.</p><a class="button" href="%s">Смотреть другие лоты</a>',
+			'messege' => '<h2>Здраствуйте, %s</h2><p>Торги за лот "%s" завершены.</p><p>Победила ставка %s руб от пользователя %s.</p><p>Не падайте духом! Вас ждут другие лоты.</p><a class="button" href="%s">Смотреть другие лоты</a>',
     	],
     	// перебили ставку
     	'slewRate' => [
@@ -32,7 +34,7 @@ return [
     	// за несколько минут до окончание лота
     	'endsInMinutes' => [
     		'view' => 'email-html',
-    		'subject' => 'До конца лота осталось совсем не много',
+    		'subject' => 'До конца лота осталось совсем немного',
 			'messege' => '<h2>Здраствуйте, %s</h2><p>Напоминаем, что до конца лота осталось %s, поспешите сделать свою ставку.</p><a class="button" href="%s">Перейти к торгам</a>',
     	],
     	// оплата лота  
@@ -40,19 +42,19 @@ return [
     		// за 8 часов до конца
     		'first' => [
     			'view' => 'email-html',
-    			'subject' => 'Напоминаем об оплате',
+    			'subject' => 'Напоминаем об оплате - 1',
 				'messege' => '<h2>Здраствуйте, %s</h2><p>Напоминаем, что до %s нужно оплатить лот "%s".</p><a class="button" href="%s">Перейти к оплате</a>',
     		],
     		// за 4 часов до конца
     		'second' => [
     			'view' => 'email-html',
-    			'subject' => 'Напоминаем об оплате',
+    			'subject' => 'Напоминаем об оплате - 2',
 				'messege' => '<h2>Здраствуйте, %s</h2><p>Напоминаем, что до %s нужно оплатить лот "%s".</p><a class="button" href="%s">Перейти к оплате</a>',
     		],
     		// за 1 час до конца
     		'third' => [
     			'view' => 'email-html',
-    			'subject' => 'Напоминаем об оплате',
+    			'subject' => 'Напоминаем об оплате - 3',
 				'messege' => '<h2>Здраствуйте, %s</h2><p>Напоминаем, что до %s нужно оплатить лот "%s".</p><a class="button" href="%s">Перейти к оплате</a>',
     		],
     		// вы не можете оплачивать счет

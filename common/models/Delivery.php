@@ -3,34 +3,33 @@
 namespace common\models;
 
 use Yii;
-//use yii\helpers\Html;
-//use yii\helpers\Url;
+use yii\helpers\Html;
+use yii\helpers\Url;
 use common\models\Follower;
 use common\models\CheckLot;
 use common\models\Lot;
 use common\models\CategoryLot;
 use common\models\CronInfo;
-//use common\models\UserSettings;
 use common\models\UserInterests;
-
-
+use console\models\SendEmail;
 
 class Delivery
 {
 
 	/**
 	*	start metod 
+	* ищем все новые лоты, проверяем их категории, отправляем на getUserInteres
+	* 
 	*  если нужно что бы отправлялись сообщения и на переложеные лоты, то нужно когда лот перелаживается, делать обновление времени создания
 	* 
 	* @return
-	*/
-	// ищем все новые лоты, проверяем их категории, отправляем на getUserInteres
-	public function getLotsInfo()
+	*/ 
+	public function startCron()
 	{
 		$cronInfo = CronInfo::findone(['type' => 'email_interest']);
-		
-		$Lots = Lot::find()->where(['>',  'creation_time', $cronInfo->time])->all();
-		//$Lots = Lot::findall([3,4]); //тест
+		$Lots = Lot::find()->where(['>',  'creation_time', $cronInfo->time])->andWhere(['public'=>1])->all();
+		//Yii::info('count Lots - '.count($Lots), 'delivery');
+		//$Lots = Lot::findall([30]); //тест
 		//var_dump($Lots);
 		if($Lots)
 		{
@@ -39,7 +38,6 @@ class Delivery
 				//получить все email подпищиков $this->getFollowers();
 				// получил все email по категория $this->getAllEmailsOfCategories($lotId);
 				$emails = array_merge($this->getAllEmailsOfCategories($Lot->id), $this->getFollowers());
-				// eсли будут повтояться значения то array_unique 
 				$emails = array_unique($emails);
 				$this->limitingEmails($Lot, $emails);
 			}
@@ -47,11 +45,15 @@ class Delivery
 		$cronInfo->time = Yii::$app->formatter->asDate('now', 'yyyy-MM-dd HH:mm:ss');
 		$cronInfo->save();
 		return TRUE;
-		//получиьт лот, получить 
-		//return $this->getUserInteres($categoryId, $Lot);
 	}
 	
-	// по LotId найти все категории и с них получить все email
+	/**
+	* по LotId найти все категории и с них получить все email 
+	* 
+	* @param int $lotId
+	* 
+	* @return array $emails
+	*/
 	public function getAllEmailsOfCategories($lotId)
 	{
 		$emails = [];
@@ -71,7 +73,11 @@ class Delivery
 		return $emails;
 	}
 	
-	// return all Follower emails
+	/**
+	* возращает все emails подписщиков
+	* 
+	* @return all Follower emails
+	*/
 	public function getFollowers()
 	{
 		$emails = [];
@@ -86,11 +92,16 @@ class Delivery
 		return $emails;
 
 	}
-	
-	// ищи по категории всех юзеров, которые делали ставки ($interesStep)
+	 
+	/**
+	* ищи по категории всех юзеров, которые делали ставки ($interesStep)
+	* 
+	* @param int $categoryId
+	* 
+	* @return $emails
+	*/
 	public function getUserInteresEmails($categoryId)
 	{
-		
 		$interesStep = Yii::$app->params['delivery.interesStep']; // шаг интереса, с которого начинается отправка email
 		$emails = [];
 		
@@ -114,10 +125,16 @@ class Delivery
 	}
 	
 	
-	// ограничение emails в одном письме
+	/**
+	* ограничение emails в одном письме
+	* 
+	* @param obj $Lot
+	* @param array $emails
+	* 
+	* @return TRUE
+	*/
 	protected function limitingEmails($Lot, $emails)
 	{
-
 		$countEmail = Yii::$app->params['delivery.countEmailInEmail']; // количество emails которые можно отправить в одном письме = 15
 		if(count($emails) > $countEmail)
 		{
@@ -129,46 +146,49 @@ class Delivery
 		}
 		else
 		{
-			return $this->sendInfoAboutNewLot($Lot, $emails);
+			$this->sendInfoAboutNewLot($Lot, $emails);
 		}
-		return FALSE;
+		return TRUE;
 	}
-	
-	// форирование email
+	 
+	/**
+	* форирование email и отправка на sendEmail()
+	* 
+	* @param obj $Lot
+	* @param array $emails
+	* 
+	* @return true or false
+	*/
 	public function sendInfoAboutNewLot($Lot, $emails)
 	{
+		$url = Yii::$app->urlManager->createAbsoluteUrl(['lot/view', 'slug'=>$Lot->slug]);
 		$newEmail = Yii::$app->params['emailText']['interest'];
-		$newEmail['subject'] = sprintf(Yii::$app->params['emailText']['interest']['subject'], $Lot->name);
-		$newEmail['messege'] = sprintf(Yii::$app->params['emailText']['interest']['messege'],  Yii::$app->urlManager->createAbsoluteUrl(['lot/view', 'slug' => $Lot->slug]), $Lot->name);
-		// сделать проверку на логирование, когда не отправилось		
+		$newEmail['subject'] = sprintf($newEmail['subject'], $Lot->name);
+		$newEmail['messege'] = sprintf($newEmail['messege'], $url, $Lot->name);
+			
 		$return = $this->sendEmail($newEmail, $emails);
 		if(!$return)
 		{
-			$log = 'false email send --- '.Yii::$app->formatter->asDate('now', 'yyyy-MM-dd HH:mm:ss').'; ';	
-			Yii::info($log, 'follower');
+			Yii::info('false email send', 'delivery');
 		}
 		return $return;
+		
 	}
 	
-	
-	//отправка сообщения пользователю
-	// array $emails
+	/**
+	* отправка сообщения пользователю 
+	* 
+	* @param array $mail, контент сообщение
+	* @param array $emails
+	* 
+	* @return true or false
+	*/
 	public function sendEmail($mail, $emails)
 	{
-		/*$mail = [
-			'view' => 'email-html',
-			'emailTo' => 'developer.awam@gmail.com',
-			'messege' => 'Привет мир',
-			'subject' => 'subject текст',
-		];*/
 		return  Yii::$app->mailer->compose( $mail['view'], ['mail' => $mail])
 		    ->setFrom(Yii::$app->params['mainEmail'])
 		    ->setTo($emails)
 		    ->setSubject($mail['subject'])
-		    ->send();	  
+		    ->send();	 
 	}
-	
-	
-	
-
 }

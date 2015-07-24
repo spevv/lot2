@@ -29,12 +29,12 @@ use yii\bootstrap\Modal;
 							        	}',
 							        'update' => 'function(event){
 							        	var format = "%-Sс";
-						                if(event.offset.minutes > 0) format = "%-M " + Text.plural(event.offset.minutes, ["минута ", "минуты ", "минут "]);
-						                if(event.offset.hours   > 0) format = "%-H " + Text.plural(event.offset.hours, ["час ", "часа ", "часов "]);
-						                if(event.offset.days    > 0) format = "%-D " + Text.plural(event.offset.days, ["день ", "дня ", "дней "])  + "%-H " + Text.plural(event.offset.hours, ["час ", "часа ", "часов "]);
-						                if(event.offset.weeks   > 0) format = "%-D " + Text.plural((7*event.offset.weeks)+event.offset.days, ["день ", "дня ", "дней "])  + "%-H " + Text.plural(event.offset.hours, ["час ", "часа ", "часов "]);
+						                if(event.offset.minutes > 0) format = "%-M " + pluralFunc(event.offset.minutes, ["минута ", "минуты ", "минут "]);
+						                if(event.offset.hours   > 0) format = "%-H " + pluralFunc(event.offset.hours, ["час ", "часа ", "часов "]);
+						                if(event.offset.days    > 0) format = "%-D " + pluralFunc(event.offset.days, ["день ", "дня ", "дней "])  + "%-H " +pluralFunc(event.offset.hours, ["час ", "часа ", "часов "]);
+						                if(event.offset.weeks   > 0) format = "%-D " + pluralFunc((7*event.offset.weeks)+event.offset.days, ["день ", "дня ", "дней "])  + "%-H " + pluralFunc(event.offset.hours, ["час ", "часа ", "часов "]);
 						                if(event.offset.days == 0 && event.offset.hours == 0 && event.offset.minutes == 0 && event.offset.seconds < 60) {
-						                    format = "<em>%-D " + Text.plural(event.offset.seconds, ["секунда", "секунды", "секунд"]) + "...</em>";
+						                    format = "<em>%-S " + pluralFunc(event.offset.seconds, ["секунда", "секунды", "секунд"]) + "...</em>";
 						                }
 						                $(this).html(event.strftime(format));
 							        }',
@@ -89,7 +89,7 @@ use yii\bootstrap\Modal;
 							<div class="lot-rate-table">
 								<?php foreach($rates as $value): ?>
 									<div class="lot-rate-table-row">
-										<div class="lot-rate-date"><?= Yii::$app->formatter->asDatetime($value->time, 'dd.MM hh:mm'); ?></div>
+										<div class="lot-rate-date"><?= Yii::$app->formatter->asDatetime($value->time, 'dd.MM HH:mm'); ?></div>
 										<div class="lot-rate-name"><?= $value->user2_id; ?></div>
 										<div class="lot-rate-price"><?= Yii::$app->formatter->asDecimal($value->price,0); ?> <span class="glyphicon glyphicon-ruble"></span></div>
 									</div>
@@ -101,7 +101,7 @@ use yii\bootstrap\Modal;
 								<?php $i=0; foreach($rates as $value): $i++; ?>
 									<?php if($i<=5): ?>
 										<div class="lot-rate-table-row">
-											<div class="lot-rate-date"><?= Yii::$app->formatter->asDatetime($value->time, 'dd.MM hh:mm'); ?></div>
+											<div class="lot-rate-date"><?= Yii::$app->formatter->asDatetime($value->time, 'dd.MM HH:mm'); ?></div>
 											<div class="lot-rate-name"><?= $value->user2_id; ?></div>
 											<div class="lot-rate-price"><?= Yii::$app->formatter->asDecimal($value->price,0); ?> <span class="glyphicon glyphicon-ruble"></span></div>
 										</div>
@@ -113,7 +113,7 @@ use yii\bootstrap\Modal;
 								<?php  $i=0; foreach($rates as $value): $i++; ?>
 									<?php if($i>5): ?>
 										<div class="lot-rate-table-row">
-											<div class="lot-rate-date"><?= Yii::$app->formatter->asDatetime($value->time, 'dd.MM hh:mm'); ?></div>
+											<div class="lot-rate-date"><?= Yii::$app->formatter->asDatetime($value->time, 'dd.MM HH:mm'); ?></div>
 											<div class="lot-rate-name"><?= $value->user2_id; ?></div>
 											<div class="lot-rate-price"><?= Yii::$app->formatter->asDecimal($value->price, 0); ?> <span class="glyphicon glyphicon-ruble"></span></div>
 										</div>
@@ -136,7 +136,9 @@ else{
 	$service = '';
 }
 $js = <<< JS
-
+	//console.log('start');
+	//setTimeout(	function(){ $.pjax({container: '#lot-left', timeout: 0, scrollTo: false}); }, 5000);
+	
 	obj = {
 		rateVar:  $rate->id,
 		modelId: $modelId,
@@ -149,6 +151,9 @@ $js = <<< JS
 		}
 	}
 	
+	
+	
+	
 	ReturnAlert = {
 		lotSuccess: function(){
 			$("#form-lot-left").submit();
@@ -158,7 +163,7 @@ $js = <<< JS
 				type: "success",
 				timer: 3000,
 				confirmButtonColor: "#2A8FBD",
-			    confirmButtonText: "Ставка принята",
+			    confirmButtonText: "Ставка принята"
 			});
 		},
 		
@@ -169,7 +174,17 @@ $js = <<< JS
 				type: "error",
 				timer: 3000,
 				confirmButtonColor: "#2A8FBD",
-			    confirmButtonText: "Закрыть",
+			    confirmButtonText: "Закрыть"
+			});
+		},
+		
+		lotWait: function(){
+			swal({
+				title: "Пожалуйста, подождите!",
+				text: "Подтвердите размещение записи в вашей соцсети, которе показано в новом окне браузера. Если у вас не появилось окно, то выш браузер блокирует его.",
+				type: "warning",
+				timer: 60000,
+				showConfirmButton: false
 			});
 		},
 		
@@ -181,9 +196,12 @@ $js = <<< JS
 				timer: 300000,
 				html: true,
 				showConfirmButton: false
-				//confirmButtonColor: "#2A8FBD",
-			    //confirmButtonText: "Сделать принята",
-			});
+			}, 
+			function(){
+				//console.log('');
+				location.reload();
+				}
+			);
 		}
 	}
 	
@@ -245,19 +263,22 @@ $js = <<< JS
 		    function (isConfirm) {
 		        if (isConfirm) {
 		        	if(obj.service){
-		        		console.log(obj.service);
+		        		//console.log(obj.service);
 		        		switch(obj.service){
 							case 'facebook':
+								ReturnAlert.lotWait();
 								ShareSocial.fb(obj.social.fb);
 								ShareSocial.wiretapping(ReturnAlert);
 								break;
 								
 							case 'vkontakte':
+								ReturnAlert.lotWait();
 								ShareSocial.vk(obj.social.vk);
 								ShareSocial.wiretapping(ReturnAlert);
 								break;
 								
 							case 'odnoklassniki':
+								ReturnAlert.lotWait();
 								ShareSocial.ok(obj.social.ok.url);
 								ShareSocial.wiretapping(ReturnAlert);
 								break;
@@ -278,14 +299,11 @@ $js = <<< JS
 	})	
 	
 	
-	
-	
-	
 	function finishLot()
 	{
 		var lotId = $modelId;
-		console.log('in finish lot');
-		console.log(lotId);
+		//console.log('in finish lot');
+		//console.log(lotId);
 	    var ajaxRequest = $.ajax({
 	        type: "post",
 	        dataType: 'json',
@@ -293,7 +311,7 @@ $js = <<< JS
 	        data: 'lot_id='+lotId
 	    })
 		  .done(function(msg) {
-		  	console.log(msg);
+		  	//console.log(msg);
 		  	
 		    if(msg.success == true)
 		    {
@@ -313,23 +331,26 @@ $js = <<< JS
 		    console.log( "error" );
 		  });
 	}
- var Text = {
-  plural: function(n, forms) {
-    var plural = 0;
-    if (n % 10 == 1 && n % 100 != 11) {
-      plural = 0;
-    } else {
-      if ((n % 10 >= 2 && n % 10<=4) && (n % 100 < 10 || n % 100 >= 20)) {
-        plural = 1;
-      } else {
-        plural = 2;
-      }
-    }
-    return forms[plural];
-  }
-};
 	
-	
+ 	function pluralFunc(n, forms) {
+		    var plural = 0;
+		    if (n % 10 == 1 && n % 100 != 11) 
+		    {
+		    	plural = 0;
+		    } 
+		    else 
+		    {
+		    	if ((n % 10 >= 2 && n % 10<=4) && (n % 100 < 10 || n % 100 >= 20)) 
+		    	{
+		        	plural = 1;
+		      	} 
+		      	else 
+		      	{
+		        	plural = 2;
+		      	}
+		    }
+		    return forms[plural];
+	  	}	
 	
 JS;
 $this->registerJs($js,  $this::POS_READY);

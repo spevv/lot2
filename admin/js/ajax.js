@@ -33,6 +33,7 @@ function get_coord(handleData, addr){
     jQuery.ajax({
         //dataType: 'xml',
         url: url,//url Р°РґСЂРµСЃ С„Р°Р№Р»Р° РѕР±СЂР°Р±РѕС‚С‡РёРєР°
+        crossDomain: true, // enable this
         success:function (data) {//РІРѕР·РІСЂР°С‰Р°РµРјС‹Р№ СЂРµР·СѓР»СЊС‚Р°С‚ РѕС‚ СЃРµСЂРІРµСЂР°
             coord = jQuery(data).find('Point pos').first().text();
             var cc = coord.split(' ');

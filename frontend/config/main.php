@@ -16,8 +16,6 @@ return [
     'homeUrl' => '/',
     
     'components' => [
-    
-    
     	'assetManager' => [
             'bundles' => [
                 'all' => [
@@ -58,24 +56,21 @@ return [
             ],
         ],
     
-    	/* 'view' => [
-            'class' => '\rmrevin\yii\minify\View',
-            'enableMinify' => YII_DEBUG,
-            'web_path' => 'http://lot2.localhost/', // path alias to web base
-            'base_path' => 'E:\xampp\htdocs\lot2', // path alias to web base
-            'minify_path' => 'E:\xampp\htdocs\lot2/minify', // path alias to save minify result
-            'js_position' => [ \yii\web\View::POS_END ], // positions of js files to be minified
-            'force_charset' => 'UTF-8', // charset forcibly assign, otherwise will use all of the files found charset
-            'expand_imports' => true, // whether to change @import on content
-            'compress_output' => true, // compress result html page
-        ],*/
-    
     	'request' => [
             'baseUrl' => '',
+            'class' => 'yii\web\Request', // поставил на время 22.07
         ],
         'opengraph' => [
 	        'class' => 'dragonjet\opengraph\OpenGraph',
 	    ],
+	    
+	   /* 'session' => [ // влияет на загрузку изображений, что бы сработало, нужно закоментить, а потом разкоментить
+	        'name' => 'FRONTENDSESSID',
+	        'cookieParams' => [
+	            'path' => '/',
+	        ],
+	    ],
+	    */
         'urlManager' => [
             'enablePrettyUrl' => true,
             'showScriptName' => false,
@@ -223,30 +218,21 @@ return [
         'eauth' => array(
 	            'class' => 'nodge\eauth\EAuth',
 	            'popup' => true, // Use the popup window instead of redirecting.
-	            'cache' => true, // Cache component name or false to disable cache. Defaults to 'cache' on production environments.
+	            'cache' => 'cache', // Cache component name or false to disable cache. Defaults to 'cache' on production environments.
 	            'cacheExpire' => 0, // Cache lifetime. Defaults to 0 - means unlimited.
-	            //'httpClient' => array(
-	                // uncomment this to use streams in safe_mode
-	                //'useStreamsFallback' => true, // времено поставил что бы протестить 09.07.15
-	            //),
-	            // spevv s
-	            /*'tokenStorage' => array(
-	                'class' => '@app\eauth\DatabaseTokenStorage',
-	            ),*/
-	            //spevv f
 	            'services' => array( // You can change the providers and their classes.
-	                 'facebook' => array(
+	                'facebook' => array(
 	                    // register your app here: https://developers.facebook.com/apps/
 	                    'class' => 'frontend\models\social\FacebookOAuth2Service',
-	                    'clientId' => '848319381869872', // '860300950671715', //'848319381869872',
+	                    'clientId' => '848319381869872', // '860300950671715', //'860398493995294',
 	                    'clientSecret' => 'db7acdbd30eadfb4647e46a64be0ee5f', //'078f0ef6a3682b6b659f8bbf32ae096c', // 'a50a97ca31c69603d73440e605ca906a',
 	                    'title' => '',
 	                ),
 	                'vkontakte' => array(
 	                    // register your app here: https://vk.com/editapp?act=create&site=1
 	                    'class' => 'frontend\models\social\VKontakteOAuth2Service',
-	                    'clientId' => '4923090', // '4923090', 4922757
-	                    'clientSecret' => 'bijIsupnRxwKSf3VdkAH', //'bijIsupnRxwKSf3VdkAH', g4VTjJiw97wko2AS8zjw
+	                    'clientId' => '4922757', // '4923090',
+	                    'clientSecret' => 'g4VTjJiw97wko2AS8zjw', //'bijIsupnRxwKSf3VdkAH',
 	                    'title' => '',
 	                ),
 	                'odnoklassniki' => array(
@@ -264,6 +250,16 @@ return [
         'user' => [
             'identityClass' => 'frontend\models\User',
             'enableAutoLogin' => true,
+            'enableSession'  => true,
+            //'autoRenewCookie' => true,
+            // test 230715
+            'identityCookie' => [
+	            'name' => '_identity',
+	            'path' => '/',
+	            'httpOnly' => true,
+	        ],
+	        // end test
+	        
         ],
         'log' => [
             'traceLevel' => YII_DEBUG ? 3 : 0,
@@ -274,17 +270,31 @@ return [
                     
                     'logFile' => '@app/runtime/logs/eauth.log',
                     'categories' => array('nodge\eauth\*'),
-                    'logVars' => array()
+                    'logVars' => []
                 ],
                  [
 		            'class' => 'yii\log\FileTarget',
-		            'levels' => ['info'],
+		            'levels' => ['info','error', 'warning'],
 		            'categories' => ['payment'],
 		            'logFile' => '@frontend/runtime/logs/payment.log',
 		            'maxFileSize' => 1024 * 2,
 		            'maxLogFiles' => 50,
 		            'logVars' => [],
 		        ],
+		         [
+                    'class' => 'yii\log\FileTarget',
+                    'levels' => ['info', 'error', 'warning'],
+                    'logFile' => '@console/runtime/logs/mainCron.log',
+                    'categories' => ['mainCron'],
+                    'logVars' => []
+                ],
+                [
+                    'class' => 'yii\log\FileTarget',
+                    'levels' => ['info', 'error', 'warning'],
+                    'logFile' => '@console/runtime/logs/delivery.log',
+                    'categories' => ['delivery'],
+                    'logVars' => []
+                ],
             ],
         ],
         'errorHandler' => [

@@ -22,7 +22,6 @@ use iutbay\yii2kcfinder\KCFinder;
 /* @var $model backend\models\Lot */
 /* @var $form yii\widgets\ActiveForm */
 
-
 ?>
 
 
@@ -63,8 +62,14 @@ use iutbay\yii2kcfinder\KCFinder;
 		</div>
 		
 		<div class="col-xs-6">
+	    	<?= $form->field($model, 'phone')->textInput(['maxlength' => true]) ?>
+		</div>
+		
+		<div class="col-xs-12">
 	    	<?= $form->field($model, 'address')->textInput(['maxlength' => true]) ?>
 		</div>
+		
+		
 	    
 	    <div class="col-xs-2">
 			<?= $form->field($model, 'public')->widget(SwitchBox::className(),[
@@ -88,9 +93,10 @@ use iutbay\yii2kcfinder\KCFinder;
 			]) ?>
 		</div>
 		<div class="col-xs-2">
-	    	<?= $form->field($model, 'phone')->widget(\yii\widgets\MaskedInput::classname(), [
+			
+	    	<?php /* $form->field($model, 'phone')->widget(\yii\widgets\MaskedInput::classname(), [
 			    'mask' => ['+7 (999) 999-9999'] // 'mask' => ['99-999-9999', '999-999-9999']
-			]) ?>
+			])*/ ?>
 		</div>
 		<div class="col-xs-3">	
 			<?=  $form->field($model, 'remaining_time')->widget(DateTimePicker::className(), [
@@ -183,12 +189,12 @@ use iutbay\yii2kcfinder\KCFinder;
 			]); ?>
 		</div>
 		
-		<div class="col-xs-12">
-		    <?= $form->field($model, 'short_description')->widget(CKEditor::className(), [
+		<!--<div class="col-xs-12">
+		    <?php /* $form->field($model, 'short_description')->widget(CKEditor::className(), [
 		        'options' => ['rows' => 6],
 		        'preset' => 'basic',
-		    ]) ?>
-	    </div>
+		    ])*/ ?>
+	    </div>-->
 		<div class="col-xs-12">
 		    <?= $form->field($model, 'complete_description')->widget(CKEditor::className(), [
 		        'options' => ['rows' => 6],

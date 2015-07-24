@@ -58,6 +58,16 @@ obj = {
 			});
 		},
 		
+		lotWait: function(){
+			swal({
+				title: "Пожалуйста, подождите!",
+				text: "Подтвердите размещение записи в вашей соцсети, которе показано в новом окне браузера. Если у вас не появилось окно, то выш браузер блокирует его.",
+				type: "warning",
+				timer: 60000,
+				showConfirmButton: false
+			});
+		},
+		
 		lotError: function(){
 			swal({
 				title: "Не удалось разместить запись!",
@@ -90,16 +100,19 @@ $( ".pay-button" ).on( "click", function(event) {
 	        		console.log(obj.service);
 	        		switch(obj.service){
 						case 'facebook':
+							ReturnAlert.lotWait();
 							ShareSocial.fb(obj.social.fb);
 							ShareSocial.wiretapping(ReturnAlert);
 							break;
 							
 						case 'vkontakte':
+							ReturnAlert.lotWait();
 							ShareSocial.vk(obj.social.vk);
 							ShareSocial.wiretapping(ReturnAlert);
 							break;
 							
 						case 'odnoklassniki':
+							ReturnAlert.lotWait();
 							ShareSocial.ok(obj.social.ok.url);
 							ShareSocial.wiretapping(ReturnAlert);
 							break;

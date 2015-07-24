@@ -203,12 +203,20 @@ class User extends ActiveRecord implements IdentityInterface
 
     public static function findIdentity($id) {
     	
-    	
         if (Yii::$app->getSession()->has('user-'.$id)) {
             return new self(Yii::$app->getSession()->get('user-'.$id));
         }
         else {
-            return isset(self::$users[$id]) ? new self(self::$users[$id]) : null;
+       		$userSocial = UserSocial::findOne(['user_id' => $id]);
+       		if($userSocial)
+       		{
+				$attributes = array(
+		            'id' => $id,
+		            'username' => $userSocial->name,
+		            'auth_key' => md5($id),
+		        );
+		        return new self($attributes);
+			}
         }
     }
 
@@ -235,14 +243,14 @@ class User extends ActiveRecord implements IdentityInterface
 			// создание настроек пользователя
 			$userSettings = new UserSettings();
 			$userSettings->user_id = $id;
-			$userSettings->save();
-			
+			$userSettings->save();	
 		}
        
         
         $attributes = array(
             'id' => $id,
             'username' => $service->getAttribute('name'),
+            'auth_key' => md5($id),
             'authKey' => md5($id),
             'profile' => $service->getAttributes(),
         );

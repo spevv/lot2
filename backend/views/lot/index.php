@@ -41,7 +41,12 @@ $this->params['breadcrumbs'][] = $this->title;
             ['class' => 'yii\grid\SerialColumn'],
 
             //'id',
-            'short_name',
+            [
+            	'attribute' => 'short_name',
+			    'value'=> 'short_name',
+            	'contentOptions'=>['style'=>'width: 350px;'],
+            ],
+            //'short_name',
             //'speaker',
            // 'date',
             //'price:currency:Цена',

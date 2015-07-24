@@ -11,7 +11,7 @@ use common\models\CheckLot;
 use yii\web\HttpException;
 use yii\web\NotFoundHttpException;
 
-use frontend\controllers\PG_Signature;
+use frontend\models\PG_Signature;
 
 class PayController extends \yii\web\Controller
 {
@@ -160,11 +160,11 @@ class PayController extends \yii\web\Controller
     private function sendEmail($rate, $code)
     {
     	$checkLot = new CheckLot();
-    	
-    	Yii::$app->params['emailText']['toPay']['payed']['email'] = $rate->user['email'];
-		Yii::$app->params['emailText']['toPay']['payed']['subject'] = sprintf(Yii::$app->params['emailText']['toPay']['payed']['subject'], $rate->lot['name']);
-		Yii::$app->params['emailText']['toPay']['payed']['messege'] = sprintf(Yii::$app->params['emailText']['toPay']['payed']['messege'], $rate->user['name'], $rate->lot['name'], $code);
-		return $checkLot->sendEmail(Yii::$app->params['emailText']['toPay']['payed']);
+    	$email = Yii::$app->params['emailText']['toPay']['payed'];
+    	$email['email'] = $rate->user['email'];
+		$email['subject'] = sprintf($email['subject'], $rate->lot['name']);
+		$email['messege'] = sprintf($email['messege'], $rate->user['name'], $rate->lot['name'], $code);
+		return $checkLot->sendEmail($email);
 	}
 	
 	
@@ -194,36 +194,42 @@ class PayController extends \yii\web\Controller
 			{
 				//var_dump( $rate->id);
 				//toPay($array);
-				$rateWinner = RateWinner::find()->where(['rate_id' => $rate->id])->one();
-							//var_dump($rateWinner);
-				if($rateWinner)
+				if($rate->refusal != 1)
 				{
-					$socialShare = $this->social($rate->lot, $rate);
-					$winnerTime = Yii::$app->formatter->asDatetime($rateWinner->winner_time, 'dd.MM.yyyy hh:mm');
-					
-					$content = $rate->user['name'].",  ".$winnerTime. ' вы победили в лоте, и выиграли <a href="'.Url::to(['lot/view', 'slug'=>$rate->lot['slug']]).'" target="_blank">"'.$rate->lot['name'].'"</a>'. ' оплатите ваш лот. Спасибо.';
-					$button = '1';
-					
-					$array = [
-						'order_id' => $rate->id,
-						'amount' =>$rate->price.'.00', //11.00
-						'description' => $rate->lot['name'],
-						'email' =>  $rate->user['email'],
-					];
-					
-		            return $this->render('index', [
-				    	'name' => 'Оплатите лот',
-				    	'content' => $content,
-				    	'button' => $button,
-				    	'url' => $this->pay($array),
-				        'social' => json_encode($socialShare['social']),
-				    ]);
+					$rateWinner = RateWinner::find()->where(['rate_id' => $rate->id])->one();
+							//var_dump($rateWinner);
+					if($rateWinner)
+					{
+						$socialShare = $this->social($rate->lot, $rate);
+						$winnerTime = Yii::$app->formatter->asDatetime($rateWinner->winner_time, 'dd.MM.yyyy hh:mm');
+						
+						$content = $rate->user['name'].",  ".$winnerTime. ' вы победили в лоте, и выиграли <a href="'.Url::to(['lot/view', 'slug'=>$rate->lot['slug']]).'" target="_blank">"'.$rate->lot['name'].'"</a>'. ' оплатите ваш лот. Спасибо.';
+						$button = '1';
+						
+						$array = [
+							'order_id' => $rate->id,
+							'amount' =>$rate->price.'.00', //11.00
+							'description' => $rate->lot['name'],
+							'email' =>  $rate->user['email'],
+						];
+						
+			            return $this->render('index', [
+					    	'name' => 'Оплатите лот',
+					    	'content' => $content,
+					    	'button' => $button,
+					    	'url' => $this->pay($array),
+					        'social' => json_encode($socialShare['social']),
+					    ]);
+					}
+					else
+					{
+						throw new HttpException(404,'Вы не имеете права находиться на этой странице.');
+					}
 				}
 				else
 				{
-					throw new HttpException(404,'Вы не имеете права находиться на этой странице.');
+					throw new HttpException(404,'Вы не имеете права находиться на этой странице. Ваше время оплаты истекло, лот перешел другому пользователю.');
 				}
-				
 			}
 			else
 			{

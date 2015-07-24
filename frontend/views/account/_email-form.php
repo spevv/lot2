@@ -35,18 +35,18 @@ use yii2mod\alert\Alert;
 			    ]
 			])->input('email', ['placeholder'=>'Ваш e-mail', 'required' => 'required']); ?>
 	    <?php ActiveForm::end(); ?>
-	 	<?php
-	  	if(\Yii::$app->session->getFlash('success')){
-	$js = <<< JS
-		$('#change-email').modal('hide');
-		
-		if($("#lot-left").length !== 0) {
-		  $.pjax({container: '#lot-left', timeout: 0, scrollTo: false});
-		}
-	JS;
-	$this->registerJs($js,  $this::POS_READY);
-		}
-	  	?>   
+<?php
+if(\Yii::$app->session->getFlash('success')){
+$js = <<< JS
+	$('#change-email').modal('hide');
+
+	if($("#lot-left").length !== 0) {
+	  $.pjax({container: '#lot-left', timeout: 0, scrollTo: false});
+	}
+JS;
+$this->registerJs($js,  $this::POS_READY);
+}
+?>   
 	    
 	    
 	<?php

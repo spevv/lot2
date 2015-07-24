@@ -33,12 +33,12 @@ use common\models\Plural;
 		    	if($lotRateStatistic){
 					if($lotRateStatistic->status)
 					{
-						$rate = Rate::find()->where(['lot_id'=>$model->id])->andWhere(['refusal'=>0])->andWhere(['>',  'id', $lotRateStatistic->last_rate])->orderBy('price desc')->one();
+						$rate = Rate::find()->where(['lot_id'=>$model->id])->andWhere(['refusal'=>0])->andWhere(['>',  'id', $lotRateStatistic->last_rate])->orderBy('id desc')->one();
 		    			$temp = 1;
 					}
 				}
 				if(!$temp){
-					$rate = Rate::find()->where(['lot_id'=>$model->id])->andWhere(['refusal'=>0])->orderBy('price desc')->one();
+					$rate = Rate::find()->where(['lot_id'=>$model->id])->andWhere(['refusal'=>0])->orderBy('id desc')->one();
 				} ?>
 				<?php if($rate): ?>
 					<?= Yii::$app->formatter->asDecimal($rate->price,0);?>
