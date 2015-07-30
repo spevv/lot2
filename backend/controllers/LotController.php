@@ -16,6 +16,9 @@ use common\models\LotRateStatistic;
 use common\models\GeobaseCity;
 use yii\filters\AccessControl;
 
+use yii\helpers\ArrayHelper;
+use common\models\GeobaseIp;
+
 /**
  * LotController implements the CRUD actions for Lot model.
  */
@@ -148,6 +151,7 @@ class LotController extends Controller
             return $this->render('create', [
                 'model' => $model,
                 'formRate' => '',
+				'cities' => $this->getCities(),
             ]);
         }
     }
@@ -178,7 +182,6 @@ class LotController extends Controller
      */
     public function actionUpdate($id)
     {
-
         $model = $this->findModel($id);
 
         if ($model->load(Yii::$app->request->post())) {
@@ -399,6 +402,7 @@ class LotController extends Controller
             return $this->render('update', [
                 'model' => $model,
                 'formRate' => $formRate,
+                'cities' => $this->getCities(),
             ]);
         }
     }
@@ -418,6 +422,37 @@ class LotController extends Controller
 		LotImage::deleteAll('lot_id ='. $id);	
         return $this->redirect(['index']);
     }
+
+	/*
+	 * return all Cities
+	 *
+	 * */
+	protected function getCities()
+	{
+		$data = Yii::$app->cache->get('getCities2');
+		if ($data === false) {
+
+			// $data нет в кэше, считаем с нуля.
+			$cities = GeobaseCity::find()
+				->joinWith('geobase')
+				->where(['geobase_ip.country_code'=> 'RU'])
+				->orderBy('name')
+				->all();
+
+			if($cities)
+			{
+				Yii::$app->cache->set('getCities2', ArrayHelper::map($cities, 'id', 'name'));
+			}
+			else
+			{
+				Yii::$app->cache->set('getCities', []);
+			}
+
+			// Сохраняем значение $data в кэше. Данные можно получить в следующий раз.
+		}
+		return $data;
+
+	}
 
     /**
      * Finds the Lot model based on its primary key value.

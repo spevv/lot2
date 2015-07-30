@@ -128,7 +128,7 @@ use iutbay\yii2kcfinder\KCFinder;
 		<div class="col-xs-6">
 		    <?= $form->field($model, 'city_id')->widget(Select2::classname(), [
 			    //'data' => array_merge(["" => ""], $data),
-			    'data' => ArrayHelper::map(GeobaseCity::find()->orderBy('name')->all(), 'id', 'name'),
+			    'data' => $cities,
 			    'language' => 'ru',
 				'options' => ['placeholder' => 'Город ...'],
 			    'pluginOptions' => [

@@ -44,6 +44,8 @@ class GeobaseCitySearch extends GeobaseCity
     {
         $query = GeobaseCity::find();
 
+        $query->joinWith('geobase', true, 'LEFT JOIN');
+
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
         ]);
@@ -63,8 +65,16 @@ class GeobaseCitySearch extends GeobaseCity
             'longitude' => $this->longitude,
         ]);
 
+        $query->andFilterWhere([
+            'geobase_ip.country_code'=> 'RU'
+        ]);
+        //$query->innerJoin('geobase', 'lot.id = subject_lot.lot_id AND subject_lot.subject_id = :cname', [':cname' => $this->subjectLots]);
+
+
         $query->andFilterWhere(['like', 'name', $this->name]);
-        
+
+        $query->groupBy(['geobase_city.id', 'geobase_ip.city_id']);
+        $query->orderBy('geobase_city.name');
 
         return $dataProvider;
     }

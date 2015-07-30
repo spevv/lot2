@@ -3,6 +3,7 @@
 namespace common\models;
 
 use Yii;
+use common\models\GeobaseCity;
 
 /**
  * This is the model class for table "geobase_ip".
@@ -46,5 +47,13 @@ class GeobaseIp extends \yii\db\ActiveRecord
             'country_code' => 'Код страны',
             'city_id' => 'City ID',
         ];
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getCity()
+    {
+        return $this->hasOne(GeobaseCity::className(), ['id' => 'city_id']);
     }
 }

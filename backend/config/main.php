@@ -27,6 +27,9 @@ return [
             /*'enablePrettyUrl' => true,
             'showScriptName' => false,*/
        /* ],*/
+        'cache' => [
+            'class' => 'yii\caching\FileCache',
+        ],
         'request' => [
 	        'csrfParam' => '_backendCSRF',
 	        'csrfCookie' => [
