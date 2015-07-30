@@ -16,7 +16,7 @@ return [
     'homeUrl' => '/',
     
     'components' => [
-    	'assetManager' => [
+    	/*'assetManager' => [
             'bundles' => [
                 'all' => [
                     'class' => 'yii\web\AssetBundle',
@@ -54,7 +54,7 @@ return [
                 	'depends' => ['all']
                 ],
             ],
-        ],
+        ],*/
     
     	'request' => [
             'baseUrl' => '',
@@ -221,30 +221,30 @@ return [
 	            'cache' => 'cache', // Cache component name or false to disable cache. Defaults to 'cache' on production environments.
 	            'cacheExpire' => 0, // Cache lifetime. Defaults to 0 - means unlimited.
 	            'services' => array( // You can change the providers and their classes.
-	                'facebook' => array(
-	                    // register your app here: https://developers.facebook.com/apps/
-	                    'class' => 'frontend\models\social\FacebookOAuth2Service',
-	                    'clientId' => '848319381869872', // '860300950671715', //'860398493995294',
-	                    'clientSecret' => 'db7acdbd30eadfb4647e46a64be0ee5f', //'078f0ef6a3682b6b659f8bbf32ae096c', // 'a50a97ca31c69603d73440e605ca906a',
-	                    'title' => '',
-	                ),
-	                'vkontakte' => array(
-	                    // register your app here: https://vk.com/editapp?act=create&site=1
-	                    'class' => 'frontend\models\social\VKontakteOAuth2Service',
-	                    'clientId' => '4922757', // '4923090',
-	                    'clientSecret' => 'g4VTjJiw97wko2AS8zjw', //'bijIsupnRxwKSf3VdkAH',
-	                    'title' => '',
-	                ),
-	                'odnoklassniki' => array(
-	                    // register your app here: http://dev.odnoklassniki.ru/wiki/pages/viewpage.action?pageId=13992188
-	                    // ... or here: http://www.odnoklassniki.ru/dk?st.cmd=appsInfoMyDevList&st._aid=Apps_Info_MyDev
-	                   // 'class' => 'nodge\eauth\services\extended\OdnoklassnikiOAuth2Service',
-	                    'class' => 'frontend\models\social\OdnoklassnikiOAuth2Service',
-	                    'clientId' => '1137718016',
-	                    'clientSecret' => '6320D57ED9A1D769B992081B',
-	                    'clientPublic' => 'CBAEDBNEEBABABABA',
-	                    'title' => '',
-	                ),
+                    'facebook' => array(
+                        // register your app here: https://developers.facebook.com/apps/
+                        'class' => 'frontend\models\social\FacebookOAuth2Service',
+                        'clientId' => '848319381869872', // '860300950671715', //'860398493995294',
+                        'clientSecret' => 'db7acdbd30eadfb4647e46a64be0ee5f', //'078f0ef6a3682b6b659f8bbf32ae096c', // 'a50a97ca31c69603d73440e605ca906a',
+                        'title' => '',
+                    ),
+                    'vkontakte' => array(
+                        // register your app here: https://vk.com/editapp?act=create&site=1
+                        'class' => 'frontend\models\social\VKontakteOAuth2Service',
+                        'clientId' => '4922757', // '4923090',
+                        'clientSecret' => 'g4VTjJiw97wko2AS8zjw', //'bijIsupnRxwKSf3VdkAH',
+                        'title' => '',
+                    ),
+                    'odnoklassniki' => array(
+                        // register your app here: http://dev.odnoklassniki.ru/wiki/pages/viewpage.action?pageId=13992188
+                        // ... or here: http://www.odnoklassniki.ru/dk?st.cmd=appsInfoMyDevList&st._aid=Apps_Info_MyDev
+                        // 'class' => 'nodge\eauth\services\extended\OdnoklassnikiOAuth2Service',
+                        'class' => 'frontend\models\social\OdnoklassnikiOAuth2Service',
+                        'clientId' => '1137718016',
+                        'clientSecret' => '6320D57ED9A1D769B992081B',
+                        'clientPublic' => 'CBAEDBNEEBABABABA',
+                        'title' => '',
+                    ),
 	            ),
 	        ),
         'user' => [

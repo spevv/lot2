@@ -3,7 +3,7 @@ use yii\helpers\Html;
 use yii\widgets\ListView;
 use yii\bootstrap\Nav;
 use nirvana\infinitescroll\InfiniteScrollPager;
-
+use yii\helpers\Url;
 /* @var $this yii\web\View */
 //$this->title = 'ИНТЕРНЕТ-АУКЦИОН БИЗНЕС-ОБРАЗОВАНИЯ';
 $this->title = $model->name;
@@ -28,20 +28,25 @@ if(isset($model->meta_keyword)){
 	        	?>
 			</div>
 			
-			<div class="by-partner">
-				<div class="by-partner-icon"></div>
-				<div class="by-partner-text" data-toggle="modal" data-target="#contactFormPartner">
-					Станьте нашим партнером
+			<a href="<?= Url::toRoute(['article/view', 'article' => 'organizatoram-obrazovanija']); ?>">
+				<div class="by-partner">
+					<div class="by-partner-icon"></div>
+					<div class="by-partner-text" data-toggle="modal" data-target="#contactFormPartner">
+						Станьте нашим партнером
+					</div>
 				</div>
-			</div>
-
+			</a>
 			<div class="left-banner">
 				
 			</div>
 		</div>
 </div>
 
+
+
+
 <!-- Modal -->
+<!--
 <div class="modal fade" id="contactFormPartner" tabindex="-1" role="dialog" aria-labelledby="contactModal" aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content">
@@ -55,6 +60,7 @@ if(isset($model->meta_keyword)){
     </div>
   </div>
 </div>
+-->
 
 
 

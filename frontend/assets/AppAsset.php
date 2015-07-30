@@ -22,8 +22,8 @@ class AppAsset extends AssetBundle
         'css/owl.carousel.css',
     ];
     public $js = [
-    	//"http://vk.com/js/api/openapi.js",
-    	//"http://crypto-js.googlecode.com/svn/tags/3.1.2/build/rollups/md5.js",
+    	"http://vk.com/js/api/openapi.js",
+    	"http://crypto-js.googlecode.com/svn/tags/3.1.2/build/rollups/md5.js",
     	'js/social.js',
     	'js/owl.carousel.min.js',
     	'js/script.js',

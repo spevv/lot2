@@ -147,7 +147,7 @@ text-align: left;
 }
 .head{
 	background: url(../image/bg1.png) no-repeat center center ;
-	height: 600px;
+	height: 448px;
 	width: 100%;
   background-position: center top;
   background-size: 1980px 100%;
@@ -254,7 +254,7 @@ color: #ffffff;
 font-size: 70px;
 font-weight: 700;
 text-align: center;
-margin-top: 100px;
+margin-top: 35px;
 }
 
 .pre-footer{

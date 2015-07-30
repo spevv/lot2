@@ -55,7 +55,7 @@ class CheckLot
 	{
 		$currentTime = Yii::$app->formatter->asDate('now', 'yyyy-MM-dd HH:mm:ss');
 		//$rateWinners =  RateWinner::find()->where(['<',  'send_email_time', $currentTime])->all();
-		$rateWinners =  RateWinner::find()->where(['<',  'send_email_time', $currentTime])->andWhere(['pay'=>NULL])->all();
+		$rateWinners =  RateWinner::find()->where(['<',  'send_email_time', $currentTime])->andWhere(['<>', 'pay', NULL])->all();
 		//var_dump($rateWinners);
 		if($rateWinners)
 		{

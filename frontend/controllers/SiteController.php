@@ -381,7 +381,7 @@ class SiteController extends Controller
 
             try {
                 if ($eauth->authenticate()) {
-//                  var_dump($eauth->getIsAuthenticated(), $eauth->getAttributes()); exit;
+                 // var_dump($eauth->getAttributes()); exit;
 
                     $identity = User::findByEAuth($eauth);
                     //var_dump($identity);

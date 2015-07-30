@@ -42,8 +42,8 @@ class Follower extends \yii\db\ActiveRecord
     {
         return [
             'id' => 'ID',
-            'mail' => 'e-mail',
-            'date' => 'Date',
+            'mail' => 'email',
+            'date' => 'Дата подписки',
         ];
     }
 }

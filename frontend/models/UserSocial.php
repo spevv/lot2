@@ -3,6 +3,7 @@
 namespace frontend\models;
 
 use Yii;
+use common\models\UserSettings;
 
 /**
  * This is the model class for table "user_social".
@@ -46,11 +47,19 @@ class UserSocial extends \yii\db\ActiveRecord
             'id' => 'ID',
             'client' => 'Client',
             'user_id' => 'User ID',
-            'name' => 'Name',
+            'name' => 'Имя',
             'email' => 'Email',
             'image' => 'Image',
             'link' => 'link',
         ];
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getSettings()
+    {
+        return $this->hasOne(UserSettings::className(), ['user_id' => 'user_id']);
     }
     
     

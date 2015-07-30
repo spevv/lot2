@@ -103,7 +103,7 @@ class Lot extends \yii\db\ActiveRecord
             'short_name' => 'Краткое имя',
             'speaker' => 'Спикер',
             'date' => 'Числа проведения',
-            'remaining_time' => 'Длительность слота',
+            'remaining_time' => 'Длительность лота',
             'price' => 'Цена',
             'coordinates' => 'Координаты (не обязательно)',
             'address' => 'Адрес',

@@ -39,7 +39,12 @@ AppAsset::register($this);
                 ['label' => 'Категории', 'url' => ['/category/index']], 
                 ['label' => 'Города', 'url' => ['/geobase-city/index']],
                 //['label' => 'Ставки', 'url' => ['/rate/index']],
-                ['label' => 'Победители', 'url' => ['/rate-winner/index']],
+                ['label' => 'Пользователи', 'items' => [
+                    ['label' => 'Победители', 'url' => ['/rate-winner/index']],
+                    ['label' => 'Подписчики', 'url' => ['/follower/index']],
+                    ['label' => 'Пользователи', 'url' => ['/user-social/index']],
+                    ],
+                ],
                 ['label' => 'Комментарии', 'url' => ['/comment/index']],
                 ['label' => 'Лоты', 'url' => ['/lot/index']],
             ];

@@ -41,7 +41,7 @@ Url::remember();
 				<div class="row">
 					<div class="col-xs-12">
 						<div class="top-menu">
-							<a href="<?= Url::toRoute(['article/view', 'article' => 'organizatoram-treningov']); ?>">Организаторам тренингов</a>
+							<a href="<?= Url::toRoute(['article/view', 'article' => 'organizatoram-obrazovanija']); ?>">Организаторам образования</a>
 							<a href="<?= Url::toRoute(['comment/comments']); ?>">Отзывы о сайте</a>
 							<?php if(Yii::$app->user->isGuest):	?>
 								<?php Modal::begin([
@@ -158,7 +158,7 @@ Url::remember();
 				</div>
 				<div class="col-xs-3">
 					<div class="prefooter-phone">
-						<div>8 (495) 123 45 67</div>
+						<!--<div>8 (495) 123 45 67</div>-->
 						<a href="mailto:info@eduhot.ru">info@eduhot.ru</a>
 					</div>
 				</div>

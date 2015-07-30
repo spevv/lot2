@@ -210,12 +210,26 @@ class User extends ActiveRecord implements IdentityInterface
        		$userSocial = UserSocial::findOne(['user_id' => $id]);
        		if($userSocial)
        		{
-				$attributes = array(
+       			
+   			   $attributes = array(
 		            'id' => $id,
 		            'username' => $userSocial->name,
 		            'auth_key' => md5($id),
+		            'authKey' => md5($id),
+		            'profile' =>[
+		            //	$identity->profile['service'].'-'.$identity->profile['id'];
+		            ],
 		        );
+		        $attributes['profile']['service'] = $userSocial->client;
+		        Yii::$app->getSession()->set('user-'.$id, $attributes);
 		        return new self($attributes);
+			       			
+				/*$attributes = array(
+		            'id' => $id,
+		            'username' => $userSocial->name,
+		            'auth_key' =>  
+		        );
+		        return new self($attributes);*/
 			}
         }
     }
@@ -253,6 +267,7 @@ class User extends ActiveRecord implements IdentityInterface
             'auth_key' => md5($id),
             'authKey' => md5($id),
             'profile' => $service->getAttributes(),
+            //'user_id' => $service->getAttributes(),
         );
         $attributes['profile']['service'] = $service->getServiceName();
         Yii::$app->getSession()->set('user-'.$id, $attributes);

@@ -33,7 +33,8 @@ class CommentController extends \yii\web\Controller
 		$identity = Yii::$app->getUser()->getIdentity();
 	    if (isset($identity->profile)) 
 	    {
-	    	$user2_id =  $identity->profile['service'].'-'.$identity->profile['id'];
+	    	//$user2_id =  $identity->profile['service'].'-'.$identity->profile['id'];
+	    	$user2_id =  $identity->id;
 	    }
 	    else
 	    {

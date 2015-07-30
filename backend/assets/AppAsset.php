@@ -29,5 +29,6 @@ class AppAsset extends AssetBundle
         'yii\web\YiiAsset',
         'yii\bootstrap\BootstrapAsset',
         'yii2mod\alert\AlertAsset',
+        'iutbay\yii2fontawesome\FontAwesomeAsset',
     ];
 }

@@ -41,8 +41,8 @@ class AccountController extends \yii\web\Controller
     	$identity = Yii::$app->getUser()->getIdentity();
 	    if (isset($identity->profile)) 
 	    {
-	    	$user2_id =  $identity->profile['service'].'-'.$identity->profile['id'];
-	    	
+	    	//$user2_id =  $identity->profile['service'].'-'.$identity->profile['id'];
+	    	$user2_id =  $identity->id;
 	    	$rates = Rate::find()->where(['user2_id'=>$user2_id])->all();
 	    
 	    
@@ -72,7 +72,8 @@ class AccountController extends \yii\web\Controller
     	$identity = Yii::$app->getUser()->getIdentity();
 	    if (isset($identity->profile)) 
 	    {
-	    	$user2_id =  $identity->profile['service'].'-'.$identity->profile['id'];
+	    	//$user2_id =  $identity->profile['service'].'-'.$identity->profile['id'];
+	    	$user2_id =  $identity->id;
 	    	$user = UserSocial::find()->where(['user_id' => $user2_id])->one();
 			
 			$post = Yii::$app->request->post();
@@ -115,41 +116,55 @@ class AccountController extends \yii\web\Controller
     {
     	
     	$identity = Yii::$app->getUser()->getIdentity();
-	    if (isset($identity->profile)) 
+
+	    if (isset($identity->id)) 
 	    {
-	    	$user2_id =  $identity->profile['service'].'-'.$identity->profile['id'];
-	    	$user2_id =  $identity->profile['service'].'-'.$identity->profile['id'];
-	    	$userSettings = UserSettings::find()->where(['user_id'=> $user2_id])->one();
-			
-			$post = Yii::$app->request->post();
-	    	if($post)
-	    	{
-				if ($userSettings->load($post)) {
-					//var_dump('load');
-			        if ($userSettings->validate()) {
-			            // form inputs are valid, do something here
-			            //$model->date = Yii::$app->formatter->asDate('now', 'yyyy-MM-dd HH:mm:ss');
-			            $userSettings->save();
-			            var_dump('in');
-			            Yii::$app->session->setFlash('success', 'Поздравляем! Вы успешно сохранили настройки.');
-			        }
-			    }
-				return $this->renderPartial('_settings-form', [
-	                'model' => $userSettings,
-	            ]);
-				
+	    	
+	    	//$user2_id =  $identity->profile['service'].'-'.$identity->profile['id'];
+	    	//$user2_id =  $identity->profile['service'].'-'.$identity->profile['id'];
+	    	$user2_id =  $identity->id;
+	    	
+	    	$userSettings = UserSettings::find()->where(['user_id' => $user2_id])->one();
+	   		//var_dump($user2_id); die;
+			if($userSettings)
+			{
+					
+				$post = Yii::$app->request->post();
+		    	if($post)
+		    	{
+					if ($userSettings->load($post)) {
+						//var_dump('load');
+				        if ($userSettings->validate()) {
+				            // form inputs are valid, do something here
+				            //$model->date = Yii::$app->formatter->asDate('now', 'yyyy-MM-dd HH:mm:ss');
+				            $userSettings->save();
+				            //var_dump('in');
+				            Yii::$app->session->setFlash('success', 'Поздравляем! Вы успешно сохранили настройки.');
+				        }
+				    }
+					return $this->renderPartial('_settings-form', [
+		                'model' => $userSettings,
+		            ]);
+					
+				}
+				else
+				{
+					
+					return $this->render('email', [
+			        	'menu' => $this->getMenu(),
+			        	'emailForm' => $this->renderPartial('_settings-form', [
+			                'model' => $userSettings,
+			            ]),
+			        ]);
+				}
 			}
 			else
 			{
-				return $this->render('email', [
-		        	'menu' => $this->getMenu(),
-		        	'emailForm' => $this->renderPartial('_settings-form', [
-		                'model' => $userSettings,
-		            ]),
-		        ]);
+				$userSettings = new UserSettings();
+				$userSettings->user_id = $user2_id;
+				$userSettings->save();
+				return $this->redirect(['/account/email']);
 			}
-			
-	    	
 	    }
     /*	
     	$identity = Yii::$app->getUser()->getIdentity();

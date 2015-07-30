@@ -16,7 +16,7 @@ use frontend\models\ContactForm2;
 class ArticleController extends Controller
 {
 	
-	public function behaviors()
+	/*public function behaviors()
 	{
 	    return [
 	        [
@@ -25,7 +25,7 @@ class ArticleController extends Controller
 	            'duration' => 3600,
 	        ],
 	    ];
-	}
+	}*/
 
     /**
      * Lists all Article models.

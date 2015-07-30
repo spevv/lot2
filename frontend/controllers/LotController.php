@@ -7,8 +7,6 @@ use common\models\Lot;
 use frontend\models\LotSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
-//use yii\filters\VerbFilter;
-
 use yii\helpers\Html;
 use yii\helpers\Url;
 use yii\web\Response;
@@ -62,6 +60,7 @@ class LotController extends Controller
     
     public function actionContact($id)
     {  	
+    //var_dump('in');
         $model = new ContactForm2();
         
         if ($model->load(Yii::$app->request->post()) ) {
@@ -92,7 +91,8 @@ class LotController extends Controller
 	    	$identity = Yii::$app->getUser()->getIdentity();
 		    if (isset($identity->profile)) 
 		    {
-		    	$user_id =  $identity->profile['service'].'-'.$identity->profile['id'];
+		    	//$user_id =  $identity->profile['service'].'-'.$identity->profile['id'];
+		    	$user_id =  $identity->id;
 		    	//$rate = Rate::find()->where(['lot_id'=>$post['lot_id']])->orderBy('price desc')->one();
 		    	
 		    	
@@ -167,7 +167,8 @@ class LotController extends Controller
 			$identity = Yii::$app->getUser()->getIdentity();
 		    if (isset($identity->profile)) 
 		    {
-		    	$user2_id =  $identity->profile['service'].'-'.$identity->profile['id'];
+		    	//$user2_id =  $identity->profile['service'].'-'.$identity->profile['id'];
+		    	$user2_id =  $identity->id;
 		    }
 		    else
 		    {
@@ -216,7 +217,8 @@ class LotController extends Controller
     	$identity = Yii::$app->getUser()->getIdentity();
 	    if (isset($identity->profile)) 
 	    {
-	    	$user2_id =  $identity->profile['service'].'-'.$identity->profile['id'];
+	    	//$user2_id =  $identity->profile['service'].'-'.$identity->profile['id'];
+	    	$user2_id =  $identity->id;
 	    	$user = UserSocial::find()->where(['user_id' => $user2_id])->one();
 		    if($user)
 		    {
