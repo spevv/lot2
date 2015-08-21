@@ -6,29 +6,6 @@ use yii\bootstrap\Nav;
 use yii\widgets\ListView;
 use nirvana\infinitescroll\InfiniteScrollPager;
 
-$articles = [
-	[
-		'label' => 'О проекте', 
-		'linkOptions'=> ['class'=> ''], 
-		'url'=> ['article/view', 'article' => 'o-proyekte'],
-	],
-	[
-		'label' => 'Отзывы', 
-		'linkOptions'=> ['class'=> ''], 
-		'url'=> ['comment/comments'],
-	],
-	[
-		'label' => 'Правила участвия', 
-		'linkOptions'=> ['class'=> ''], 
-		'url'=> ['article/view', 'article' => 'pravila-uchastiya'],
-	],
-	[
-		'label' => 'Как развиваться дальше?', 
-		'linkOptions'=> ['class'=> ''], 
-		'url'=> ['article/view', 'article' => 'kak-razvivatsya-deshevle'], 
-	],
-];
-
 /* @var $this yii\web\View */
 /* @var $model common\models\Article */
 

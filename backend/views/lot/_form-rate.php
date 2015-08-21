@@ -23,43 +23,9 @@ use yii2mod\alert\Alert;
 	        	<?= $form->field($model, 'lot_id')->hiddenInput();  ?> 
 	        	<?= $form->field($model, 'status')->hiddenInput();  ?> 
 	            <div class="form-group">
-	                <?= Html::submitButton('Повторно выложить лот', ['class' => 'btn btn-primary clear-lot', 'data-method' => 'post', 'data-confirm' => 'Вы действительно хотите удалить все сделаные ставки этого лота?']) ?>
+	                <?= Html::submitButton('Повторно выложить лот', ["data-toggle"=>"tooltip", "title"=>"Вся история ставок будет обновлена. При повторном вылаживании лота не забудьте установить новое время лота.", 'class' => 'btn btn-primary clear-lot', 'data-method' => 'post', 'data-confirm' => 'Вы действительно хотите удалить все сделаные ставки этого лота?']) ?>
 	            </div>
 	        <?php ActiveForm::end(); ?>
 	    </div>
 	</div>
-	
-	
-<?php
-$js = <<< JS
-
-	/*$( ".clear-lot" ).on( "click", function(event) {
-		
-		event.preventDefault();
-		
-		swal({
-		    title: "Повторно выложить лот?",
-		    text: "Вы удалите все сделанные ставки данного лота.",
-		    type: "warning",
-		    showCancelButton: true,
-		    confirmButtonColor: "#2A8FBD",
-		    confirmButtonText: "Да, повторно выложить",
-		    cancelButtonText: "Отмена",
-		    closeOnConfirm: false,
-		    closeOnCancel: true
-		    },
-		    function (isConfirm) {
-		        if (isConfirm) {
-		        	$("#form-rate-form").submit();
-		        	swal("Удалено!", "Вы очистили все ставки лота.", "success");   
-		        } 
-		    }
-		);	
-	});*/
-	
-
-	
-JS;
-$this->registerJs($js,  $this::POS_READY);
-?>	
 <?php Pjax::end(); ?>

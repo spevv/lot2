@@ -31,30 +31,30 @@ use iutbay\yii2kcfinder\KCFinder;
 
 	    <?php $form = ActiveForm::begin(); ?>
 	    <div class="col-xs-6">
-	    	<?= $form->field($model, 'short_name')->textInput(['maxlength' => true]) ?>
+	    	<?= $form->field($model, 'short_name', ['labelOptions'=>["data-toggle"=>"tooltip", "title"=>"Введите краткое имя лота. Будет вводиться на главной и на странице категории."]])->textInput(['maxlength' => true]) ?>
 		</div>
 		
 		 <div class="col-xs-6">
-	    	<?= $form->field($model, 'slug')->textInput(['maxlength' => true]) ?>
+	    	<?= $form->field($model, 'slug', ['labelOptions'=>["data-toggle"=>"tooltip", "title"=>"ЧПУ (урл лота), формируется автоматически от заданого краткого имени. Или можете отредактировать сами. Это поле должно быть уникальным."]])->textInput(['maxlength' => true]) ?>
 		</div>
 		
 		<div class="col-xs-12">
-	    	<?= $form->field($model, 'name')->textInput(['maxlength' => true]) ?>
+	    	<?= $form->field($model, 'name', ['labelOptions'=>["data-toggle"=>"tooltip", "title"=>"Введите краткое имя лота. Будет вводиться на главной и на странице категории."]])->textInput(['maxlength' => true]) ?>
 		</div>
 		
 		
 		
 		<div class="col-xs-6">
-	   		<?= $form->field($model, 'speaker')->textInput(['maxlength' => true]) ?>
+	   		<?= $form->field($model, 'speaker', ['labelOptions'=>["data-toggle"=>"tooltip", "title"=>"Спикер - имя человек который проводит трейнинг."]])->textInput(['maxlength' => true]) ?>
 	    </div>
 		<div class="col-xs-6">
-	    	<?= $form->field($model, 'date')->textInput(['maxlength' => true]) ?>
+	    	<?= $form->field($model, 'date', ['labelOptions'=>["data-toggle"=>"tooltip", "title"=>"Числа проведения трейнинга."]])->textInput(['maxlength' => true]) ?>
 	    </div>
 	    
 		
 		<div class="col-xs-6">
 	    	<?php // $form->field($model, 'site')->textInput(['maxlength' => true]) ?>
-	    	<?= $form->field($model, 'site')->widget(\yii\widgets\MaskedInput::classname(), [
+	    	<?= $form->field($model, 'site', ['labelOptions'=>["data-toggle"=>"tooltip", "title"=>"Url трейнинга. Источник подробной информации"]])->widget(\yii\widgets\MaskedInput::classname(), [
 			    'clientOptions' => [
 			        'alias' =>  'url',
 			    ],
@@ -62,17 +62,17 @@ use iutbay\yii2kcfinder\KCFinder;
 		</div>
 		
 		<div class="col-xs-6">
-	    	<?= $form->field($model, 'phone')->textInput(['maxlength' => true]) ?>
+	    	<?= $form->field($model, 'phone', ['labelOptions'=>["data-toggle"=>"tooltip", "title"=>"Номер телефона или номера, что бы задать номера используйте между ними тег <br>, что бы разделить их. Например: +7 (111) 111-1111<br>+7 (111) 111-1111."]])->textInput(['maxlength' => true]) ?>
 		</div>
 		
 		<div class="col-xs-12">
-	    	<?= $form->field($model, 'address')->textInput(['maxlength' => true]) ?>
+	    	<?= $form->field($model, 'address', ['labelOptions'=>["data-toggle"=>"tooltip", "title"=>"Адрес проведения трейнинга. Нужно указать для автоматического заполнения коорденат."]])->textInput(['maxlength' => true]) ?>
 		</div>
 		
 		
 	    
 	    <div class="col-xs-2">
-			<?= $form->field($model, 'public')->widget(SwitchBox::className(),[
+			<?= $form->field($model, 'public', ['labelOptions'=>["data-toggle"=>"tooltip", "title"=>"Публиковать?  Если Выкл, то лот не будет выведен на сайте."]])->widget(SwitchBox::className(),[
 			    'options' => [
 			        'label' => false
 			    ],
@@ -87,7 +87,9 @@ use iutbay\yii2kcfinder\KCFinder;
 		</div>
 
 		<div class="col-xs-2">
-	    	<?= $form->field($model, 'price', [ 'addon' => ['append' => ['content'=>'<i class="glyphicon glyphicon-ruble"></i>']]])->widget(\yii\widgets\MaskedInput::classname(), [
+	    	<?= $form->field($model, 'price', [
+				'labelOptions'=>["data-toggle"=>"tooltip", "title"=>"Реальная цена проведения трейнинга. Валюта - рубли."],
+				'addon' => ['append' => ['content'=>'<i class="glyphicon glyphicon-ruble"></i>']]])->widget(\yii\widgets\MaskedInput::classname(), [
 			    'mask' => '9',
 			    'clientOptions' => ['repeat' => 10, 'greedy' => false]
 			]) ?>
@@ -99,7 +101,7 @@ use iutbay\yii2kcfinder\KCFinder;
 			])*/ ?>
 		</div>
 		<div class="col-xs-3">	
-			<?=  $form->field($model, 'remaining_time')->widget(DateTimePicker::className(), [
+			<?=  $form->field($model, 'remaining_time', ['labelOptions'=>["data-toggle"=>"tooltip", "title"=>"Выберите дату и время, до какого времени будут идти торги за лот. Если указаное время уже прошло, значить лот уже был отыгран."]])->widget(DateTimePicker::className(), [
 			    //'language' => 'ru',
 			    //'size' => 'ms',
 			    'options' => ['placeholder' => 'Выберите время...'],
@@ -118,7 +120,7 @@ use iutbay\yii2kcfinder\KCFinder;
 		
 		<div class="col-xs-3">
 	    	<?php // $form->field($model, 'coordinates')->textInput(['maxlength' => true]) ?>
-	    	<?= $form->field($model, 'coordinates')->widget(\yii\widgets\MaskedInput::classname(), [
+	    	<?= $form->field($model, 'coordinates', ['labelOptions'=>["data-toggle"=>"tooltip", "title"=>"Координаты - точный адрсе проведения трейнинга. Формируются автоматически  Пример: 45.02485800, 39.11931300."]])->widget(\yii\widgets\MaskedInput::classname(), [
 			    'mask' => ['99.99999999, 99.99999999'] // 'mask' => ['99-999-9999', '999-999-9999']
 			]) ?>
 		</div>
@@ -126,7 +128,7 @@ use iutbay\yii2kcfinder\KCFinder;
 
 		
 		<div class="col-xs-6">
-		    <?= $form->field($model, 'city_id')->widget(Select2::classname(), [
+		    <?= $form->field($model, 'city_id', ['labelOptions'=>["data-toggle"=>"tooltip", "title"=>"Выьерите город (города) в которых проводятся трейнинги."]])->widget(Select2::classname(), [
 			    //'data' => array_merge(["" => ""], $data),
 			    'data' => $cities,
 			    'language' => 'ru',
@@ -138,7 +140,7 @@ use iutbay\yii2kcfinder\KCFinder;
 		</div>
 		
 		<div class="col-xs-6">
-		    <?= $form->field($model, 'subjects')->widget(Select2::classname(), [
+		    <?= $form->field($model, 'subjects', ['labelOptions'=>["data-toggle"=>"tooltip", "title"=>"Выьерите тему (темы) до которых относится трейнинги."]])->widget(Select2::classname(), [
 			    //'data' => array_merge(["" => ""], $data),
 			    'data' => ArrayHelper::map(Subject::find()->all(), 'id', 'name'),
 			    'language' => 'ru',
@@ -150,7 +152,7 @@ use iutbay\yii2kcfinder\KCFinder;
 		</div>
 		
 		<div class="col-xs-6  ">
-		    <?= $form->field($model, 'branchs')->widget(Select2::classname(), [
+		    <?= $form->field($model, 'branchs', ['labelOptions'=>["data-toggle"=>"tooltip", "title"=>"Выьерите отрасль (отрасли) до которых относится трейнинг."]])->widget(Select2::classname(), [
 			    //'data' => array_merge(["" => ""], $data),
 			    'data' => ArrayHelper::map(Branch::find()->all(), 'id', 'name'),
 			    'language' => 'ru',
@@ -162,7 +164,7 @@ use iutbay\yii2kcfinder\KCFinder;
 		</div>
 		
 		<div class="col-xs-6  ">
-		    <?= $form->field($model, 'categories')->widget(Select2::classname(), [
+		    <?= $form->field($model, 'categories', ['labelOptions'=>["data-toggle"=>"tooltip", "title"=>"Выьерите категорию (категории) к которым относится трейнинг."]])->widget(Select2::classname(), [
 			    //'data' => array_merge(["" => ""], $data),
 			    'data' => ArrayHelper::map(Category::find()->all(), 'id', 'name'),
 			    'language' => 'ru',
@@ -176,7 +178,7 @@ use iutbay\yii2kcfinder\KCFinder;
 		<div class="clearfix"></div>
 		<div class="col-xs-2">
 	    	<?php  // $form->field($model, 'image')->textInput(['maxlength' => true]) ?>
-	    	<?=  $form->field($model, 'image')->widget(KCFinderInputWidget::className(), [
+	    	<?=  $form->field($model, 'image', ['labelOptions'=>["data-toggle"=>"tooltip", "title"=>"Выьерите изображение, будет показана на главной или на страницах категорий. Так же может подгружать новые изображения."]])->widget(KCFinderInputWidget::className(), [
 			    //'multiple' => true,
 
 			]); ?>
@@ -184,7 +186,7 @@ use iutbay\yii2kcfinder\KCFinder;
 		
 		<div class="col-xs-10">
 	    	<?php // $form->field($model, 'image')->textInput(['maxlength' => true]) ?>
-	    	<?php echo $form->field($model, 'lotImages')->widget(KCFinderInputWidget::className(), [
+	    	<?php echo $form->field($model, 'lotImages', ['labelOptions'=>["data-toggle"=>"tooltip", "title"=>"Выьерите изображения. Будут показаны на странице лота в слайдере."]])->widget(KCFinderInputWidget::className(), [
 			    'multiple' => true,
 			]); ?>
 		</div>
@@ -196,28 +198,28 @@ use iutbay\yii2kcfinder\KCFinder;
 		    ])*/ ?>
 	    </div>-->
 		<div class="col-xs-12">
-		    <?= $form->field($model, 'complete_description')->widget(CKEditor::className(), [
+		    <?= $form->field($model, 'complete_description', ['labelOptions'=>["data-toggle"=>"tooltip", "title"=>"Полное описание трейнинга. Выводится на странице лота."]])->widget(CKEditor::className(), [
 		        'options' => ['rows' => 6],
 		        'preset' => 'full',
 		    ]) ?>
 	    </div>
 		<div class="col-xs-12">
-		    <?= $form->field($model, 'condition')->widget(CKEditor::className(), [
+		    <?= $form->field($model, 'condition', ['labelOptions'=>["data-toggle"=>"tooltip", "title"=>"Условия проведения лота. Выводтся на странице лота."]])->widget(CKEditor::className(), [
 		        'options' => ['rows' => 6],
 		        'preset' => 'full',
 		    ]) ?>
 		</div>
 	    
 		<div class="col-xs-12">
-	    	<?= $form->field($model, 'meta_description')->textInput(['maxlength' => true]) ?>
+	    	<?= $form->field($model, 'meta_description', ['labelOptions'=>["data-toggle"=>"tooltip", "title"=>"Meta description - информация для поисковиков."]])->textInput(['maxlength' => true]) ?>
 		</div>
 		<div class="col-xs-12">
-	    	<?= $form->field($model, 'meta_keywords')->textInput(['maxlength' => true]) ?>
+	    	<?= $form->field($model, 'meta_keywords', ['labelOptions'=>["data-toggle"=>"tooltip", "title"=>"Meta keywords - информация для поисковиков."]])->textInput(['maxlength' => true]) ?>
 		</div>
 		
 		<div class="col-xs-12">
 		    <div class="form-group">
-		        <?= Html::submitButton($model->isNewRecord ? 'Создать' : 'Обновить', ['class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-primary']) ?>
+		        <?= Html::submitButton($model->isNewRecord ? 'Создать' : 'Обновить', ["data-toggle"=>"tooltip", "title"=>"Сохранить данные.", 'class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-primary']) ?>
 		    </div>
 		</div>
 
@@ -235,7 +237,10 @@ use iutbay\yii2kcfinder\KCFinder;
 $js = <<< JS
 
 $("#lot-short_name").syncTranslit({destination: "lot-slug"});
-	
+
+$(function () {
+  $('[data-toggle="tooltip"]').tooltip()
+})
 JS;
 $this->registerJs($js,  $this::POS_READY);
 ?>	

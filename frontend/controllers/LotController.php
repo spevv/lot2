@@ -64,7 +64,7 @@ class LotController extends Controller
         $model = new ContactForm2();
         
         if ($model->load(Yii::$app->request->post()) ) {
-            if ($model->sendEmail(Yii::$app->params['adminEmail'])) {
+            if ($model->sendEmailTo(Yii::$app->params['adminEmail'])) {
                 Yii::$app->session->setFlash('success', 'Поздравляем! Ваше сообщение успешно отправлено.');
             } else {
                 Yii::$app->session->setFlash('error', 'Не удалось отправить сообщение.');
@@ -437,30 +437,32 @@ class LotController extends Controller
 		}
 		return $rates;
 	}
-    
-    // ставка была перебита
+
+	/**
+	 *  ставка была перебита
+	 *
+	 * @param $id - rate  id
+	 * @return bool|true
+	 */
     private function slewRate($id)
     {
     	$rates = $this->getRateState($id);
     	$ratesInfo = $this->getRateAndRetes($rates, $id);
-    	
-    	//var_dump($ratesInfo['rates'][1]);
-		//$rate = Rate::find()->where(['lot_id'=>$id])->orderBy('price desc')->offset($offset)->one();
 		$rate = $ratesInfo['rates'][1];
 		if($rate)
 		{
-			//$rateWinner = Rate::find()->where(['lot_id'=>$id])->orderBy('price desc')->one();
-			$rateWinner = $ratesInfo['rates'][0];
-			$checkLot = new CheckLot();
-			$url = Yii::$app->urlManager->createAbsoluteUrl(['lot/view', 'slug'=>$rate->lot['slug']]);
-			Yii::$app->params['emailText']['slewRate']['email'] = $rate->user['email'];
-			Yii::$app->params['emailText']['slewRate']['messege'] = sprintf(Yii::$app->params['emailText']['slewRate']['messege'], $rate->user['name'],$rate->lot['name'], $rateWinner->user['name'], Yii::$app->formatter->asDatetime($rate->lot['remaining_time'], 'dd.MM HH:mm'), $url);
-					
-	    	return $checkLot->sendEmail(Yii::$app->params['emailText']['slewRate']);
+			if($rate->user->settings['slewRate'] == 1)
+			{
+				$rateWinner = $ratesInfo['rates'][0];
+				$checkLot = new CheckLot();
+				$url = Yii::$app->urlManager->createAbsoluteUrl(['lot/view', 'slug'=>$rate->lot['slug']]);
+				$email = Yii::$app->params['emailText']['slewRate'];
+				$email['email'] = $rate->user['email'];
+				$email['messege'] = sprintf($email['messege'], $rate->user['name'],$rate->lot['name'], $rateWinner->user['name'], Yii::$app->formatter->asDatetime($rate->lot['remaining_time'], 'dd.MM HH:mm'), $url);
+				return $checkLot->sendEmail($email);
+			}
 		}
 		return false;
-		
-		
 	}
     
     // получить ставки

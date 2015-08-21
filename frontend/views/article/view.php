@@ -4,34 +4,6 @@ use yii\helpers\Html;
 use yii\helpers\Url;
 use yii\bootstrap\Nav;
 
-
-/*use yii2mod\alert\Alert;
-Yii::$app->getSession()->setFlash('error', 'Для того что бы перейти к оплате, вы должны авторизироваться.');
-Alert::widget();*/
-
-$articles = [
-	[
-		'label' => 'О проекте', 
-		'linkOptions'=> ['class'=> ''], 
-		'url'=> ['article/view', 'article' => 'o-proyekte'],
-	],
-	[
-		'label' => 'Отзывы', 
-		'linkOptions'=> ['class'=> ''], 
-		'url'=> ['comment/comments'],
-	],
-	[
-		'label' => 'Правила участвия', 
-		'linkOptions'=> ['class'=> ''], 
-		'url'=> ['article/view', 'article' => 'pravila-uchastiya'],
-	],
-	[
-		'label' => 'Как развиваться дальше?', 
-		'linkOptions'=> ['class'=> ''], 
-		'url'=> ['article/view', 'article' => 'kak-razvivatsya-deshevle'], 
-	],
-];
-
 /* @var $this yii\web\View */
 /* @var $model common\models\Article */
 

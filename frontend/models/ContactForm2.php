@@ -61,6 +61,17 @@ class ContactForm2 extends Model
             ->setTextBody($this->body)
             ->send();
     }
+
+    public function sendEmailTo($email)
+    {
+        return Yii::$app->mailer->compose()
+            ->setTo($this->email)
+            //->setFrom()
+            ->setFrom([$email])
+            ->setSubject($this->subject)
+            ->setTextBody($this->body)
+            ->send();
+    }
     
     
 }

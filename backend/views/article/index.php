@@ -30,7 +30,7 @@ $this->params['breadcrumbs'][] = $this->title;
             //'description:ntext',
             //'meta_description',
             //'meta_keyword',
-			['class' => 'yii\grid\ActionColumn', 'template' => '{update} {delete}'],
+			['class' => 'yii\grid\ActionColumn', 'template' => '{update} '], //{delete}
             /*['class' => 'yii\grid\ActionColumn', 
             'contentOptions'=>['style'=>'width: 70px;'],
             	'buttons' => [

@@ -148,9 +148,69 @@ class ArticleController extends Controller
     	  
         return $this->render('view', [
             'model' => $model,
+            'articles' => $this->getMenuUrl(),
             'contactForm' => $contactForm,
             //'articles' => $articles,
         ]);
+    }
+
+    protected function getMenuUrl()
+    {
+
+        $articles = Article::find()->all();
+        if($articles)
+        {
+            $urls['organizations'] = [];
+            $urls['o-proyekte'] = [];
+            $urls['pravila-uchastija'] = [];
+            $urls['kak-razvivatsya-deshevle'] = [];
+            $urls['publichnaya-oferta'] = [];
+            foreach($articles as $article)
+            {
+                switch( $article->id )
+                {
+                    case 10:
+                        $urls['organizations'] = ['article/view', 'article' => $article->slug];
+                        break;
+                    case 5:
+                        $urls['o-proyekte'] = ['article/view', 'article' => $article->slug];
+                        break;
+                    case 7:
+                        $urls['pravila-uchastija'] = ['article/view', 'article' => $article->slug];
+                        break;
+                    case 8:
+                        $urls['kak-razvivatsya-deshevle'] = ['article/view', 'article' => $article->slug];
+                        break;
+                    case 9:
+                        $urls['publichnaya-oferta'] = ['article/view', 'article' => $article->slug];
+                        break;
+                }
+            }
+        }
+
+        $articles = [
+            [
+                'label' => 'О проекте',
+                'linkOptions'=> ['class'=> ''],
+                'url'=> $urls['o-proyekte'],
+            ],
+           /* [
+                'label' => 'Отзывы',
+                'linkOptions'=> ['class'=> ''],
+                'url'=> ['comment/comments'],
+            ],*/
+            [
+                'label' => 'Правила участвия',
+                'linkOptions'=> ['class'=> ''],
+                'url'=> $urls['pravila-uchastija'],
+            ],
+           /* [
+                'label' => 'Как развиваться дальше?',
+                'linkOptions'=> ['class'=> ''],
+                'url'=> $urls['kak-razvivatsya-deshevle'],
+            ],*/
+        ];
+        return $articles;
     }
 
     /**

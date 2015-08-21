@@ -32,6 +32,14 @@ class CategoryController extends Controller
 		$categoryLot = ArrayHelper::map(CategoryLot::find()->where(['category_id' => $categoryInfo->id])->all(), 'id', 'lot_id');
 		$categoryLot = array_unique($categoryLot);
 
+
+		$dataProvider = $searchModel->search(Yii::$app->request->post(), $lotIds, true);
+		if($dataProvider->totalCount == 0)
+		{
+			Yii::$app->session->setFlash('info', 'В этой категории нет активных лотов.');
+		}
+
+
 		$search =  $this->renderPartial('/site/_search', [
 			'action' => ['view', 'category' => $category],
         	'model' => $searchModel, 
@@ -133,7 +141,7 @@ class CategoryController extends Controller
 	// return all active subjects
 	private function getActiveSubjects($categoryLot)
 	{
-		$subjectLots = SubjectLot::find()->where(['lot_id' => $categoryLot])->all();
+		/*$subjectLots = SubjectLot::find()->where(['lot_id' => $categoryLot])->all();
 		foreach($subjectLots as $key => $subjectLot)
 		{
 			if($subjectLot->lot->public != 1)
@@ -148,13 +156,19 @@ class CategoryController extends Controller
 		
 		$subjectLot = ArrayHelper::map($subjectLots, 'id', 'subject_id');
 		$subjectLot = array_unique($subjectLot);
-		return ArrayHelper::map(Subject::findAll($subjectLot), 'id', 'name');
+		return ArrayHelper::map(Subject::findAll($subjectLot), 'id', 'name');*/
+		$subjects = Subject::find()->all();
+		if($subjects)
+		{
+			return ArrayHelper::map($subjects, 'id', 'name');
+		}
+		return false;
 	}
 	
 	// return all active Branchs
 	private function getActiveBranchs($categoryLot)
 	{
-		$branchLots = BranchLot::find()->where(['lot_id' => $categoryLot])->all();
+		/*$branchLots = BranchLot::find()->where(['lot_id' => $categoryLot])->all();
 		foreach($branchLots as $key => $branchLot)
 		{
 			if($branchLot->lot->public != 1)
@@ -170,7 +184,13 @@ class CategoryController extends Controller
 		
 		$branchLot = ArrayHelper::map($branchLots, 'id', 'branch_id');
 		$branchLot = array_unique($branchLot);
-		return ArrayHelper::map(Branch::findAll($branchLot), 'id', 'name');
+		return ArrayHelper::map(Branch::findAll($branchLot), 'id', 'name');*/
+		$branchs = Branch::find()->all();
+		if($branchs)
+		{
+			return ArrayHelper::map($branchs, 'id', 'name');
+		}
+		return false;
 	}
 	
 	//return region

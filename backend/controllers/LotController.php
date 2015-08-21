@@ -18,7 +18,7 @@ use yii\filters\AccessControl;
 
 use yii\helpers\ArrayHelper;
 use common\models\GeobaseIp;
-
+use iutbay\yii2kcfinder\KCFinder;
 /**
  * LotController implements the CRUD actions for Lot model.
  */
@@ -56,9 +56,11 @@ class LotController extends Controller
      */
     public function actionIndex()
     {
+
+		//var_dump(Yii::$app->session['KCFINDER']);
     	
     	//var_dump(Yii::$app->getUser());
-    	
+		$this->setKCFINDER();
         $searchModel = new LotSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
@@ -88,7 +90,7 @@ class LotController extends Controller
      */
     public function actionCreate()
     {
-
+		$this->setKCFINDER();
         $model = new Lot();
 
         if ($model->load(Yii::$app->request->post())) {
@@ -182,6 +184,7 @@ class LotController extends Controller
      */
     public function actionUpdate($id)
     {
+		$this->setKCFINDER();
         $model = $this->findModel($id);
 
         if ($model->load(Yii::$app->request->post())) {
@@ -452,6 +455,85 @@ class LotController extends Controller
 		}
 		return $data;
 
+	}
+
+	private function setKCFINDER()
+	{
+		if(!Yii::$app->session->get('KCFINDER')){
+			$kcfOptions = array_merge(KCFinder::$kcfDefaultOptions, [
+				'uploadURL' => Yii::getAlias('@uploadURL'), //'/uploads',
+				'uploadDir' => Yii::getAlias('@uploadDir'), //dirname(dirname(__DIR__)).'/uploads',
+				'access' => [
+					'files' => [
+						'upload' => true,
+						'delete' => true,
+						'copy' => true,
+						'move' => true,
+						'rename' => true,
+					],
+					'dirs' => [
+						'create' => true,
+						'delete' => true,
+						'rename' => true,
+					],
+				],
+				'disabled' => false,
+				'denyZipDownload' => true,
+				'denyUpdateCheck' => true,
+				'denyExtensionRename' => true,
+				'theme' => 'default',
+				'types' => [  // @link http://kcfinder.sunhater.com/install#_types
+					'files' => [
+						'type' => '',
+					],
+				],
+				'access' => [
+					'files' => [
+						'upload' => true,
+						'delete' => true,
+						'copy' => true,
+						'move' => true,
+						'rename' => true,
+					],
+					'dirs' => [
+						'create' => true,
+						'delete' => true,
+						'rename' => true,
+					],
+				],
+				'lang' => 'ru',
+				'thumbsDir' => 'thumbs',
+				'thumbWidth' => 100,
+				'thumbHeight' => 100,
+				'filenameChangeChars' => array(
+					" " => "_",
+					":" => ".",
+					"Є"=>"YE","І"=>"I","Ѓ"=>"G","і"=>"i","№"=>"-","є"=>"ye","ѓ"=>"g",
+					"А"=>"A","Б"=>"B","В"=>"V","Г"=>"G","Д"=>"D",
+					"Е"=>"E","Ё"=>"YO","Ж"=>"ZH",
+					"З"=>"Z","И"=>"I","Й"=>"J","К"=>"K","Л"=>"L",
+					"М"=>"M","Н"=>"N","О"=>"O","П"=>"P","Р"=>"R",
+					"С"=>"S","Т"=>"T","У"=>"U","Ф"=>"F","Х"=>"X",
+					"Ц"=>"C","Ч"=>"CH","Ш"=>"SH","Щ"=>"SHH","Ъ"=>"'",
+					"Ы"=>"Y","Ь"=>"","Э"=>"E","Ю"=>"YU","Я"=>"YA",
+					"а"=>"a","б"=>"b","в"=>"v","г"=>"g","д"=>"d",
+					"е"=>"e","ё"=>"yo","ж"=>"zh",
+					"з"=>"z","и"=>"i","й"=>"j","к"=>"k","л"=>"l",
+					"м"=>"m","н"=>"n","о"=>"o","п"=>"p","р"=>"r",
+					"с"=>"s","т"=>"t","у"=>"u","ф"=>"f","х"=>"x",
+					"ц"=>"c","ч"=>"ch","ш"=>"sh","щ"=>"shh","ъ"=>"",
+					"ы"=>"y","ь"=>"","э"=>"e","ю"=>"yu","я"=>"ya",
+					" "=>"_","—"=>"_",","=>"_","!"=>"_","@"=>"_",
+					"#"=>"-","$"=>"","%"=>"","^"=>"","&"=>"","*"=>"",
+					"("=>"",")"=>"","+"=>"","="=>"",";"=>"",":"=>"",
+					"'"=>"", "\""=>"","~"=>"","`"=>"","?"=>"","/"=>"",
+					"\\"=>"","["=>"","]"=>"","{"=>"","}"=>"","|"=>""
+				),
+			]);
+			// Set kcfinder session options
+			Yii::$app->session->set('KCFINDER', $kcfOptions);
+		}
+		return TRUE;
 	}
 
     /**

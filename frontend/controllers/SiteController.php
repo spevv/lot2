@@ -32,10 +32,11 @@ use common\models\Subject;
 use common\models\CheckLot;
 use common\models\Branch;
 use common\models\Follower;
+use common\models\Article;
 //use frontend\models\ContactForm;
 use yii\helpers\Url;
 
-use iutbay\yii2kcfinder\KCFinder;
+
 /**
  * Site controller
  */
@@ -155,7 +156,7 @@ class SiteController extends Controller
 
 	public function actionIndex()
     {
-		$this->setKCFINDER();
+
         $searchModel = new LotSearch();
         $dataProvider2 = $searchModel->search(null, false);
         
@@ -266,12 +267,28 @@ class SiteController extends Controller
 	            'activeBlockLot' => $activeBlockLot,
 	            'model'=> $siteInfo,
 	            'contact'=> $contact,
-	            
+				'urls'=> $this->getArticleUrls(),
 	            
 	        ]);
 		}
     }
-    
+
+	/**
+	 *
+	 *
+	 * @return urls article #10
+	 */
+	private function getArticleUrls()
+	{
+		$urls['organizations'] = [];
+		$article = Article::find()->where(['id' => 10])->one();
+		if($article)
+		{
+			$urls['organizations'] = ['article/view', 'article' => $article->slug];
+		}
+		return $urls;
+	}
+
     //return public category
     private function getCategoty()
     {
@@ -295,7 +312,7 @@ class SiteController extends Controller
 	// return all active subjects
 	private function getActiveSubjects()
 	{
-		$subjectLots = SubjectLot::find()->all();
+		/*$subjectLots = SubjectLot::find()->all();
 		if($subjectLots)
 		{
 			
@@ -322,6 +339,13 @@ class SiteController extends Controller
 			$subjectLot = array_unique($subjectLot);
 			return ArrayHelper::map(Subject::findAll($subjectLot), 'id', 'name');
 		}
+		return false;*/
+
+		$subjects = Subject::find()->all();
+		if($subjects)
+		{
+			return ArrayHelper::map($subjects, 'id', 'name');
+		}
 		return false;
 		
 	}
@@ -329,7 +353,7 @@ class SiteController extends Controller
 	// return all active Branchs
 	private function getActiveBranchs()
 	{
-		$branchLots = BranchLot::find()->all();
+		/*$branchLots = BranchLot::find()->all();
 		if($branchLots)
 		{
 			foreach($branchLots as $key => $branchLot)
@@ -354,6 +378,13 @@ class SiteController extends Controller
 			$branchLot = ArrayHelper::map($branchLots, 'id', 'branch_id');
 			$branchLot = array_unique($branchLot);
 			return ArrayHelper::map(Branch::findAll($branchLot), 'id', 'name');
+		}
+		return false;*/
+
+		$branchs = Branch::find()->all();
+		if($branchs)
+		{
+			return ArrayHelper::map($branchs, 'id', 'name');
 		}
 		return false;
 	}
@@ -467,84 +498,7 @@ class SiteController extends Controller
         } 
     }
     
-    private function setKCFINDER()
-    {
-		if(!Yii::$app->session->get('KCFINDER')){
-			$kcfOptions = array_merge(KCFinder::$kcfDefaultOptions, [
-			    'uploadURL' => Yii::getAlias('@uploadURL'), //'/uploads',
-			    'uploadDir' => Yii::getAlias('@uploadDir'), //dirname(dirname(__DIR__)).'/uploads',
-			    'access' => [
-			        'files' => [
-			            'upload' => true,
-			            'delete' => true,
-			            'copy' => true,
-			            'move' => true,
-			            'rename' => true,
-			        ],
-			        'dirs' => [
-			            'create' => true,
-			            'delete' => true,
-			            'rename' => true,
-			        ],
-			    ],
-			    'disabled' => false,
-		        'denyZipDownload' => true,
-		        'denyUpdateCheck' => true,
-		        'denyExtensionRename' => true,
-		        'theme' => 'default',
-		        'types' => [  // @link http://kcfinder.sunhater.com/install#_types
-		            'files' => [
-		                'type' => '',
-		            ],
-		        ],
-				    'access' => [
-				        'files' => [
-				            'upload' => true,
-				            'delete' => true,
-				            'copy' => true,
-				            'move' => true,
-				            'rename' => true,
-				        ],
-				        'dirs' => [
-				            'create' => true,
-				            'delete' => true,
-				            'rename' => true,
-				        ],
-				    ],
-				    'lang' => 'ru',
-				    'thumbsDir' => 'thumbs',
-			        'thumbWidth' => 100,
-			        'thumbHeight' => 100,
-			        'filenameChangeChars' => array(
-					    " " => "_",
-					    ":" => ".",
-					   "Є"=>"YE","І"=>"I","Ѓ"=>"G","і"=>"i","№"=>"-","є"=>"ye","ѓ"=>"g",
-					   "А"=>"A","Б"=>"B","В"=>"V","Г"=>"G","Д"=>"D",
-					   "Е"=>"E","Ё"=>"YO","Ж"=>"ZH",
-					   "З"=>"Z","И"=>"I","Й"=>"J","К"=>"K","Л"=>"L",
-					   "М"=>"M","Н"=>"N","О"=>"O","П"=>"P","Р"=>"R",
-					   "С"=>"S","Т"=>"T","У"=>"U","Ф"=>"F","Х"=>"X",
-					   "Ц"=>"C","Ч"=>"CH","Ш"=>"SH","Щ"=>"SHH","Ъ"=>"'",
-					   "Ы"=>"Y","Ь"=>"","Э"=>"E","Ю"=>"YU","Я"=>"YA",
-					   "а"=>"a","б"=>"b","в"=>"v","г"=>"g","д"=>"d",
-					   "е"=>"e","ё"=>"yo","ж"=>"zh",
-					   "з"=>"z","и"=>"i","й"=>"j","к"=>"k","л"=>"l",
-					   "м"=>"m","н"=>"n","о"=>"o","п"=>"p","р"=>"r",
-					   "с"=>"s","т"=>"t","у"=>"u","ф"=>"f","х"=>"x",
-					   "ц"=>"c","ч"=>"ch","ш"=>"sh","щ"=>"shh","ъ"=>"",
-					   "ы"=>"y","ь"=>"","э"=>"e","ю"=>"yu","я"=>"ya",
-					   " "=>"_","—"=>"_",","=>"_","!"=>"_","@"=>"_",
-					   "#"=>"-","$"=>"","%"=>"","^"=>"","&"=>"","*"=>"",
-					   "("=>"",")"=>"","+"=>"","="=>"",";"=>"",":"=>"",
-					   "'"=>"", "\""=>"","~"=>"","`"=>"","?"=>"","/"=>"",
-					   "\\"=>"","["=>"","]"=>"","{"=>"","}"=>"","|"=>""
-					),
-			]);
-			// Set kcfinder session options
-			Yii::$app->session->set('KCFINDER', $kcfOptions);
-		}
-		return TRUE;	
-	}
+
 
    /* public function actionAbout()
     {

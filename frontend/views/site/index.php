@@ -28,7 +28,7 @@ if(isset($model->meta_keyword)){
 	        	?>
 			</div>
 			
-			<a href="<?= Url::toRoute(['article/view', 'article' => 'organizatoram-obrazovanija']); ?>">
+			<a href="<?= Url::toRoute($urls['organizations']); ?>">
 				<div class="by-partner">
 					<div class="by-partner-icon"></div>
 					<div class="by-partner-text" data-toggle="modal" data-target="#contactFormPartner">

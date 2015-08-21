@@ -14,13 +14,48 @@ use common\models\GeobaseCity;
 use yii\bootstrap\Modal;
 use common\models\Follower;
 use kartik\form\ActiveForm;
-use yii\widgets\Pjax;					    
+use yii\widgets\Pjax;
+
+
+use common\models\Article;
 /* @var $this \yii\web\View */
 /* @var $content string */
 
 AppAsset::register($this);
 
 Url::remember();
+
+$articles = Article::find()->all();
+if($articles)
+{
+	$urls['organizations'] = [];
+	$urls['o-proyekte'] = [];
+	$urls['pravila-uchastija'] = [];
+	$urls['kak-razvivatsya-deshevle'] = [];
+	$urls['publichnaya-oferta'] = [];
+	foreach($articles as $article)
+	{
+		switch( $article->id )
+		{
+			case 10:
+				$urls['organizations'] = ['article/view', 'article' => $article->slug];
+				break;
+			case 5:
+				$urls['o-proyekte'] = ['article/view', 'article' => $article->slug];
+				break;
+			case 7:
+				$urls['pravila-uchastija'] = ['article/view', 'article' => $article->slug];
+				break;
+			case 8:
+				$urls['kak-razvivatsya-deshevle'] = ['article/view', 'article' => $article->slug];
+				break;
+			case 9:
+				$urls['publichnaya-oferta'] = ['article/view', 'article' => $article->slug];
+				break;
+		}
+	}
+}
+
 ?>
 <?php $this->beginPage() ?>
 <!DOCTYPE html>
@@ -41,8 +76,8 @@ Url::remember();
 				<div class="row">
 					<div class="col-xs-12">
 						<div class="top-menu">
-							<a href="<?= Url::toRoute(['article/view', 'article' => 'organizatoram-obrazovanija']); ?>">Организаторам образования</a>
-							<a href="<?= Url::toRoute(['comment/comments']); ?>">Отзывы о сайте</a>
+							<a href="<?= Url::toRoute($urls['organizations']); ?>">Организаторам образования</a>
+							<!--<a href="<?= Url::toRoute(['comment/comments']); ?>">Отзывы о сайте</a>-->
 							<?php if(Yii::$app->user->isGuest):	?>
 								<?php Modal::begin([
 										//'size' => 'modal-sm',
@@ -54,7 +89,8 @@ Url::remember();
 									?>
 									<div class="eauth-link">
 										<div>Авторизуясь, вы принимаете <a href="<?= Url::toRoute(['article/view', 'article' => 'pravila-auktsiona']); ?>">правила аукциона</a></div>
-										<div><a href="<?= Url::toRoute(['article/view', 'article' => 'avtorizatsiya-cherez-sotsset']); ?>">Что такое авторизация через соцсеть?</a></div>
+										<div><a id="toSweet" href="">Что такое авторизация через соцсеть?</a></div>
+										<!--<div><a href="<?= Url::toRoute(['article/view', 'article' => 'avtorizatsiya-cherez-sotsset']); ?>">Что такое авторизация через соцсеть?</a></div>-->
 									</div>
 									<?php
 									Modal::end(); 
@@ -84,26 +120,26 @@ Url::remember();
 								<?php
 						            echo Nav::widget([
 									    'items' => [
-									   		[
-										    	'label' => 'О проекте',
-												'linkOptions' =>  ['class'=> 'm-about'],
-												'url' => ['article/view', 'article' => 'o-proyekte'],
-											],
 											[
-										    	'label' => 'Отзывы',
+												'label' => 'О проекте',
+												'linkOptions' =>  ['class'=> 'm-about'],
+												'url' => $urls['o-proyekte'],
+											],
+											/*[
+												'label' => 'Отзывы',
 												'linkOptions' =>  ['class'=> 'm-comment'],
 												'url' => ['article/view', 'article' => 'otzyvy'],
-											],
+											],*/
 											[
-										    	'label' => 'Правила участия',
+												'label' => 'Правила участия',
 												'linkOptions' =>  ['class'=> 'm-rule'],
-												'url' => ['article/view', 'article' => 'pravila-uchastiya'],
+												'url' => $urls['pravila-uchastija'],
 											],
-											[
-										    	'label' => 'Как развиваться дешевле',
+											/*[
+												'label' => 'Как развиваться дешевле',
 												'linkOptions' =>  ['class'=> 'm-next'],
-												'url' => ['article/view', 'article' => 'kak-razvivatsya-deshevle'],
-											],
+												'url' => $urls['kak-razvivatsya-deshevle'],
+											],*/
 									    ],
 									    'options' => ['class' =>'nav nav-pills  nav-lot-menu'],
 									]);
@@ -129,7 +165,7 @@ Url::remember();
             'links' => isset($this->params['breadcrumbs']) ? $this->params['breadcrumbs'] : [],
         ]) ?>
           	<?php
-  	if(\Yii::$app->session->getFlash('success') or \Yii::$app->session->getFlash('error')){
+  	if(\Yii::$app->session->getFlash('success') or \Yii::$app->session->getFlash('error') or  \Yii::$app->session->getFlash('info')){
 		echo  Alert::widget();
 	}
   	?>
@@ -143,17 +179,18 @@ Url::remember();
 			<div class="row">
 				<div class="col-xs-3">
 					<div class="pre-footer-logo"></div>
+					<div class="pre-footer-logo-text">Интернет-аукцион бизнес образования</div>
 				</div>
 				<div class="col-xs-3">
 					<div class="prefooter-url">
-						<a href="<?= Url::toRoute(['article/view', 'article' => 'o-proyekte']); ?>">О проекте</a>
-						<a href="<?= Url::toRoute(['article/view', 'article' => 'pravila-uchastiya']); ?>">Правила участия</a>
+						<a href="<?= Url::toRoute($urls['o-proyekte']); ?>">О проекте</a>
+						<a href="<?= Url::toRoute($urls['pravila-uchastija']); ?>">Правила участия</a>
 					</div>
 				</div>
 				<div class="col-xs-3">
 					<div class="prefooter-url">
-						<a href="<?= Url::toRoute(['article/view', 'article' => 'publichnaya-oferta']); ?>">Публичная оферта</a>
-						<a href="<?= Url::toRoute(['article/view', 'article' => 'organizatoram-treningov']); ?>">Организаторам тренингов</a>
+						<a href="<?= Url::toRoute($urls['publichnaya-oferta']); ?>">Публичная оферта</a>
+						<a href="<?= Url::toRoute($urls['organizations']); ?>">Организаторам образования</a>
 					</div>
 				</div>
 				<div class="col-xs-3">

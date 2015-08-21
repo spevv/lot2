@@ -1,6 +1,7 @@
 
 function afterAjaxListViewUpdate(){
 	console.log('afterAjaxListViewUpdate');
+    $('#infscr-loading').remove();
 }
 
 
@@ -11,6 +12,15 @@ $('a[href^="#"]').click(function(){
 	return false;
 });
 
+$( "#toSweet" ).click(function(event){
+    event.preventDefault();
+
+    swal(
+        "Что такое авторизация через соцсеть?",
+        "Краткое описание авторизации через соцсети."
+    );
+
+});
 
 $(function () {
   $.scrollUp({

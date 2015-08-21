@@ -21,14 +21,74 @@ class CommentController extends \yii\web\Controller
 		$dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 		return $this->render('comments', [
             'searchModel' => $searchModel,
+			'articles' => $this->getMenuUrl(),
             'dataProvider' => $dataProvider,  
             'model' => $model,  
         ]);
 	}
-    
 
-	
-    public function actionIndex($id)
+	protected function getMenuUrl()
+	{
+
+		$articles = Article::find()->all();
+		if($articles)
+		{
+			$urls['organizations'] = [];
+			$urls['o-proyekte'] = [];
+			$urls['pravila-uchastija'] = [];
+			$urls['kak-razvivatsya-deshevle'] = [];
+			$urls['publichnaya-oferta'] = [];
+			foreach($articles as $article)
+			{
+				switch( $article->id )
+				{
+					case 10:
+						$urls['organizations'] = ['article/view', 'article' => $article->slug];
+						break;
+					case 5:
+						$urls['o-proyekte'] = ['article/view', 'article' => $article->slug];
+						break;
+					case 7:
+						$urls['pravila-uchastija'] = ['article/view', 'article' => $article->slug];
+						break;
+					case 8:
+						$urls['kak-razvivatsya-deshevle'] = ['article/view', 'article' => $article->slug];
+						break;
+					case 9:
+						$urls['publichnaya-oferta'] = ['article/view', 'article' => $article->slug];
+						break;
+				}
+			}
+		}
+
+		$articles = [
+			[
+				'label' => 'О проекте',
+				'linkOptions'=> ['class'=> ''],
+				'url'=> $urls['o-proyekte'],
+			],
+			/*[
+				'label' => 'Отзывы',
+				'linkOptions'=> ['class'=> ''],
+				'url'=> ['comment/comments'],
+			],*/
+			[
+				'label' => 'Правила участвия',
+				'linkOptions'=> ['class'=> ''],
+				'url'=> $urls['pravila-uchastija'],
+			],
+			/*[
+				'label' => 'Как развиваться дальше?',
+				'linkOptions'=> ['class'=> ''],
+				'url'=> $urls['kak-razvivatsya-deshevle'],
+			],*/
+		];
+		return $articles;
+	}
+
+
+
+	public function actionIndex($id)
 	{
 		$identity = Yii::$app->getUser()->getIdentity();
 	    if (isset($identity->profile)) 
