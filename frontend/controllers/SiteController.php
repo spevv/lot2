@@ -162,7 +162,7 @@ class SiteController extends Controller
         
         $search =  $this->renderPartial('_search', [
         	'model' => $searchModel, 
-        	'action' => ['/site/index'], 
+        	'action' => ['site/index'],
         	'region' => $this->getActiveRegions(), 
         	'subjects' => $this->getActiveSubjects(), 
         	'branchs' => $this->getActiveBranchs()
@@ -198,13 +198,14 @@ class SiteController extends Controller
 	        	'branchs' => $this->getActiveBranchs()
 	        ]);
 			$activeBlockLot =  $this->renderPartial('_active-block-lot', [
+				'categoryInfo' => $this->getCategoty(),
 			 	'search' => $search,
 			 	'dataProvider' => $dataProvider,
 	        ]);
 			
 			return $this->render('index', [
 	            'dataProvider2' => $dataProvider2,
-	            'categoryInfo' => $this->getCategoty(),
+	           // 'categoryInfo' => $this->getCategoty(),
 	            'activeBlockLot' => $activeBlockLot, 
 	            'model'=> $siteInfo,
 	        ]);  	
@@ -213,6 +214,7 @@ class SiteController extends Controller
 		if(Yii::$app->request->isPost)
 		{
 			//var_dump('is post');
+           // die;
 			Yii::$app->session->set('searchData', Yii::$app->request->post());
 			$dataProvider = $searchModel->search(Yii::$app->request->post(), true);
 			
@@ -225,6 +227,7 @@ class SiteController extends Controller
 	        ]);
 			
 			return $this->renderPartial('_active-block-lot', [
+                'categoryInfo' => $this->getCategoty(),
 			 	'search' => $search,
 			 	'dataProvider' => $dataProvider,
 	        ]);
@@ -241,6 +244,7 @@ class SiteController extends Controller
 	        ]);
 			
 			return $this->renderPartial('_active-block-lot', [
+                'categoryInfo' => $this->getCategoty(),
 			 	'search' => $search,
 			 	'dataProvider' => $dataProvider,
 	        ]);
@@ -257,13 +261,14 @@ class SiteController extends Controller
 			$dataProvider = $searchModel->search(Yii::$app->request->queryParams, true);
 			
 			$activeBlockLot =  $this->renderPartial('_active-block-lot', [
+				'categoryInfo' => $this->getCategoty(),
 			 	'search' => $search,
 			 	'dataProvider' => $dataProvider,
 	        ]);
 			
 			return $this->render('index', [
 	            'dataProvider2' => $dataProvider2,
-	            'categoryInfo' => $this->getCategoty(),
+	            //'categoryInfo' => $this->getCategoty(),
 	            'activeBlockLot' => $activeBlockLot,
 	            'model'=> $siteInfo,
 	            'contact'=> $contact,
@@ -292,7 +297,7 @@ class SiteController extends Controller
     //return public category
     private function getCategoty()
     {
-    	$items = Yii::$app->cache->get('getCategoty');
+    	$items = Yii::$app->cache->get('getCategoty-new');
 		if ($items === false) 
 		{
 		    $categoryInfo = Category::find()
@@ -301,10 +306,10 @@ class SiteController extends Controller
 			    ->all();
 			foreach($categoryInfo as $key => $value){
 				$items[$key]['label'] = $value['name'];
-				$items[$key]['linkOptions'] =  ['class'=> $value['slug']];
+				//$items[$key]['linkOptions'] =  ['class'=> $value['slug']];
 				$items[$key]['url'] = ['category/view', 'category' => $value['slug']];
 			}
-		    Yii::$app->cache->set('getCategoty', $items);
+		    Yii::$app->cache->set('getCategoty-new', $items);
 		}
 		return $items;
 	}

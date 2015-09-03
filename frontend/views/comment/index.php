@@ -11,29 +11,34 @@ use yii\widgets\Pjax;
 
 $this->title = $name;
 ?>
-<?php Pjax::begin(['options' => ['id'=>'comment', 'timeout'=>false, 'enablePushState' => false], 'enablePushState' => false]) ?> 
-<div class="comment-main">
-    <h1><?= Html::encode($this->title) ?></h1>
-    <?= $text; ?>
-    <?php
-  	if(\Yii::$app->session->getFlash('success') or \Yii::$app->session->getFlash('error')){
-		echo  Alert::widget();
-	}
-  	?>
-    <?= $content ?>
+<div class="wrap3">
+    <div class="container">
+        <div class="row">
+            <div class="col-xs-12">
 
-</div>
-<?php Pjax::end(); ?>
+                <?php Pjax::begin(['options' => ['id'=>'comment', 'timeout'=>false, 'enablePushState' => false], 'enablePushState' => false]) ?>
+                <div class="comment-main">
+                    <h1><?= Html::encode($this->title) ?></h1>
+                    <?= $text; ?>
+                    <?php
+                    if(\Yii::$app->session->getFlash('success') or \Yii::$app->session->getFlash('error')){
+                        echo  Alert::widget();
+                    }
+                    ?>
+                    <?= $content ?>
+
+                </div>
+                <?php Pjax::end(); ?>
 
 
-<?php
-if (isset($identity->profile)) {
-	$service = $identity->profile['service'];	
-}
-else{
-	$service = '';
-}
-$js = <<< JS
+                <?php
+                if (isset($identity->profile)) {
+                    $service = $identity->profile['service'];
+                }
+                else{
+                    $service = '';
+                }
+                $js = <<< JS
 
 obj = {
 		service: '$service',
@@ -55,13 +60,17 @@ if(!obj.service)
 	        if (isConfirm) {
 	        	$('#modal-auth').modal();
 	        }
-	    });	
+	    });
 }
-	
+
 
 
 JS;
-$this->registerJs($js,  $this::POS_READY);
-?>	
+                $this->registerJs($js,  $this::POS_READY);
+                ?>
+            </div>
+        </div>
+    </div>
+</div>
 
 

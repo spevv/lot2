@@ -129,7 +129,6 @@ $js = <<< JS
 	
 JS;
 $this->registerJs($js,  $this::POS_READY);
-
 ?>
 
 
@@ -193,7 +192,7 @@ $this->registerJs($js,  $this::POS_READY);
 	    <div class="form-group">
 	 	<?php 
 
-	 	$subnmae = '<span style="float:left;">Найти</span> <span id="spinner" style="display: none; margin-top: 10px; float:right; margin-left: 20px;"></span>';
+	 	$subnmae = '<span>Найти</span> <span id="spinner" style="display: none; margin-top: 10px; float:right; margin-left: 20px;"></span>';
 	        ?>
 	        <?= Html::submitButton($subnmae, ['class' => ' btn-lot', 'id'=>'idb']) ?> 
 	    </div>

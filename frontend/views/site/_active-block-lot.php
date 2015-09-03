@@ -5,13 +5,23 @@ use yii\widgets\ListView;
 use yii\widgets\Pjax;
 //use kartik\spinner\Spinner;
 use nirvana\infinitescroll\InfiniteScrollPager;
+use yii\bootstrap\Nav;
 
 ?>
 
-
 <?php Pjax::begin(['options' => ['id'=>'main-lot', 'timeout'=>false, 'enablePushState' => false], 'enablePushState' => false]) ?> 
-		<?= $search ?> 
-	    <div class="lot-search-header">Активные лоты</div>
+		<?= $search ?>
+
+		<div class="category-list-new">
+			<?= Nav::widget([
+				'items' => $categoryInfo,
+				'options' => ['class' =>'nav nav-pills ', 'id'=>'category-list'],
+			]);
+			?>
+		</div>
+
+<br>
+	    <!--<div class="lot-search-header">Активные лоты</div>-->
 	    <div class="lot-list">
 		    <?= ListView::widget([
 		        'dataProvider' => $dataProvider,
@@ -40,9 +50,6 @@ use nirvana\infinitescroll\InfiniteScrollPager;
 		</div>
 <?php
 $js = <<< JS
-
-
-
 	$('#lot-search').on('beforeSubmit', function(){
 		//console.log('beforeSubmit');
 		$('#spinner').fadeIn();

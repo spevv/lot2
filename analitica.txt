@@ -1,0 +1,53 @@
+onclick="yaCounterXXXXXX.reachGoal('Otpravka'); return true;"
+onsubmit=
+
+
+onclick="yaCounter32184009.reachGoal('Otpravka'); return true;"
+
+
+поврезать картинки на eduhot
+
+обработать картинки в слайде
+
+регистрация и выполнение скрипта
+
+
+
+
+Yii::$app->getSession()->setFlash('login', 's-'.$serviceName);
+
+/*if(\Yii::$app->session->getFlash('login')){
+			var_dump('login');	
+			}*/
+
+			s-vkontakte
+			s-facebook
+			s-odnoklassniki
+
+
+
+[19:05:08] Максим: для гугл аналитики
+[26 августа 2015 г. 23:48] Тумайкин Дмитрий: 
+
+<<< analytics.google.com
+логин eduhotbiz
+пароль auktsion
+http://prntscr.com/8b0vzk
+[19:05:12] Максим: тоже нужно цели поставить
+
+
+onClick=”_gaq.push([‘_trackEvent’, ‘Категория’, ‘ Действие’, ‘Ярлык’, ‘Ценность’]);”
+
+onClick="_gaq.push(['_trackEvent', 'Клик', 'ga_auth_fail_vk']);
+
+Клик
+	ga_auth_fail_vk
+	ga_auth_fail_ok
+	ga_auth_fail_fb
+
+	ga_auth_success_vk
+	ga_auth_success_ok
+	ga_auth_success_fb
+
+	ga_stavka
+	ga_bid_share_success

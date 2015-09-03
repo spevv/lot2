@@ -15,7 +15,7 @@ use common\models\LotRateStatistic;
 			</div>
 			<?php 
 			if(isset($model->image) and is_file('.'.$model->image)){
-				$path = \Yii::$app->thumbler->resize(substr($model->image, 1),380,230);
+				$path = \Yii::$app->thumbler->resize(substr($model->image, 1),290,214);
 				echo Html::img(Url::to(Yii::getAlias('@thumbsPath/').$path, true));
 			}
 			?>
@@ -38,6 +38,8 @@ use common\models\LotRateStatistic;
 					$rate = Rate::find()->where(['lot_id'=>$model->id])->andWhere(['refusal'=>0])->orderBy('price desc')->one();
 				}
 				?>
+            <span class="winner-star"></span> Александр Спивак за 3200 <span class="glyphicon glyphicon-ruble"></span>
+
 			<?php if($rate): ?>
 				<?php  
 				$user = UserSocial::findOne(['user_id'=>$rate->user2_id]);
@@ -52,18 +54,18 @@ use common\models\LotRateStatistic;
 
 		
 		<div class="real-price">
-			<div class="real-price-text">Реальная цена курса: <?= Yii::$app->formatter->asDecimal($model->price).' <span class="glyphicon glyphicon-ruble"></span>';
+			<div class="real-price-text">Реальная цена лота: <?= Yii::$app->formatter->asDecimal($model->price).' <span class="glyphicon glyphicon-ruble"></span>';
 				?></div>
 		</div>
 	
-		<div class="lot-hr"></div>
+		<!--<div class="lot-hr"></div>
 		<div class="lot-city">
 			<span class="glyphicon glyphicon-map-marker"></span>
 			<?php
 			$city = GeobaseCity::findOne($model->city_id);
 			echo($city["name"]);
 			?>
-		</div>
+		</div>-->
 	</div>
 
 

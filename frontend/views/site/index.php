@@ -15,81 +15,99 @@ if(isset($model->meta_keyword)){
 }
 ?>
 
-<div class="row filter-row">
-	<div class="col-xs-9">	
-		<?= $activeBlockLot ?>
-	</div>
-		<div class="col-xs-3">
-			<div class="category-list">
-				<?= Nav::widget([
-				    'items' => $categoryInfo,
-				    'options' => ['class' =>'nav nav-pills nav-stacked', 'id'=>'category-list'],
-				]);
-	        	?>
-			</div>
-			
-			<a href="<?= Url::toRoute($urls['organizations']); ?>">
-				<div class="by-partner">
-					<div class="by-partner-icon"></div>
-					<div class="by-partner-text" data-toggle="modal" data-target="#contactFormPartner">
-						Станьте нашим партнером
-					</div>
-				</div>
-			</a>
-			<div class="left-banner">
-				
-			</div>
-		</div>
-</div>
+<div class="wrap3">
+    <div class="container">
+        <div class="row filter-row">
+            <div class="col-xs-12">
+                <?= $activeBlockLot ?>
+            </div>
 
 
+            <div class="col-xs-8">
+                <a href="">
+                    <div class="banner-1"></div>
+                </a>
+
+            </div>
+
+            <div class="col-xs-4 pull-right">
+                <a href="">
+                    <div class="by-partner-new2"></div>
+                    <!--<div class="by-partner">
+                        <div class="by-partner-icon"></div>
+                        <div class="by-partner-text" data-toggle="modal" data-target="#contactFormPartner">
+                            Станьте нашим партнером
+                        </div>
+                    </div>-->
+                </a>
+            </div>
 
 
-<!-- Modal -->
-<!--
-<div class="modal fade" id="contactFormPartner" tabindex="-1" role="dialog" aria-labelledby="contactModal" aria-hidden="true">
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-        <h4 class="modal-title" id="contactModal">Станьте нашим партнером</h4>
-      </div>
-      <div class="modal-body">
-			<?= $contact ?>
-      </div>
+        </div>
     </div>
-  </div>
-</div>
--->
-
-
-
-<div class="lot-search-header-noactive">Сыграные лоты</div>
-	<div class="lot-list-noactive">
-		<?= ListView::widget([
-		        'dataProvider' => $dataProvider2,
-		        'itemOptions' => ['class' => 'lot-noactive item'],
-		        'itemView' => '_lot-noactive',
-		        'id' => 'my-listview-id-noactive',
-			    'layout' => "<div class=\"items\">{items}</div>\n<div class=\"mypager\">{pager}</div>",
-			    'pager' => [
-			        'class' => InfiniteScrollPager::className(),
-			        'widgetId' => 'my-listview-id-noactive',
-			        'itemsCssClass' => 'items',
-			        'contentLoadedCallback' => 'afterAjaxListViewUpdate',
-			        'nextPageLabel' => 'Еще лоты',
-			        'linkOptions' => [
-			            'class' => 'icon-more',
-			        ],
-			        'pluginOptions' => [
-			            'loading' => [
-			                'msgText' => "<em>Загрузка...</em>",
-			                'finishedMsg' => "<em>Все елементы загружены</em>",
-			            ],
-			            'behavior' => InfiniteScrollPager::BEHAVIOR_TWITTER,
-			        ],
-			    ],
-		]) ?>
 </div>
 
+
+
+<div class="wrap2">
+    <div class="container">
+        <div class="row">
+            <div class="col-xs-12">
+                <div class="lot-search-header-noactive">Сыграные лоты</div>
+                <div class="lot-list-noactive">
+                    <?= ListView::widget([
+                        'dataProvider' => $dataProvider2,
+                        'itemOptions' => ['class' => 'lot-noactive item'],
+                        'itemView' => '_lot-noactive',
+                        'id' => 'my-listview-id-noactive',
+                        'layout' => "<div class=\"items\">{items}</div>\n<div class=\"mypager\">{pager}</div>",
+                        'pager' => [
+                            'class' => InfiniteScrollPager::className(),
+                            'widgetId' => 'my-listview-id-noactive',
+                            'itemsCssClass' => 'items',
+                            'contentLoadedCallback' => 'afterAjaxListViewUpdate',
+                            'nextPageLabel' => 'Еще лоты',
+                            'linkOptions' => [
+                                'class' => 'icon-more',
+                            ],
+                            'pluginOptions' => [
+                                'loading' => [
+                                    'msgText' => "<em>Загрузка...</em>",
+                                    'finishedMsg' => "<em>Все елементы загружены</em>",
+                                ],
+                                'behavior' => InfiniteScrollPager::BEHAVIOR_TWITTER,
+                            ],
+                        ],
+                    ]) ?>
+                </div>
+            </div>
+
+            <div class="col-xs-8">
+                <a href="">
+                    <div class="banner-1"></div>
+                </a>
+
+            </div>
+
+            <div class="col-xs-4 pull-right">
+                <a href="<?= Url::toRoute($urls['organizations']); ?>">
+                    <div class="by-partner-new"></div>
+                    <!--<div class="by-partner">
+                        <div class="by-partner-icon"></div>
+                        <div class="by-partner-text" data-toggle="modal" data-target="#contactFormPartner">
+                            Станьте нашим партнером
+                        </div>
+                    </div>-->
+                </a>
+            </div>
+
+        </div>
+
+
+
+
+
+
+    </div>
+</div>
 

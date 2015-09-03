@@ -14,9 +14,18 @@ use common\models\Plural;
 			<div class="lot-name">
 				<?= $model->short_name;?>
 			</div>
+
+            <div class="lot-city">
+                <span class="glyphicon glyphicon-map-marker"></span>
+                <?php
+                $city = GeobaseCity::findOne($model->city_id);
+                echo($city["name"]);
+                ?>
+            </div>
+
 			<?php 
 			if(isset($model->image) and is_file(".".$model->image)){
-				$path = \Yii::$app->thumbler->resize(substr($model->image, 1),420,255);
+				$path = \Yii::$app->thumbler->resize(substr($model->image, 1),290,214);
 				echo Html::img(Url::to(Yii::getAlias('@thumbsPath/').$path, true));
 			}
 			?>
@@ -66,11 +75,12 @@ use common\models\Plural;
 				if(isset($model->remaining_time) and ($model->remaining_time > Yii::$app->formatter->asDate('now', 'yyyy-MM-dd HH:mm:ss'))){
 					 $countdown =  \russ666\widgets\Countdown::widget([
 					    'datetime' => $model->remaining_time,
-					    'format' => '%Dд %Hч:%Mм:%Sс',
+					    //'format' => '%Dдни %Hчасы:%Mмин:%Sсек',
+					    'format' => '%D  %H  %M  %S',
 					    'id' => 'countdown'.$model->id,
 					    'events' => [
 					        'finish' => 'function(){location.reload()}',
-					        'update' => 'function(event){
+					        /*'update' => 'function(event){
 					        	var format = "%-Sс";
 				                if(event.offset.minutes > 0) format = "%-M " + Text.plural(event.offset.minutes, ["минута ", "минуты ", "минут "]);
 				                if(event.offset.hours   > 0) format = "%-H " + Text.plural(event.offset.hours, ["час ", "часа ", "часов "]);
@@ -80,7 +90,7 @@ use common\models\Plural;
 				                    format = "<em>%-D " + Text.plural(event.offset.seconds, ["секунда", "секунды", "секунд"]) + "...</em>";
 				                }
 				                $(this).html(event.strftime(format));
-					        }',
+					        }',*/
 					    ],
 					]);
 					
@@ -94,20 +104,20 @@ use common\models\Plural;
 					}
 				}
 				?>
+                    <div class="lot-time-time-text">
+                        <div>дни</div>
+                        <div>часы</div>
+                        <div>мин</div>
+                        <div>сек</div>
+                    </div>
 				</div>
 			</div>
+            <div class="lot-hr"></div>
 			<div class="lot-button-wrapper">
-				<a class="lot-button" href="<?= Url::toRoute(['lot/view', 'slug' => $model->slug]); ?>">Сделать ставку&nbsp;&nbsp;&nbsp; <span class="glyphicon glyphicon-menu-right"></span> </a>
+				<a class="lot-button" href="<?= Url::toRoute(['lot/view', 'slug' => $model->slug]); ?>">Сделать ставку</a>
 			</div>
 		</div>
-		<div class="lot-hr"></div>
-		<div class="lot-city">
-			<span class="glyphicon glyphicon-map-marker"></span>
-			<?php
-			$city = GeobaseCity::findOne($model->city_id);
-			echo($city["name"]);
-			?>
-		</div>
+
 	</div>
 
 

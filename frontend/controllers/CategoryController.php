@@ -16,6 +16,7 @@ use common\models\BranchLot;
 use common\models\GeobaseCity;
 use common\models\Subject;
 use common\models\Branch;
+use common\models\Article;
 /**
  * CategoryController implements the CRUD actions for Category model.
  */
@@ -99,20 +100,39 @@ class CategoryController extends Controller
 			$dataProvider = $searchModel->search(Yii::$app->request->queryParams, $lotIds, true);
 			
 			$activeBlockLot =  $this->renderPartial('/site/_active-block-lot', [
+                'categoryInfo' => $this->getCategoty(),
 			 	'search' => $search,
 			 	'dataProvider' => $dataProvider,
 	        ]);
 			
 			return $this->render('/site/index', [
 	            'dataProvider2' => $dataProvider2,
-	            'categoryInfo' => $this->getCategoty(),
+	            //'categoryInfo' => $this->getCategoty(),
 	            'activeBlockLot' => $activeBlockLot,
 	            'model'=> $categoryInfo,
+                'urls'=> $this->getArticleUrls(),
 	            
 	        ]);
 		}
     }
-    
+
+    /**
+     *
+     *
+     * @return urls article #10
+     */
+    private function getArticleUrls()
+    {
+        $urls['organizations'] = [];
+        $article = Article::find()->where(['id' => 10])->one();
+        if($article)
+        {
+            $urls['organizations'] = ['article/view', 'article' => $article->slug];
+        }
+        return $urls;
+    }
+
+
     protected function getLotsOfCategory($categoryId)
 	{
 		$categoryLot = CategoryLot::find()
@@ -212,7 +232,7 @@ class CategoryController extends Controller
 		
 		foreach($categoryInfo as $key => $value){
 			$items[$key]['label'] = $value['name'];
-			$items[$key]['linkOptions'] =  ['class'=> $value['slug']];
+			//$items[$key]['linkOptions'] =  ['class'=> $value['slug']];
 			$items[$key]['url'] = ['category/view', 'category' => $value['slug']];
 		}
 		return $items;

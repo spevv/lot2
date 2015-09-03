@@ -10,16 +10,24 @@ use yii2mod\alert\Alert;
 
 $this->title = $name;
 ?>
-
-<div class="comment-main">
-    <h1><?= Html::encode($this->title) ?></h1>
-    <?= $content ?>
-    <?php if($button): ?>
-    	<div class="pay-button-wrapper">
-    		<div class="pay-button">Оплатить</div>
-    	</div>
-    <?php endif; ?>
+<div class="wrap3">
+    <div class="container">
+        <div class="row">
+            <div class="col-xs-12">
+                <div class="comment-main">
+                    <h1><?= Html::encode($this->title) ?></h1>
+                    <?= $content ?>
+                    <?php if($button): ?>
+                        <div class="pay-button-wrapper">
+                            <div class="pay-button">Оплатить</div>
+                        </div>
+                    <?php endif; ?>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
+
 
 <?php
 if(\Yii::$app->session->getFlash('success') or \Yii::$app->session->getFlash('error')){

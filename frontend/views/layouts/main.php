@@ -114,6 +114,7 @@ if($articles)
 					<div class="col-xs-12">
 						<div class="logo-menu">
 							<a href="/">
+                                <div class="logo-hidden"></div>
 								<div class="logo"></div>
 							</a>
 							<div class="menu">
@@ -152,8 +153,14 @@ if($articles)
 			
 			<div class="container">
 				<div class="row">
-					<div class="col-xs-12">
-						<div class="header-text">ИНТЕРНЕТ-АУКЦИОН <br>БИЗНЕС-ОБРАЗОВАНИЯ</div>
+					<div class="col-xs-3">
+						<div class="header-left-img"></div>
+					</div>
+					<div class="col-xs-6">
+						<div class="header-text"><div>Сделайте ставку</div>на свое образование!</div>
+					</div>
+					<div class="col-xs-3">
+						<div class="header-right-img"></div>
 					</div>
 				</div>
 			</div>
@@ -161,17 +168,19 @@ if($articles)
 
       
         <div class="container">
-        <?= Breadcrumbs::widget([
-            'links' => isset($this->params['breadcrumbs']) ? $this->params['breadcrumbs'] : [],
-        ]) ?>
+            <?= Breadcrumbs::widget([
+                'links' => isset($this->params['breadcrumbs']) ? $this->params['breadcrumbs'] : [],
+            ]) ?>
           	<?php
-  	if(\Yii::$app->session->getFlash('success') or \Yii::$app->session->getFlash('error') or  \Yii::$app->session->getFlash('info')){
-		echo  Alert::widget();
-	}
-  	?>
-        <?= $content ?>
+            if(\Yii::$app->session->getFlash('success') or \Yii::$app->session->getFlash('error') or  \Yii::$app->session->getFlash('info')){
+                echo  Alert::widget();
+            }
+            ?>
         </div>
     </div>
+
+    <?= $content ?>
+
 	
 	
 	<div class="pre-footer">
@@ -180,61 +189,70 @@ if($articles)
 				<div class="col-xs-3">
 					<div class="pre-footer-logo"></div>
 					<div class="pre-footer-logo-text">Интернет-аукцион бизнес образования</div>
+
+                    <div class="social-block">
+                        <div class="prefooter-social-text">Узнавай о новых лотах <br>в наших группах</div>
+                        <div class="prefooter-social-icon">
+                            <a href=""><div class="vk"></div></a>
+                            <a href=""><div class="fb"></div></a>
+                            <a href=""><div class="od"></div></a>
+                        </div>
+                    </div>
 				</div>
 				<div class="col-xs-3">
 					<div class="prefooter-url">
 						<a href="<?= Url::toRoute($urls['o-proyekte']); ?>">О проекте</a>
 						<a href="<?= Url::toRoute($urls['pravila-uchastija']); ?>">Правила участия</a>
-					</div>
+                        <a href="<?= Url::toRoute($urls['publichnaya-oferta']); ?>">Публичная оферта</a>
+                        <a href="<?= Url::toRoute($urls['organizations']); ?>">Организаторам образования</a>
+                    </div>
 				</div>
-				<div class="col-xs-3">
-					<div class="prefooter-url">
-						<a href="<?= Url::toRoute($urls['publichnaya-oferta']); ?>">Публичная оферта</a>
-						<a href="<?= Url::toRoute($urls['organizations']); ?>">Организаторам образования</a>
-					</div>
-				</div>
-				<div class="col-xs-3">
-					<div class="prefooter-phone">
-						<!--<div>8 (495) 123 45 67</div>-->
-						<a href="mailto:info@eduhot.ru">info@eduhot.ru</a>
-					</div>
-				</div>
+                <div class="col-xs-4">
+                    <div class="prefooter-subscribe-text">Подпишитесь на нашу рассылку</div>
+                    <div class="follower">
+                        <?php Pjax::begin(['options' => ['id'=>'follower', 'timeout'=>false, 'enablePushState' => false], 'enablePushState' => false]) ?>
+                        <?php  $form = new Follower(); ?>
+                        <?php $form2 = ActiveForm::begin(['options' => ['data-pjax' => true], 'action'=> ['site/follower'], 'formConfig' => ['showLabels'=>false]]); ?>
+
+                        <?= $form2->field($form, 'mail', [
+                            'addon' => [
+                                'append' => [
+                                    'content' => Html::submitButton('Отправить', ['class' => 'btn btn-primary', 'data-pjax' => '1', 'data-method' => 'post']),
+                                    'asButton' => true
+                                ]
+                            ]
+                        ])->input('email', ['placeholder'=>'Ваш e-mail']); ?>
+                        <?php ActiveForm::end(); ?>
+                        <?php Pjax::end(); ?>
+                    </div><!-- follower -->
+                    <div class="prefooter-pay-text prefooter-subscribe-text">Способы оплаты</div>
+                    <div class="prefooter-pay"></div>
+                </div>
+                <div class="col-xs-2">
+                    <div class="prefooter-phone">
+                        <div class="prefooter-ph-block">
+                            <div class="prefooter-phone-ph">8 (495) 123 45 67</div>
+                            <div class="prefooter-phone-ph-text"> Техподдержка 24 часа</div>
+                        </div>
+
+                        <div class="prefooter-email-block">
+                            <div class="prefooter-email-text"> Электронная почта:</div>
+                            <a href="mailto:info@eduhot.ru">info@eduhot.ru</a>
+                        </div>
+                    </div>
+                </div>
+
 			</div>
-			<div class="row-margin">
+			<!--<div class="row-margin">
 				<div class="row">
-					<div class="col-xs-4">
-						<div class="prefooter-social-text">Узнавай о новых лотах в наших группах</div>
-						<div class="prefooter-social-icon">
-							<a href=""><div class="vk"></div></a>
-							<a href=""><div class="fb"></div></a>
-							<a href=""><div class="od"></div></a>
-						</div>
-						
+					<div class="col-xs-3">
+
 					</div>
-					<div class="col-xs-4">
-						<div class="prefooter-subscribe-text">Подпишитесь на нашу рассылку</div>
-						<div class="follower">
-							<?php Pjax::begin(['options' => ['id'=>'follower', 'timeout'=>false, 'enablePushState' => false], 'enablePushState' => false]) ?>
-							    <?php  $form = new Follower(); ?>
-							    <?php $form2 = ActiveForm::begin(['options' => ['data-pjax' => true], 'action'=> ['site/follower'], 'formConfig' => ['showLabels'=>false]]); ?>
-							        
-							        <?= $form2->field($form, 'mail', [
-									    'addon' => [
-									        'append' => [
-									            'content' => Html::submitButton('Отправить', ['class' => 'btn btn-primary', 'data-pjax' => '1', 'data-method' => 'post']), 
-									            'asButton' => true
-									        ]
-									    ]
-									])->input('email', ['placeholder'=>'Ваш e-mail']); ?>
-							    <?php ActiveForm::end(); ?>
-							<?php Pjax::end(); ?>
-						</div><!-- follower -->
-					</div>
-					<div class="col-xs-4">
-						<div class="prefooter-pay"></div>
-					</div>
+                    <div class="col-xs-3"></div>
+
+
 				</div>
-			</div>
+			</div>-->
 		</div>
 	</div>
 	
