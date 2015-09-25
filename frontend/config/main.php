@@ -81,6 +81,11 @@ return [
                     'route' => 'lot/get-rate-info',
                     'suffix' => ''
             	],
+                [
+                    'pattern' => 'site/get-rates-info',
+                    'route' => 'site/get-rates-info',
+                    'suffix' => ''
+                ],
             	[
             		'pattern' => 'cancel-subscription/<email>',
                     'route' => 'site/cancel-subscription',
@@ -224,8 +229,8 @@ return [
                     'facebook' => array(
                         // register your app here: https://developers.facebook.com/apps/
                         'class' => 'frontend\models\social\FacebookOAuth2Service',
-                        'clientId' => '848319381869872', // '860300950671715', //'860398493995294',
-                        'clientSecret' => 'db7acdbd30eadfb4647e46a64be0ee5f', //'078f0ef6a3682b6b659f8bbf32ae096c', // 'a50a97ca31c69603d73440e605ca906a',
+                        'clientId' => '1629410954003891',//'848319381869872', // '860300950671715', //'860398493995294',
+                        'clientSecret' => '14d67798de91b18c3f2e393d473c97f9',//'db7acdbd30eadfb4647e46a64be0ee5f', //'078f0ef6a3682b6b659f8bbf32ae096c', // 'a50a97ca31c69603d73440e605ca906a',
                         'title' => '',
                     ),
                     'vkontakte' => array(
@@ -240,9 +245,9 @@ return [
                         // ... or here: http://www.odnoklassniki.ru/dk?st.cmd=appsInfoMyDevList&st._aid=Apps_Info_MyDev
                         // 'class' => 'nodge\eauth\services\extended\OdnoklassnikiOAuth2Service',
                         'class' => 'frontend\models\social\OdnoklassnikiOAuth2Service',
-                        'clientId' => '1137718016',
-                        'clientSecret' => '6320D57ED9A1D769B992081B',
-                        'clientPublic' => 'CBAEDBNEEBABABABA',
+                        'clientId' => '1152714240',//'1137718016',
+                        'clientSecret' => 'D612BA2E1497B9290FB45B45',//'6320D57ED9A1D769B992081B',
+                        'clientPublic' => 'CBAHAGLFEBABABABA',//'CBAEDBNEEBABABABA',
                         'title' => '',
                     ),
 	            ),

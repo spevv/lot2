@@ -22,7 +22,7 @@ return [
 	    'urlManager' => [
 	     	'scriptUrl' => '',
 	   	 	'baseUrl' => '',
-	   	 	'hostInfo' => 'http://yii.awam-it.ru/',
+	   	 	'hostInfo' => 'http://eduhot.biz/',
 	   	 	
 	   	 	'enablePrettyUrl' => true,
             'showScriptName' => false,

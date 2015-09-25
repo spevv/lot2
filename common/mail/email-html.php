@@ -36,9 +36,9 @@ else
 		<div style=" display: inline-block; font-family: Arial; color: #f8f8f8; font-size: 15px; font-weight: 400; text-align: left; width: 170px;">
 			Узнайте о новых лотах в наших группах
 			<div>
-				<a href="" style="display: inline-block;   margin: 5px 5px 5px 0;"><div style="  background: url(<?= $urlSite ?>image/icon/Layer47_cr1.png) no-repeat;   width: 35px;   height: 35px;"></div></a>
-				<a href="" style="display: inline-block;   margin: 5px 5px;"><div style="  background: url(<?= $urlSite ?>image/icon/Layer47_cr2.png) no-repeat;   width: 35px;   height: 35px;"></div></a>
-				<a href="" style="display: inline-block;   margin: 5px 5px;"><div style="  background: url(<?= $urlSite ?>image/icon/Layer47_cr3.png) no-repeat;   width: 35px;   height: 35px;"></div></a>
+				<a href="https://vk.com/eduhot" target="_blank" style="display: inline-block;   margin: 5px 5px 5px 0;"><div style="  background: url(<?= $urlSite ?>image/icon/Layer47_cr1.png) no-repeat;   width: 35px;   height: 35px;"></div></a>
+				<a href="https://www.facebook.com/EduHot.biz" target="_blank" style="display: inline-block;   margin: 5px 5px;"><div style="  background: url(<?= $urlSite ?>image/icon/Layer47_cr2.png) no-repeat;   width: 35px;   height: 35px;"></div></a>
+				<a href="http://ok.ru/eduhot" target="_blank" style="display: inline-block;   margin: 5px 5px;"><div style="  background: url(<?= $urlSite ?>image/icon/Layer47_cr3.png) no-repeat;   width: 35px;   height: 35px;"></div></a>
 			</div>
 		</div>
 		

@@ -52,7 +52,7 @@ use common\models\Plural;
 				<?php if($rate): ?>
 					<?= Yii::$app->formatter->asDecimal($rate->price,0);?>
 				<?php else: ?>
-					0
+					1
 				<?php endif; ?>
 				
 				 <span class="glyphicon glyphicon-ruble"></span>
@@ -70,27 +70,257 @@ use common\models\Plural;
 		<div class="lot-torg">
 			<div class="lot-time">
 				<div class="lot-time-header">До окончания торгов:</div>
-				<div class="lot-time-time">			
+				<div class="lot-time-time timeBl-<?=$model->id?>">			
 				<?php
 				if(isset($model->remaining_time) and ($model->remaining_time > Yii::$app->formatter->asDate('now', 'yyyy-MM-dd HH:mm:ss'))){
 					 $countdown =  \russ666\widgets\Countdown::widget([
 					    'datetime' => $model->remaining_time,
-					    //'format' => '%Dдни %Hчасы:%Mмин:%Sсек',
-					    'format' => '%D  %H  %M  %S',
+					    //'format' => '%Dдни %Hчасы:%Mмин:%Sсек', %D  %H  %M  %S
+					    'format' => '%D  %H  %M ',
 					    'id' => 'countdown'.$model->id,
 					    'events' => [
 					        'finish' => 'function(){location.reload()}',
-					        /*'update' => 'function(event){
-					        	var format = "%-Sс";
-				                if(event.offset.minutes > 0) format = "%-M " + Text.plural(event.offset.minutes, ["минута ", "минуты ", "минут "]);
-				                if(event.offset.hours   > 0) format = "%-H " + Text.plural(event.offset.hours, ["час ", "часа ", "часов "]);
-				                if(event.offset.days    > 0) format = "%-D " + Text.plural(event.offset.days, ["день ", "дня ", "дней "])  + "%-H " + Text.plural(event.offset.hours, ["час ", "часа ", "часов "]);
-				                if(event.offset.weeks   > 0) format = "%-D " + Text.plural((7*event.offset.weeks)+event.offset.days, ["день ", "дня ", "дней "])  + "%-H " + Text.plural(event.offset.hours, ["час ", "часа ", "часов "]);
-				                if(event.offset.days == 0 && event.offset.hours == 0 && event.offset.minutes == 0 && event.offset.seconds < 60) {
-				                    format = "<em>%-D " + Text.plural(event.offset.seconds, ["секунда", "секунды", "секунд"]) + "...</em>";
+					        'update' => 'function(event){
+					        	//var format = "%-S";
+					        	var format = "";
+				                if(event.offset.minutes > 0){
+				                	if(event.offset.minutes >= 10)
+				                	{
+										format = "<div class=\"wrt\"><span class=\"min\">%-M</span></div> " + format;
+									}
+									else
+									{
+										format = "<div class=\"wrt\"><span class=\"min\">0%-M</span></div> " + format;
+									}
+				                	 
 				                }
+				                else
+				                {
+									format = "<div class=\"wrt\"><span class=\"min\">00</span></div> " + format;
+								}
+				                if(event.offset.hours > 0)
+				                {
+				                	if(event.offset.hours  >= 10)
+				                	{
+										format = "<div class=\"wrt\"><span class=\"houver\">%-H</span></div> "  + format;
+									}
+									else
+									{
+										format = "<div class=\"wrt\"><span class=\"houver\">0%-H</span></div> "  + format;
+									}
+				                	 
+				                } 
+				                 else
+				                {
+									format = "<div class=\"wrt\"><span class=\"houver\">00</span></div> " + format;
+								}
+				                /*if(event.offset.days > 0)
+				                {
+				                	if(event.offset.days  >= 10)
+				                	{
+										format = "<div class=\"wrt\"><span class=\"day\">%-D</span></div> " + format;
+									}
+									else
+									{
+										format = "<div class=\"wrt\"><span class=\"day\">0%-D</span></div> " + format;
+									}
+				                	 
+				                }  */
+				                if(event.offset.weeks  > 0)
+				                {
+				                	var days = ((event.offset.weeks*7)+event.offset.days);
+				                	if(days  >= 10)
+				                	{
+				                		
+				                		var format = "";
+						                if(event.offset.minutes > 0){
+						                	if(event.offset.minutes >= 10)
+						                	{
+												format = "<div class=\"wrt\"><span class=\"min\">%-M</span></div> " + format;
+											}
+											else
+											{
+												format = "<div class=\"wrt\"><span class=\"min\">0%-M</span></div> " + format;
+											}
+						                	 
+						                }
+						                else
+						                {
+											format = "<div class=\"wrt\"><span class=\"min\">00</span></div> " + format;
+										}
+						                if(event.offset.hours > 0)
+						                {
+						                	if(event.offset.hours  >= 10)
+						                	{
+												format = "<div class=\"wrt\"><span class=\"houver\">%-H</span></div> "  + format;
+											}
+											else
+											{
+												format = "<div class=\"wrt\"><span class=\"houver\">0%-H</span></div> "  + format;
+											}
+						                	 
+						                } 
+						                else
+						                {
+											format = "<div class=\"wrt\"><span class=\"houver\">00</span></div> " + format;
+										}
+										 format =  "<div class=\"wrt\"><span class=\"day\">"+days +"</span></div> "+ format ;
+										 
+									}
+									else
+									{
+										var format = "";
+						                if(event.offset.minutes > 0){
+						                	if(event.offset.minutes >= 10)
+						                	{
+												format = "<div class=\"wrt\"><span class=\"min\">%-M</span></div> " + format;
+											}
+											else
+											{
+												format = "<div class=\"wrt\"><span class=\"min\">0%-M</span></div> " + format;
+											}
+						                	 
+						                }
+						                else
+						                {
+											format = "<div class=\"wrt\"><span class=\"min\">00</span></div> " + format;
+										}
+						                if(event.offset.hours > 0)
+						                {
+						                	if(event.offset.hours  >= 10)
+						                	{
+												format = "<div class=\"wrt\"><span class=\"houver\">%-H</span></div> "  + format;
+											}
+											else
+											{
+												format = "<div class=\"wrt\"><span class=\"houver\">0%-H</span></div> "  + format;
+											}
+						                	 
+						                }
+						                 else
+						                {
+											format = "<div class=\"wrt\"><span class=\"houver\">00</span></div> " + format;
+										}
+										format =  "<div class=\"wrt\"><span class=\"day\">0"+days  +"</span></div> "+ format ;
+									}
+									
+				                	 
+				                }
+				                else
+				                {
+									if(event.offset.days > 0)
+					                {
+					                	if(event.offset.days  >= 10)
+					                	{
+											format = "<div class=\"wrt\"><span class=\"day\">%-D</span></div> " + format;
+										}
+										else
+										{
+											format = "<div class=\"wrt\"><span class=\"day\">0%-D</span></div> " + format;
+										}
+					                	 
+					                }
+					                else
+					                {
+										format = "<div class=\"wrt\"><span class=\"day\">00</span></div> " + format;
+									} 
+								}
+								
+								if(event.offset.weeks == 0 && event.offset.days == 0 && event.offset.hours < 25 ) {
+									format = "";
+									if(event.offset.seconds > 0)
+									{
+					                	if(event.offset.seconds >= 10)
+					                	{
+											format = "<div class=\"wrt\"><span class=\"sec\">%-S</span></div> " + format;
+										}
+										else
+										{
+											format = "<div class=\"wrt\"><span class=\"sec\">0%-S</span></div> " + format;
+										}
+					                	 
+					                }
+					                else
+					                {
+										format = "<div class=\"wrt\"><span class=\"sec\">00</span></div> " + format;
+									}
+									if(event.offset.minutes > 0)
+									{
+					                	if(event.offset.minutes >= 10)
+					                	{
+											format = "<div class=\"wrt\"><span class=\"min\">%-M</span></div> " + format;
+										}
+										else
+										{
+											format = "<div class=\"wrt\"><span class=\"min\">0%-M</span></div> " + format;
+										}
+					                	 
+					                }
+					                else
+					                {
+										format = "<div class=\"wrt\"><span class=\"min\">00</span></div> " + format;
+									}
+					                if(event.offset.hours > 0)
+					                {
+					                	if(event.offset.hours  >= 10)
+					                	{
+											format = "<div class=\"wrt\"><span class=\"houver\">%-H</span></div> "  + format;
+										}
+										else
+										{
+											format = "<div class=\"wrt\"><span class=\"houver\">0%-H</span></div> "  + format;
+										}
+					                	 
+					                } 
+					                 else
+					                {
+										format = "<div class=\"wrt\"><span class=\"houver\">00</span></div> " + format;
+									}
+				                } 
+				                
+								if(event.offset.weeks == 0 && event.offset.days == 0 && event.offset.hours == 0 && event.offset.minutes  < 60 ) {
+									format = "";
+									if(event.offset.seconds > 0)
+									{
+					                	if(event.offset.seconds >= 10)
+					                	{
+											format = "<div class=\"wrt\"><span class=\"sec\">%-S</span></div> " + format;
+										}
+										else
+										{
+											format = "<div class=\"wrt\"><span class=\"sec\">0%-S</span></div> " + format;
+										}
+					                	 
+					                }
+					                else
+					                {
+										format = "<div class=\"wrt\"><span class=\"sec\">00</span></div> " + format;
+									}
+									if(event.offset.minutes > 0)
+									{
+					                	if(event.offset.minutes >= 10)
+					                	{
+											format = "<div class=\"wrt\"><span class=\"min\">%-M</span></div> " + format;
+										}
+										else
+										{
+											format = "<div class=\"wrt\"><span class=\"min\">0%-M</span></div> " + format;
+										}
+					                	 
+					                }
+					                else
+					                {
+										format = "<div class=\"wrt\"><span class=\"min\">00</span></div> " + format;
+									}
+				                } 
+				                if(event.offset.weeks == 0 && event.offset.days == 0 && event.offset.hours == 0 && event.offset.minutes == 0 && event.offset.seconds < 60) {
+				                    format = "<div class=\"wrt\"><span class=\"sec\">%-S</span></div>";
+				                }
+
+								
 				                $(this).html(event.strftime(format));
-					        }',*/
+				      
+					        }',
 					    ],
 					]);
 					
@@ -100,15 +330,28 @@ use common\models\Plural;
 					}
 					else
 					{
-						echo Plural::downcounter($model->remaining_time);
+						//echo Plural::downcounter($model->remaining_time);
+						echo "<span class='load-time'>" . $model->remaining_time . "</span>";
+						//echo "00 00 00 00";
 					}
 				}
 				?>
-                    <div class="lot-time-time-text">
-                        <div>дни</div>
-                        <div>часы</div>
-                        <div>мин</div>
-                        <div>сек</div>
+					<div class="wrapptimeBl">
+	                    <div class="lot-time-time-text timeBlock1">
+	                        <div>дни</div>
+	                        <div>часы</div>
+	                        <div>мин</div>
+	                    </div>
+	                    <div class="lot-time-time-text timeBlock2">
+	                        <div>часы</div>
+	                        <div>мин</div>
+	                        <div>сек</div>
+	                    </div>
+	                    <div class="lot-time-time-text timeBlock3">
+	                        <div>мин</div>
+	                        <div>сек</div>
+	                    </div>
+	                    
                     </div>
 				</div>
 			</div>

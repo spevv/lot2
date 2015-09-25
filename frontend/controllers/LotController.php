@@ -61,6 +61,7 @@ class LotController extends Controller
     public function actionContact($id)
     {  	
     //var_dump('in');
+
         $model = new ContactForm2();
         
         if ($model->load(Yii::$app->request->post()) ) {
@@ -144,7 +145,8 @@ class LotController extends Controller
 		        return $res;
 			}
 	    }
-	} 
+	}
+
     
     public function actionRate()
     {
@@ -207,7 +209,7 @@ class LotController extends Controller
 			}
 		}
 		
-		return $this->redirect(Url::previous());
+		return $this->redirect(Yii::$app->request->referrer);
 		
 	}
     
@@ -240,19 +242,6 @@ class LotController extends Controller
     
     public function actionView($slug)   
     {
-    	//$Delivery = new Delivery();
-    	//$Delivery->startCron();
-    	
-    	//$CheckLot = new CheckLot();
-    	//$CheckLot->getNextRate(463,1);
-    	//var_dump(Yii::$app->getUser());
-    	
-    	//$value = Yii::$app->getRequest()->getCookies()->getValue('_identity');
-    	//var_dump($value);
-    	
-    	//var_dump(Yii::$app->getUser());
-
-    	Url::remember();
     	
     	$modelId = $this->findModel($slug);
     	$count = $this->getRateCount($modelId);
@@ -261,8 +250,6 @@ class LotController extends Controller
 		$socialShare = $this->social($modelId, $ratesInfo['rate']);
 		
 		$comments = $this->getComments($modelId->id);
-		
-		//var_dump($count);
 		
 		Yii::$app->opengraph->set([
 		    'title' => $modelId->name,
@@ -304,6 +291,7 @@ class LotController extends Controller
 	            'emailForm' => '',
             ]);
 		}
+		
 		
         return $this->render('view', [
             'model' => $modelId->toArray([], ['subjects','branchs', 'images']),
@@ -401,8 +389,8 @@ class LotController extends Controller
     		$rate = new Rate();
     		$rate->id = 0;
     		$rate->lot_id = $model_id;
-    		$rate->price = 0;
-	    	$currentPrice = 0;
+    		$rate->price = 1;
+	    	$currentPrice = 1;
     	}
     	else
     	{
@@ -451,8 +439,8 @@ class LotController extends Controller
 		$rate = $ratesInfo['rates'][1];
 		if($rate)
 		{
-			if($rate->user->settings['slewRate'] == 1)
-			{
+			/*if($rate->user->settings['slewRate'] == 1)
+			{*/
 				$rateWinner = $ratesInfo['rates'][0];
 				$checkLot = new CheckLot();
 				$url = Yii::$app->urlManager->createAbsoluteUrl(['lot/view', 'slug'=>$rate->lot['slug']]);
@@ -460,7 +448,7 @@ class LotController extends Controller
 				$email['email'] = $rate->user['email'];
 				$email['messege'] = sprintf($email['messege'], $rate->user['name'],$rate->lot['name'], $rateWinner->user['name'], Yii::$app->formatter->asDatetime($rate->lot['remaining_time'], 'dd.MM HH:mm'), $url);
 				return $checkLot->sendEmail($email);
-			}
+			/*}*/
 		}
 		return false;
 	}
@@ -557,7 +545,7 @@ class LotController extends Controller
     	$url = $this->getUrl();
     	
     	//$attachment =  '{"media": [{"type": "link","url": "http://yii.awam-it.ru"},{"type": "text", "text": "hello world!"}]}';
-		$attachment =  '{"media": [{"type": "link","url": "'.$url.'"},{"type": "text", "text": "Моя ставка - '.$rate->price.' р"}]}';
+		$attachment =  '{"media": [{"type": "link","url": "'.$url.'"},{"type": "text", "text": "Моя ставка - '.$rate->price.' руб"}]}';
 		$sigSource = 'st.attachment='.$attachment.Yii::$app->params['odnoklassniki']['clientSecret'];
 		$sign = md5($sigSource);
 		
@@ -571,7 +559,7 @@ class LotController extends Controller
 			'vk' => [
 				'apiId' => Yii::$app->params['vkontakte']['clientId'],
 				'url' => $url,
-				'message' => 'Моя ставка - '.$rate->price.' р',
+				'message' => 'Моя ставка - '.$rate->price.' руб',
 				'title' => $modelId->name,
 				'image' => $img,
 			],
@@ -581,7 +569,7 @@ class LotController extends Controller
 				'caption' => '',
 				'link' => $url,
 				'picture' => $img,
-				'description' => 'Моя ставка - '.$rate->price.' р',
+				'description' => 'Моя ставка - '.$rate->price.' руб',
 			],
 			'ok' => [
 				//'apiId' => Yii::$app->params['odnoklassniki']['clientId'],

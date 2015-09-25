@@ -30,10 +30,10 @@ class RateWinner extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['pay', 'rate_id', 'status'], 'integer'],
+            [['rate_id', 'status'], 'integer'],
             [['rate_id'], 'required'],
             [['winner_time', 'pay_time', 'send_email_time'], 'safe'],
-            [['rate_info', 'comment'], 'string']
+            [['rate_info','pay', 'comment'], 'string']
         ];
     }
 
@@ -45,6 +45,7 @@ class RateWinner extends \yii\db\ActiveRecord
         return [
             'id' => 'ID',
             'pay' => 'Оплата',
+            'status' => 'Статус',
             'rate_id' => 'Rate ID',
             'comment' => 'Комментарий',
             'rate_info' => 'Info',

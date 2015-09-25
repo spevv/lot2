@@ -46,13 +46,14 @@
         "nirvana-msu/yii2-infinite-scroll": "1.0.*@dev",
         "kop/yii2-scroll-pager": "dev-master",
         "darkcs/yii2-infinite-scroll": "*",
-        "nodge/yii2-eauth": "dev-master",
+        "nodge/yii2-eauth": "~2",
         "uran1980/yii2-jquery-essential": "dev-master",
         "dragonjet/yii2-opengraph": "*",
         "rmrevin/yii2-minify-view": "1.8.*",
         "kartik-v/yii2-export": "@dev",
         "kartik-v/yii2-mpdf": "dev-master",
-        "iutbay/yii2-fontawesome": "*"
+        "iutbay/yii2-fontawesome": "*",
+        "nickcv/yii2-mandrill": "*"
     },
     "require-dev": {
         "yiisoft/yii2-codeception": "*",

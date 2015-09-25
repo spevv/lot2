@@ -30,7 +30,7 @@ if(isset($model->meta_keyword)){
                     <div class="article-left">
                         <div class="article-image">
                         <?php if(isset($model->image) and is_file(".".$model->image)){
-                            $path = \Yii::$app->thumbler->resize(substr($model->image, 1),855,400);
+                            $path = \Yii::$app->thumbler->resize(substr($model->image, 1),892,420);
                             echo Html::img(Url::to(Yii::getAlias('@thumbsPath/').$path, true));
                         }
                         ?>

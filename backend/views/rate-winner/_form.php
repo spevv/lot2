@@ -2,7 +2,7 @@
 
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
-
+use dosamigos\switchinput\SwitchBox;
 /* @var $this yii\web\View */
 /* @var $model backend\models\RateWinner */
 /* @var $form yii\widgets\ActiveForm */
@@ -13,8 +13,21 @@ use yii\widgets\ActiveForm;
     <?php $form = ActiveForm::begin(); ?>
 
     <?= $form->field($model, 'pay')->textInput(['maxlength' => true]) ?>
+    
+    <?php /* $form->field($model, 'status', ['labelOptions'=>["data-toggle"=>"tooltip", "title"=>"Оплачено?  Если Вкл, то лот оплачен."]])->widget(SwitchBox::className(),[
+			    'options' => [
+			        'label' => false
+			    ],
+			    'clientOptions' => [
+			        'size' => 'small',
+			        'onColor' => 'success',
+			        'offColor' => 'danger',
+			        'onText' => 'Оплачен',
+			        'offText' => 'Не оплачен'
+			    ]
+			]); */ ?>
 
-    <?= $form->field($model, 'rate_id')->textInput(['maxlength' => true]) ?>
+    <?php // $form->field($model, 'rate_id')->textInput(['maxlength' => true]) ?>
 
     <?= $form->field($model, 'comment')->textInput(['maxlength' => true]) ?>
 

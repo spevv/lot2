@@ -30,7 +30,22 @@ $this->params['breadcrumbs'][] = $this->title;
         'attributes' => [
             'id',
             'pay',
-            'rate_id',
+            'status',
+           /* [
+            	'attribute' => 'status',
+			    'value'=> function($model){
+			    	echo($model->status);
+			    	/*if($model->status == 1)
+			    	{
+						echo "Оплачен";
+					}
+			    	else{
+						echo "Не оплачен";
+					}*/
+			   /* },
+            ],*/
+            
+            //'rate_id',
             'comment',
         ],
     ]) ?>

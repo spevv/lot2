@@ -96,7 +96,14 @@ class RateWinnerController extends Controller
     {
         $model = $this->findModel($id);
 
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
+        if ($model->load(Yii::$app->request->post())) {
+        	/*var_dump($model);
+        	die;*/
+        	 if($model->status == 1 and $model->pay_time =="")
+        	 {
+			 	$model->pay_time = Yii::$app->formatter->asDate('now', 'yyyy-MM-dd HH:mm:ss');
+			 }
+        	 $model->save();
             return $this->redirect(['view', 'id' => $model->id]);
         } else {
             return $this->render('update', [

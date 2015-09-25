@@ -432,7 +432,7 @@ class LotController extends Controller
 	 * */
 	protected function getCities()
 	{
-		$data = Yii::$app->cache->get('getCities2');
+		/*$data = Yii::$app->cache->get('getCities');
 		if ($data === false) {
 
 			// $data нет в кэше, считаем с нуля.
@@ -444,7 +444,7 @@ class LotController extends Controller
 
 			if($cities)
 			{
-				Yii::$app->cache->set('getCities2', ArrayHelper::map($cities, 'id', 'name'));
+				Yii::$app->cache->set('getCities', ArrayHelper::map($cities, 'id', 'name'));
 			}
 			else
 			{
@@ -453,7 +453,8 @@ class LotController extends Controller
 
 			// Сохраняем значение $data в кэше. Данные можно получить в следующий раз.
 		}
-		return $data;
+		return $data;*/
+		return ArrayHelper::map(GeobaseCity::find()->orderBy('name')->all(), 'id', 'name');
 
 	}
 

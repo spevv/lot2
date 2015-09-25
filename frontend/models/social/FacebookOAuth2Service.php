@@ -19,7 +19,6 @@ class FacebookOAuth2Service extends \nodge\eauth\services\FacebookOAuth2Service
 		self::SCOPE_USER_LOCATION,
 		self::SCOPE_USER_PHOTOS,
 	);
-
 	/**
 	 * http://developers.facebook.com/docs/reference/api/user/
 	 *
@@ -27,10 +26,10 @@ class FacebookOAuth2Service extends \nodge\eauth\services\FacebookOAuth2Service
 	 */
 	protected function fetchAttributes()
 	{
-		$this->attributes = $this->makeSignedRequest('me');
+		$this->attributes = $this->makeSignedRequest('me?fields=email,link,name');
 		
-		//var_dump($this->attributes);
-		//die;
+		/*var_dump($this->attributes);
+		die;*/
 		if(!$this->attributes['email']){
 			$this->attributes['email'] = '';
 		}

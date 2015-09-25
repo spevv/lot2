@@ -1,9 +1,9 @@
 <?php
 return [
-    'adminEmail' => 'developer.awam@gmail.com',
-    'supportEmail' => 'developer.awam@gmail.com',
+    'adminEmail' => 'info@eduhot.biz',
+    'supportEmail' => 'info@eduhot.biz',
     //'mainEmail' => 'developer.awam@gmail.com', // с какой почты будет вестись рассылка
-    'mainEmail' => ['developer.awam@gmail.com' => 'EduHot.biz'], // с какой почты будет вестись рассылка
+    'mainEmail' => ['info@eduhot.biz' => 'EduHot.biz'], // с какой почты будет вестись рассылка
     'user.passwordResetTokenExpire' => 3600,
     'cronTime' => 5, // через какое время будет выполняться крон
     'lot.timeToFinish' => 9, // минуты до конца лота (отправка сообшения) должно быть (lot.timeToFinish - cronTime) = 10 ~ 15
@@ -17,7 +17,7 @@ return [
     	'toWinner' => [
     		'view' => 'email-html',
     		'subject' => 'Вы выиграли торги!',
-			'messege' => '<h2>Здраствуйте, %s</h2><p>Поздравляем! Вы выиграл торги за лот "%s".</p><p>Для завершение сделки внесите оплату %s руб до %s по Москве.</p><a class="button" href="%s">Перейти к оплате</a>',
+			'messege' => '<h2>Здраствуйте, %s</h2><p>Поздравляем! Вы выиграли торги за лот "%s".</p><p>Для завершение сделки внесите оплату %s руб до %s по Москве.</p><a class="button" href="%s">Перейти к оплате</a>',
     	],
     	// проигравшим
     	'toLoser' => [

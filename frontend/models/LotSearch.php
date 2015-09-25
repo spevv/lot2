@@ -69,7 +69,7 @@ class LotSearch extends Lot
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
             'pagination' => [
-                    'pageSize' => 10,
+                    'pageSize' => 8,
                     //'pageParam' => 'page',
                     //'validatePage' => false,
                 ],

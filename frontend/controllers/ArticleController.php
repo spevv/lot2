@@ -9,6 +9,7 @@ use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 use frontend\models\ContactForm2;
+use frontend\models\ContactFormArticle;
 
 /**
  * ArticleController implements the CRUD actions for Article model.
@@ -54,7 +55,7 @@ class ArticleController extends Controller
         ]);
     }*/
     
-    public function actionContact()
+   /* public function actionContact()
     {  	
     //var_dump('sdf');
         $model = new ContactForm2();
@@ -73,6 +74,30 @@ class ArticleController extends Controller
                 //'send' => $return,
             ]);
         } 
+    }*/
+     public function actionContact()
+    {  	
+
+        $model = new ContactFormArticle();
+
+
+        if ($model->load(Yii::$app->request->post()) && $model->validate()) {
+            $model->body = "Имя: ".$model->name."\nТелефон: ".$model->phone."\nКомментарий: ".$model->body;
+            if ($model->sendEmail(Yii::$app->params['adminEmail'])) {
+                Yii::$app->session->setFlash('success', 'Поздравляем! Ваше сообщение успешно отправлено.');
+                //$return = '1';
+            } else {
+                Yii::$app->session->setFlash('error', 'Не удалось отправить сообщение.');
+                // $return = '';
+            }
+            
+            $modelNew = new ContactFormArticle();
+            $modelNew->subject = 'Заявка на размещение лота';
+            return $this->renderPartial('_form2', [
+                'model' => $modelNew,
+                //'send' => $return,
+            ]);
+        }
     }
     
     
@@ -134,12 +159,29 @@ class ArticleController extends Controller
 		}
 		
 		if($model->id == 10){
-			$modelNew = new ContactForm2();
-	        $contactForm =  $this->renderPartial('_form', [
-	            'model' => $modelNew,
-	            'send' => '',
-	        ]);
+            $modelNew = new ContactFormArticle();
+            $modelNew->subject = 'Заявка на размещение лота';
+            $contactForm =  $this->renderPartial('_form2', [
+                'model' => $modelNew,
+                'send' => '',
+            ]);
+            return $this->render('organizers-education', [
+                'model' => $model,
+                'contactForm' => $contactForm,
+            ]);
 		}
+        elseif($model->id == 5)
+        {
+            return $this->render('about', [
+                'model' => $model,
+            ]);
+        }
+        elseif($model->id == 7)
+        {
+            return $this->render('rules', [
+                'model' => $model,
+            ]);
+        }
 		else
 		{
 			$contactForm ="";

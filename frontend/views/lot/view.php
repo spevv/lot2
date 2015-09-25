@@ -14,7 +14,7 @@ use kartik\form\ActiveForm;
 
 use yii\widgets\ListView;
 use yii\widgets\Pjax;
-
+use yii\helpers\Url;
 use yii\captcha\Captcha;
 use yii\bootstrap\Modal;
 /* @var $this yii\web\View */
@@ -56,6 +56,10 @@ $this->title = $model['name'];
                             );
                             foreach($model['images'] as $key => $value){
                                     echo (Html::img($value));
+                                  /* if(isset($value) and is_file(".".$value)){
+                                        $path = \Yii::$app->thumbler->resize(substr($value, 1),790, 405);
+                                        echo Html::img(Url::to(Yii::getAlias('@thumbsPath/').$path, true));
+                                    }*/
                                 }
                             $fotorama->end();
                         ?>

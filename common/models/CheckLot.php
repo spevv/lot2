@@ -107,6 +107,7 @@ class CheckLot
 		$lots = Lot::find()
     		->where(['<',  'remaining_time', $more])
     		->andWhere(['>',  'remaining_time', $less])
+    		->andWhere(['public' => 1])
     		->all(); 
     		
 		if($lots)
@@ -184,6 +185,7 @@ class CheckLot
 		$lots = Lot::find()
     		->where(['<',  'remaining_time', Yii::$app->formatter->asDate('now', 'yyyy-MM-dd HH:mm:ss')])
     		->andWhere(['>',  'remaining_time', $cronInfo['time']])
+    		->andWhere(['public' => 1])
     		->all(); 
     		
     	$cronInfo->time = Yii::$app->formatter->asDate('now', 'yyyy-MM-dd HH:mm:ss');
@@ -202,6 +204,7 @@ class CheckLot
 		$lots = Lot::find()
     		->where(['<',  'remaining_time', Yii::$app->formatter->asDate('now', 'yyyy-MM-dd HH:mm:ss')])
     		->andWhere(['>',  'remaining_time', $cronInfo['time']])
+    		->andWhere(['public' => 1])
     		->all(); 
     		
     	$cronInfo->time = Yii::$app->formatter->asDate('now', 'yyyy-MM-dd HH:mm:ss');
@@ -432,8 +435,8 @@ class CheckLot
 				//Yii::info('timePay - '.$timePay, 'mainCron');
 				//Yii::info('time - '.$time, 'mainCron');
 				//Yii::info('cronInfo->time - '.$cronInfo->time, 'mainCron');
-				//if(  ($rate_info->email->second == '') and ($cronInfo->time > date('Y-m-d H:i:s', strtotime("+4 hours", strtotime($time)) ) ) ) //+4
-				if(  ($rate_info->email->second == '') and ($cronInfo->time > date('Y-m-d H:i:s', strtotime("+5 minutes", strtotime($time)) ) ) ) //+4
+				if(  ($rate_info->email->second == '') and ($cronInfo->time > date('Y-m-d H:i:s', strtotime("+4 hours", strtotime($time)) ) ) ) //+4
+				//if(  ($rate_info->email->second == '') and ($cronInfo->time > date('Y-m-d H:i:s', strtotime("+5 minutes", strtotime($time)) ) ) ) //+4
 				{
 					
 					//Yii::info('+4 hours - '.strtotime("+4 hours", strtotime($time)), 'mainCron');
@@ -444,8 +447,8 @@ class CheckLot
 					$email['messege'] = sprintf($email['messege'], $rate->user['name'], $timePay, $rate->lot['name'], $url);
 					$this->sendEmail($email);
 					
-				//}elseif(  ($rate_info->email->third == '') and ($cronInfo->time > date('Y-m-d H:i:s', strtotime("+8 hours", strtotime($time)))) ) //+8
-				}elseif(  ($rate_info->email->third == '') and ($cronInfo->time > date('Y-m-d H:i:s', strtotime("+10 minutes", strtotime($time)))) ) //+8
+				}elseif(  ($rate_info->email->third == '') and ($cronInfo->time > date('Y-m-d H:i:s', strtotime("+8 hours", strtotime($time)))) ) //+8
+				//}elseif(  ($rate_info->email->third == '') and ($cronInfo->time > date('Y-m-d H:i:s', strtotime("+10 minutes", strtotime($time)))) ) //+8
 				{
 					//Yii::info('+8 hours - '.strtotime("+8 hours", strtotime($time)), 'mainCron'); 
 					//послать емайл 4 часов
@@ -457,8 +460,8 @@ class CheckLot
 					$email['email'] = $rate->user['email'];
 					$email['messege'] = sprintf($email['messege'], $rate->user['name'], $timePay, $rate->lot['name'], $url);
 					$this->sendEmail($email);
-				//}elseif(  ($rate_info->email->fours == '') and ($cronInfo->time> date('Y-m-d H:i:s', strtotime("+11 hours", strtotime($time)))) ) //+11
-				}elseif(  ($rate_info->email->fours == '') and ($cronInfo->time > date('Y-m-d H:i:s', strtotime("+15 minutes", strtotime($time)))) ) //+11
+				}elseif(  ($rate_info->email->fours == '') and ($cronInfo->time> date('Y-m-d H:i:s', strtotime("+11 hours", strtotime($time)))) ) //+11
+				//}elseif(  ($rate_info->email->fours == '') and ($cronInfo->time > date('Y-m-d H:i:s', strtotime("+15 minutes", strtotime($time)))) ) //+11
 				{
 					//Yii::info('+11 hours - '.strtotime("+8 hours", strtotime($time)), 'mainCron');
 					//послать емайл 1 часов
@@ -470,8 +473,8 @@ class CheckLot
 					$email['email'] = $rate->user['email'];
 					$email['messege'] = sprintf($email['messege'], $rate->user['name'], $timePay, $rate->lot['name'], $url);
 					$this->sendEmail($email);
-				//}elseif($cronInfo->time > date('Y-m-d H:i:s', strtotime("+12 hours", strtotime($time))) ) //+12
-				}elseif($cronInfo->time > date('Y-m-d H:i:s', strtotime("+20 minutes", strtotime($time))) ) //+12
+				}elseif($cronInfo->time > date('Y-m-d H:i:s', strtotime("+12 hours", strtotime($time))) ) //+12
+				//}elseif($cronInfo->time > date('Y-m-d H:i:s', strtotime("+20 minutes", strtotime($time))) ) //+12
 				{
 					//Yii::info('попали в проверку', 'mainCron');
 					//$rate = Rate::findone($rateWinner->rate_id);

@@ -38,8 +38,7 @@ use common\models\LotRateStatistic;
 					$rate = Rate::find()->where(['lot_id'=>$model->id])->andWhere(['refusal'=>0])->orderBy('price desc')->one();
 				}
 				?>
-            <span class="winner-star"></span> Александр Спивак за 3200 <span class="glyphicon glyphicon-ruble"></span>
-
+            
 			<?php if($rate): ?>
 				<?php  
 				$user = UserSocial::findOne(['user_id'=>$rate->user2_id]);

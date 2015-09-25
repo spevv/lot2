@@ -22,31 +22,21 @@ if(isset($model->meta_keyword)){
                 <?= $activeBlockLot ?>
             </div>
 
-
             <div class="col-xs-8">
                 <a href="">
                     <div class="banner-1"></div>
                 </a>
-
             </div>
 
             <div class="col-xs-4 pull-right">
                 <a href="">
                     <div class="by-partner-new2"></div>
-                    <!--<div class="by-partner">
-                        <div class="by-partner-icon"></div>
-                        <div class="by-partner-text" data-toggle="modal" data-target="#contactFormPartner">
-                            Станьте нашим партнером
-                        </div>
-                    </div>-->
                 </a>
             </div>
-
 
         </div>
     </div>
 </div>
-
 
 
 <div class="wrap2">
@@ -92,22 +82,10 @@ if(isset($model->meta_keyword)){
             <div class="col-xs-4 pull-right">
                 <a href="<?= Url::toRoute($urls['organizations']); ?>">
                     <div class="by-partner-new"></div>
-                    <!--<div class="by-partner">
-                        <div class="by-partner-icon"></div>
-                        <div class="by-partner-text" data-toggle="modal" data-target="#contactFormPartner">
-                            Станьте нашим партнером
-                        </div>
-                    </div>-->
                 </a>
             </div>
 
         </div>
-
-
-
-
-
-
     </div>
 </div>
 

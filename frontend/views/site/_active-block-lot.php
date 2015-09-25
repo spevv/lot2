@@ -9,7 +9,7 @@ use yii\bootstrap\Nav;
 
 ?>
 
-<?php Pjax::begin(['options' => ['id'=>'main-lot', 'timeout'=>false, 'enablePushState' => false], 'enablePushState' => false]) ?> 
+<?php Pjax::begin(['options' => ['id'=>'main-lot', 'timeout'=>false]]) ?> 
 		<?= $search ?>
 
 		<div class="category-list-new">
@@ -19,7 +19,6 @@ use yii\bootstrap\Nav;
 			]);
 			?>
 		</div>
-
 <br>
 	    <!--<div class="lot-search-header">Активные лоты</div>-->
 	    <div class="lot-list">
@@ -76,7 +75,56 @@ $js = <<< JS
 		    $.pjax({container: '#main-lot', timeout: 0, scrollTo: false});
 		}
 	}
-	setTimeout(	function(){ obj.refresh(); }, 600000);
+	//setTimeout(	function(){ obj.refresh(); }, 1000);
+
+
+
+    setTimeout(	function(){ getRatesInfo(); }, 60000);
+
+	function getRatesInfo()
+	{
+
+      //  console.log($('.lot[data-key="36"]').find('.current-price-price').text());
+
+	    var keys =  [];
+        $('.lot').each(function( key, value ) {
+            keys.push($(this).data('key'));
+        });
+        //console.log(keys);
+
+        var ajaxRequest = $.ajax({
+	        type: "post",
+	        dataType: 'json',
+	        url: '/site/get-rates-info',
+	        data: 'lots_id='+keys
+	    })
+		  .done(function(msg) {
+
+		  	if(msg.status)
+		  	{
+		  		//console.log(msg.rates);
+		  		$.each(msg.rates, function( key, value ) {
+                    //console.log(key);
+                    var price = parseInt($('.lot[data-key="'+key+'"]').find('.current-price-price').text());
+                    if(price != value)
+                    {
+                       // console.log('new');
+                        $('.lot[data-key="'+key+'"]').find('.current-price-price').text(value);
+                    }
+                     //console.log($('.lot[data-key="'+key+'"]').find('.current-price-price').text());
+                });
+		  	}
+
+		  })
+		  .fail(function() {
+		    console.log( "error" );
+		  });
+
+        setTimeout(	function(){ getRatesInfo(); }, 60000);
+
+	}
+
+
 JS;
 $this->registerJs($js,  $this::POS_READY);
 ?>		

@@ -33,6 +33,30 @@ $js = <<< JS
 	    selectAllText: 'Выбрать все',
 	    maxHeight: 300,
 	    numberDisplayed: 2,
+	    buttonTitle: function(options, select) {
+	      if (options.length === 0) {
+	        return 'Ничего не выбрано';
+	      }
+	      else if (options.length > 1) {
+	        if (options.length == select.find('option').length) {
+	          return 'Все'
+	        } else {
+	          return options.length + ' ' + Text.plural(options.length, ['город', 'города', 'городов']);
+	        }
+	      }
+	      else {
+	        var labels = [];
+	        options.each(function() {
+	          if ($(this).attr('label') !== undefined) {
+	            labels.push($(this).attr('label'));
+	          }
+	          else {
+	            labels.push($(this).html());
+	          }
+	        });
+	        return labels.join(', ') + ' ';
+	      }
+	    },
 	    buttonText: function(options, select) {
 	      if (options.length === 0) {
 	        return 'Ничего не выбрано';
@@ -66,6 +90,30 @@ $js = <<< JS
 	    selectAllText: 'Выбрать все',
 	    maxHeight: 300,
 	    numberDisplayed: 2,
+	    buttonTitle:function(options, select) {
+	      if (options.length === 0) {
+	        return 'Ничего не выбрано';
+	      }
+	      else if (options.length > 1) {
+	        if (options.length == select.find('option').length) {
+	          return 'Все'
+	        } else {
+	          return options.length + ' ' + Text.plural(options.length, ['тема', 'темы', 'тем']);
+	        }
+	      }
+	      else {
+	        var labels = [];
+	        options.each(function() {
+	          if ($(this).attr('label') !== undefined) {
+	            labels.push($(this).attr('label'));
+	          }
+	          else {
+	            labels.push($(this).html());
+	          }
+	        });
+	        return labels.join(', ') + ' ';
+	      }
+	    },
 	    buttonText: function(options, select) {
 	      if (options.length === 0) {
 	        return 'Ничего не выбрано';
@@ -99,6 +147,31 @@ $js = <<< JS
 	    selectAllText: 'Выбрать все',
 	    maxHeight: 300,
 	    numberDisplayed: 2,
+	    buttonTitle:
+	    function(options, select) {
+	      if (options.length === 0) {
+	        return 'Ничего не выбрано';
+	      }
+	      else if (options.length > 1) {
+	        if (options.length == select.find('option').length) {
+	          return 'Все'
+	        } else {
+	          return options.length + ' ' + Text.plural(options.length, ['отрасль', 'отрасли', 'отраслей']);
+	        }
+	      }
+	      else {
+	        var labels = [];
+	        options.each(function() {
+	          if ($(this).attr('label') !== undefined) {
+	            labels.push($(this).attr('label'));
+	          }
+	          else {
+	            labels.push($(this).html());
+	          }
+	        });
+	        return labels.join(', ') + ' ';
+	      }
+	    },
 	    buttonText: function(options, select) {
 	      if (options.length === 0) {
 	        return 'Ничего не выбрано';

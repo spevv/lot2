@@ -25,7 +25,7 @@ ShareSocial = {
 			FB.init({
 			  appId      : data.apiId,
 			  xfbml      : true,
-			  version    : 'v2.3'
+			  version    : 'v2.4'
 			});
 		};
 	},
@@ -53,6 +53,7 @@ ShareSocial = {
 			}
 		);
 	},
+		
 	
 	
 	fb: function(data)
@@ -116,26 +117,31 @@ ShareSocial = {
 	
 	onOkMessage:function(a)
 	{
+		console.log("onOkMessage");
+		/*console.log(a);*/
 		var b=a.originalEvent;
-		if("http://connect.ok.ru"==b.origin&&"loaded"!=b.data)
+		if("https://connect.ok.ru"==b.origin&&"loaded"!=b.data)
 		{
+			/*console.log("in-if-onOkMessage");*/
 			try
 			{
 				var c=$.parseJSON(b.data);
-				console.log(c);
+				/*console.log("in-if-onOkMessage-C");
+				console.log(c);*/
 				if(c.error)return void $(window).trigger("share.error")
 			}catch(d)
 			{
 			}
-			console.log('share.success write');
+			console.log('share.success write 1 -- ');
 			$(window).trigger("share.success");
-			//console.log('share.success write');
+			console.log('share.success write 2');
 		}
 	},
 	
 	
 	ok:function(a)
 	{
+		console.log('ok');
 		$(window).on("message",this.onOkMessage),
 		$(window).on("share.window.closed",
 			function(){
@@ -153,7 +159,8 @@ ShareSocial = {
 		var b=window.open(url,"","toolbar=0,status=0,scrollbars=1,width=626,height=436,left="+leftvar+",top="+topvar+'"');
 		c=setInterval(function(){try{(null==b||b.closed)&&(clearInterval(c),$(window).trigger("share.window.closed"))}catch(url){}},500)
 	}
-
+	
+	
 }
 
 
